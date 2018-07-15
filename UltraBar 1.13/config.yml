@@ -1,0 +1,46 @@
+############################################################
+#                        UltraBar                          #
+############################################################
+#bstats is where data is sent. https://bstats.org/plugin/bukkit/UltraBar .
+#Here is some more information on it like what it collects and how to disable it all togeather and not just for this plugin.
+# https://bstats.org/getting-started
+bstats: true
+#Note time is in seconds!
+WorldGuardRegion:
+    Enabled: true
+    Message: '&6<< &b%region% &6>>'
+    Message2: '&b%region% &3<<>> &6and &c%number%&6 more.'
+OnJoin:
+    BossBar:
+        Enabled: true
+        Message: '&6Welcome Back &5{player}&6!'
+        Color: 'green'
+        Time: 10
+        Style: '6'
+        Health: 1
+    Title:
+        Enabled: true
+        Message: '&6Welcome Back &5{player}&6'
+        SubTitle: '&bto the best server ever!'
+        fadein: 5
+        fadeout: 5
+        time: 20
+    ActionBar:
+        Enabled: true
+        Message: '&6Welcome Back &5{player}&6!'
+    BossBarMessages:
+        Enabled: true
+        Time: 10
+        Number_Of_Messages: 3
+        1:
+            Message: '&1BossBar #1'
+            Color: 'green'
+            Style: '6'
+        2:
+            Message: '&2BossBar #2'
+            Color: 'blue'
+            Style: '6'
+        3:
+            Message: '&3BossBar #3'
+            Color: 'red'
+            Style: '6'

@@ -44,3 +44,25 @@ OnJoin:
             Message: '&3BossBar #3'
             Color: 'red'
             Style: '6'
+BossBarMessages:
+    Enabled: true
+    World_Whitelist_Enabled: false
+    Random_Order: false
+    World_Whitelist:
+    - world
+    Number_Of_Messages: 3
+    1:
+        Message: '&1BossBar #1'
+        Color: 'green'
+        Style: '6'
+        Time: 10
+    2:
+        Message: '&2BossBar #2'
+        Color: 'blue'
+        Style: '6'
+        Time: 10
+    3:
+        Message: '&3BossBar #3'
+        Color: 'red'
+        Style: '6'
+        Time: 10

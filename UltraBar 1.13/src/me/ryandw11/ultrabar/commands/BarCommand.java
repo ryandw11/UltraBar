@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.BossBarMessage;
-import me.ryandw11.ultrabar.BossBarSced;
 import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.core.UltraBar;
 
@@ -153,10 +152,6 @@ public class BarCommand implements CommandExecutor {
 			}
 			UltraBar.bossbars.clear();
 			plugin.getLogger().info("All of the boss bars have been removed.");
-			if(plugin.getConfig().getBoolean("OnJoin.BossBarMessages.Enabled")){
-				BossBarSced b = new BossBarSced();
-				b.startProgram();
-			}
 		}
 		else{
 			p.sendMessage(ChatColor.RED + "Invalid command. Do /bar for list of commands.");

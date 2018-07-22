@@ -1,6 +1,10 @@
 package me.ryandw11.ultrabar;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -8,10 +12,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.ryandw11.ultrabar.core.UltraBar;
 import net.md_5.bungee.api.ChatColor;
 
+
 public class BossBarSced extends BukkitRunnable{
 	private int num;
 	private int currentNum;
 	private int time;
+	private int lastNum;
 
 	
 	private UltraBar b;
@@ -21,9 +27,9 @@ public class BossBarSced extends BukkitRunnable{
 
 	public BossBarSced(){
 		this.b = UltraBar.plugin;
-		num = b.getConfig().getInt("OnJoin.BossBarMessages.Number_Of_Messages");
-		time = b.getConfig().getInt("OnJoin.BossBarMessages.Time") * 20;
+		num = b.getConfig().getInt("BossBarMessages.Number_Of_Messages");
 		currentNum = 1;
+		lastNum = 1;
 	}
 	
 	public void startProgram(){
@@ -32,13 +38,14 @@ public class BossBarSced extends BukkitRunnable{
 			return;
 		}
 		BossBar bar = Bukkit.createBossBar(
-				ChatColor.translateAlternateColorCodes('&', b.getConfig().getString("OnJoin.BossBarMessages." + currentNum + ".Message")), 
-				GrabBarStyles.barColor(b.getConfig().getString("OnJoin.BossBarMessages." + currentNum + ".Color")), 
-				GrabBarStyles.barStyle(b.getConfig().getString("OnJoin.BossBarMessages." + currentNum + ".Style")
+				ChatColor.translateAlternateColorCodes('&', b.getConfig().getString("BossBarMessages." + currentNum + ".Message")), 
+				GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")), 
+				GrabBarStyles.barStyle(b.getConfig().getString("BossBarMessages." + currentNum + ".Style")
 						));
-		UltraBar.bossbars.add(bar);
+		UltraBar.barMessage = bar;
 		this.bar = bar;
 		Double ticks = (double) 1;
+		time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20;
 		this.progress = ticks / time;
 		bar.setProgress(1);
 		
@@ -51,6 +58,8 @@ public class BossBarSced extends BukkitRunnable{
 	
 	@Override
 	public void run() {
+		
+		
 		if(currentNum > num){
 			currentNum = 1;
 		}
@@ -63,10 +72,21 @@ public class BossBarSced extends BukkitRunnable{
         	 * 
         	 * 
         	 */
+        	lastNum = currentNum;
         	currentNum += 1;
         	if(currentNum > num){
     			currentNum = 1;
     		}
+        	
+        	if(b.getConfig().getBoolean("BossBarMessages.Random_Order")){
+        		Random rand = new Random();
+        		int n = lastNum;
+        		while(n == lastNum){
+        			n = rand.nextInt(b.getConfig().getInt("BossBarMessages.Number_Of_Messages")) + 1;
+        		}
+        		currentNum = n;
+        	}
+        	
         	for(Player p : bar.getPlayers()){
         		if(!p.isOnline()){
         			bar.removePlayer(p);
@@ -77,28 +97,38 @@ public class BossBarSced extends BukkitRunnable{
 //        			bar.addPlayer(p);
 //        		}
 //        	}
-        	if(!b.getConfig().contains("OnJoin.BossBarMessages." + currentNum) 
-        			|| GrabBarStyles.barColor(b.getConfig().getString("OnJoin.BossBarMessages." + currentNum + ".Color")) == null){
+        	if(!b.getConfig().contains("BossBarMessages." + currentNum) 
+        			|| GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")) == null){
         		b.getLogger().severe("There is an error with the configuration!");
         		b.getLogger().severe("There are not " + currentNum + " boss bar messages!");
         		b.getLogger().severe("Please fix the errors! The boss bar announce has been disabled.");
         		b.getLogger().severe("For more assistance please contact me on github or spigot.");
-        		UltraBar.bossbars.remove(bar);
+        		UltraBar.barMessage = Bukkit.createBossBar("", BarColor.BLUE, BarStyle.SEGMENTED_10);
         		bar.setVisible(false);
         		this.cancel();
         	}
-        	bar.setColor(GrabBarStyles.barColor(b.getConfig().getString("OnJoin.BossBarMessages." + currentNum + ".Color")));
-        	bar.setStyle(GrabBarStyles.barStyle(b.getConfig().getString("OnJoin.BossBarMessages." + currentNum + ".Style")));
-        	bar.setTitle(ChatColor.translateAlternateColorCodes('&', b.getConfig().getString("OnJoin.BossBarMessages." + currentNum + ".Message")));
+        	bar.setColor(GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")));
+        	bar.setStyle(GrabBarStyles.barStyle(b.getConfig().getString("BossBarMessages." + currentNum + ".Style")));
+        	bar.setTitle(ChatColor.translateAlternateColorCodes('&', b.papi.getMessage(b.getConfig().getString("BossBarMessages." + currentNum + ".Message"), null)));
         	bar.setProgress(1);
-        	time = b.getConfig().getInt("OnJoin.BossBarMessages.Time") * 20;
         	Double ticks = (double) 1;
+        	time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20;
     		this.progress = ticks / time;
+    		
+    		bar.removeAll();
+    		for(Player p : Bukkit.getOnlinePlayers()){
+    			if(b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
+    				bar.addPlayer(p);
+    			}
+    		}
+    		
+    		
         }
         else{
         	bar.setProgress(prog);
         }
-		
+        
+        bar.setTitle(ChatColor.translateAlternateColorCodes('&', b.papi.getMessage(b.getConfig().getString("BossBarMessages." + currentNum + ".Message"), null)));
 		
 		
 	}

@@ -1,9 +1,11 @@
 package me.ryandw11.ultrabar.api;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.BossBarMessage;
@@ -72,5 +74,13 @@ public class UltraBarAPI {
 	public void sendBossBarNoCountDown(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress){
 		BossBarMessage bbm = new BossBarMessage();
 		bbm.createMessage(p, message, color, bstyle, time, progress);
+	}
+	/**
+	 * Grab the active bossbars.
+	 * @return A list of possbars.
+	 */
+	@SuppressWarnings("static-access")
+	public List<BossBar> getActiveBars(){
+		return plugin.bossbars;
 	}
 }

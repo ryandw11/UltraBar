@@ -20,6 +20,8 @@ import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
 import me.ryandw11.ultrabar.listener.OnJoin;
 import me.ryandw11.ultrabar.listener.OnMove;
 import me.ryandw11.ultrabar.typemgr.Typemgr;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_11_R1;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_12_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
 
 /**
@@ -45,8 +47,6 @@ public class UltraBar extends JavaPlugin{
 			loadMethod();
 			registerConfig();
 			getLogger().info(String.format("UltraBar is enabled and running fine! V: %s", getDescription().getVersion()));
-			getLogger().warning("This is an experamental version of UltraBar! This version could be untested and contain errors."); //TODO remove after pres
-			getLogger().warning("Report all errors to ryandw11!"); //TODO Remove after pres
 			if(getConfig().getBoolean("OnJoin.BossBarMessages.Enabled")){
 				BossBarSced b = new BossBarSced();
 				b.startProgram();
@@ -58,7 +58,7 @@ public class UltraBar extends JavaPlugin{
 		}
 		else{
 			getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on! Use: 1.13!");
-			getLogger().info("This version is only for 1.13. Please download 1.4.9 in order to use the plugin for 1.9 - 1.13");
+			getLogger().info("This version is only for 1.11 - 1.13. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
 			getLogger().info("The plugin will now be disabled!");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
@@ -99,7 +99,7 @@ public class UltraBar extends JavaPlugin{
 		barMessage.setVisible(false);
 		barMessage.removeAll();
 		barMessage = null;
-		getLogger().info("UltraBar for 1.13 has been disabled correctly!"); // same thing
+		getLogger().info("UltraBar for 1.11 - 1.13 has been disabled correctly!"); // same thing
 		
 	}
 	
@@ -138,6 +138,14 @@ public class UltraBar extends JavaPlugin{
         if (version.equals("v1_13_R1")) {
             
             mgr = new Typemgr_1_13_R1();
+        }
+        else if (version.equals("v1_12_R1")) {
+            
+            mgr = new Typemgr_1_12_R1();
+        }
+        else if (version.equals("v1_11_R1")) {
+            
+            mgr = new Typemgr_1_11_R1();
         }
         
         return mgr != null;

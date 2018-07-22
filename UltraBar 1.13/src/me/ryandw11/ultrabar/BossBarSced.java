@@ -115,10 +115,15 @@ public class BossBarSced extends BukkitRunnable{
         	time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20;
     		this.progress = ticks / time;
     		
-    		bar.removeAll();
     		for(Player p : Bukkit.getOnlinePlayers()){
-    			if(b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
-    				bar.addPlayer(p);
+    			if(b.getConfig().getBoolean("BossBarmessages.Enabled")){
+    				if(b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
+    					if(!bar.getPlayers().contains(p))
+    						bar.addPlayer(p);
+    				}
+    			}else{
+    				if(!bar.getPlayers().contains(p))
+						bar.addPlayer(p);
     			}
     		}
     		

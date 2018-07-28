@@ -14,9 +14,14 @@ import me.ryandw11.ultrabar.commands.ActionBarCommands;
 import me.ryandw11.ultrabar.commands.BarCommand;
 import me.ryandw11.ultrabar.commands.Help;
 import me.ryandw11.ultrabar.commands.TitleCommands;
+import me.ryandw11.ultrabar.depends.PAPIExists;
+import me.ryandw11.ultrabar.depends.PAPINotFound;
+import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
 import me.ryandw11.ultrabar.listener.OnJoin;
 import me.ryandw11.ultrabar.listener.OnMove;
 import me.ryandw11.ultrabar.typemgr.Typemgr;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_11_R1;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_12_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
 
 /**
@@ -26,14 +31,18 @@ import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
 public class UltraBar extends JavaPlugin{
 
 	public static ArrayList<BossBar> bossbars;
+	public static BossBar barMessage;
 	public static UltraBar plugin;
 	public Typemgr mgr;
+	public PlaceholderAPIDepend papi;
 	public boolean worldguard = false;
+	public boolean placeholderAPI;
 	
 	@Override
 	public void onEnable(){
 		plugin = this;
 		bossbars = new ArrayList<BossBar>();
+		
 		if(setupPlug()){
 			loadMethod();
 			registerConfig();
@@ -42,14 +51,14 @@ public class UltraBar extends JavaPlugin{
 				BossBarSced b = new BossBarSced();
 				b.startProgram();
 			}
-			if(getServer().getPluginManager().getPlugin("WorldGuard") != null){
+			if(Bukkit.getPluginManager().getPlugin("WorldGuard") != null){
 				getLogger().info("WorldGuard detected. WorldGuard addon activated");
 				worldguard = true;
 			}
 		}
 		else{
 			getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on! Use: 1.13!");
-			getLogger().info("This version is only for 1.13. Please download 1.4.9 in order to use the plugin for 1.9 - 1.13");
+			getLogger().info("This version is only for 1.11 - 1.13. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
 			getLogger().info("The plugin will now be disabled!");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
@@ -60,6 +69,14 @@ public class UltraBar extends JavaPlugin{
 		}else{
 			getLogger().info("Bstat metrics is disabled for this plugin.");
 		}
+		if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
+			getLogger().info("PlaceholderAPI detected. PlaceholderAPI addon detected.");
+			placeholderAPI = true;
+		}
+		else
+			placeholderAPI = false;
+		setupPlaceholderAPI();
+		
 		
 		 UpdateChecker updater = new UpdateChecker(this, 20113);
 		    try {
@@ -79,7 +96,10 @@ public class UltraBar extends JavaPlugin{
 			b.removeAll();
 		}
 		bossbars.clear();
-		getLogger().info("UltraBar for 1.13 has been disabled correctly!"); // same thing
+		barMessage.setVisible(false);
+		barMessage.removeAll();
+		barMessage = null;
+		getLogger().info("UltraBar for 1.11 - 1.13 has been disabled correctly!"); // same thing
 		
 	}
 	
@@ -91,7 +111,6 @@ public class UltraBar extends JavaPlugin{
 	
 	public void loadMethod(){
 		getCommand("bar").setExecutor(new BarCommand());
-		getCommand("bar").setTabCompleter();
 		getCommand("utitle").setExecutor(new TitleCommands(this));
 		getCommand("actionbar").setExecutor(new ActionBarCommands(this));
 		getCommand("ultrabar").setExecutor(new Help(this));
@@ -120,9 +139,25 @@ public class UltraBar extends JavaPlugin{
             
             mgr = new Typemgr_1_13_R1();
         }
+        else if (version.equals("v1_12_R1")) {
+            
+            mgr = new Typemgr_1_12_R1();
+        }
+        else if (version.equals("v1_11_R1")) {
+            
+            mgr = new Typemgr_1_11_R1();
+        }
         
         return mgr != null;
     }
+	
+	private void setupPlaceholderAPI(){
+		if(placeholderAPI){
+			papi = new PAPIExists();
+			return;
+		}
+		papi = new PAPINotFound();
+	}
 }
 
 /*

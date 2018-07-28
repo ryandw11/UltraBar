@@ -34,17 +34,20 @@ public class Help implements CommandExecutor {
 			}
 			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")){
 				if(p.hasPermission("ultrabar.reload")){
-					if(plugin.getConfig().getBoolean("OnJoin.BossBarMessages.Enabled")){
+					if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")){
 						for(BossBar b : UltraBar.bossbars){
 							b.setVisible(false);
 							b.removeAll();
 						}
 						UltraBar.bossbars.clear();
+						UltraBar.barMessage.setVisible(false);
+						UltraBar.barMessage.removeAll();
+						UltraBar.barMessage = null;
 					}
 					plugin.reloadConfig();
 					p.sendMessage(ChatColor.GREEN + "The config file was reloaded!");
 					plugin.getLogger().info("[UltraBar] The config files were reloaded!");
-					if(plugin.getConfig().getBoolean("OnJoin.BossBarMessages.Enabled")){
+					if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")){
 						BossBarSced b = new BossBarSced();
 						b.startProgram();
 					}

@@ -3,6 +3,7 @@ package me.ryandw11.ultrabar;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -10,8 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.ryandw11.ultrabar.core.UltraBar;
-import net.md_5.bungee.api.ChatColor;
-
 
 public class BossBarSced extends BukkitRunnable{
 	private int num;
@@ -19,9 +18,8 @@ public class BossBarSced extends BukkitRunnable{
 	private int time;
 	private int lastNum;
 
-	
 	private UltraBar b;
-	
+
 	private BossBar bar;
 	private Double progress;
 
@@ -31,7 +29,7 @@ public class BossBarSced extends BukkitRunnable{
 		currentNum = 1;
 		lastNum = 1;
 	}
-	
+
 	public void startProgram(){
 		if(num <= 0){
 			b.getLogger().warning("BossBarMessages.Number_Of_Messages is set to 0! Please change enabled to false or add a message!");
@@ -48,22 +46,21 @@ public class BossBarSced extends BukkitRunnable{
 		time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20;
 		this.progress = ticks / time;
 		bar.setProgress(1);
-		
+
 		for(Player p : Bukkit.getOnlinePlayers()){ //adds all players online to the bar
 			bar.addPlayer(p);
 		}
-		
+
 		this.runTaskTimer(b, 5L, 1L);
 	}
-	
+
 	@Override
 	public void run() {
-		
-		
+
 		if(currentNum > num){
 			currentNum = 1;
 		}
-		
+
 		double prog = bar.getProgress() - progress;
         if(prog < 0){
         	/*
@@ -77,7 +74,7 @@ public class BossBarSced extends BukkitRunnable{
         	if(currentNum > num){
     			currentNum = 1;
     		}
-        	
+
         	if(b.getConfig().getBoolean("BossBarMessages.Random_Order")){
         		Random rand = new Random();
         		int n = lastNum;
@@ -86,7 +83,7 @@ public class BossBarSced extends BukkitRunnable{
         		}
         		currentNum = n;
         	}
-        	
+
         	for(Player p : bar.getPlayers()){
         		if(!p.isOnline()){
         			bar.removePlayer(p);
@@ -114,7 +111,7 @@ public class BossBarSced extends BukkitRunnable{
         	Double ticks = (double) 1;
         	time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20;
     		this.progress = ticks / time;
-    		
+
     		for(Player p : Bukkit.getOnlinePlayers()){
     			if(b.getConfig().getBoolean("BossBarmessages.Enabled")){
     				if(b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
@@ -126,17 +123,13 @@ public class BossBarSced extends BukkitRunnable{
 						bar.addPlayer(p);
     			}
     		}
-    		
-    		
+
         }
         else{
         	bar.setProgress(prog);
         }
-        
+
         bar.setTitle(ChatColor.translateAlternateColorCodes('&', b.papi.getMessage(b.getConfig().getString("BossBarMessages." + currentNum + ".Message"), null)));
-		
-		
 	}
-	
 
 }

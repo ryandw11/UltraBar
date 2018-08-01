@@ -12,11 +12,11 @@ import me.ryandw11.ultrabar.core.UltraBar;
 public class Help implements CommandExecutor {
 
 	private UltraBar plugin;
+
 	public Help(UltraBar plugin){
 		this.plugin = plugin;
 	}
-	
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 		CommandSender p = sender;
@@ -56,7 +56,6 @@ public class Help implements CommandExecutor {
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
 				}
 			}
-		
 		return false;
 	}
 

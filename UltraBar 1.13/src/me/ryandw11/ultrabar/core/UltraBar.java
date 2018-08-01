@@ -20,6 +20,8 @@ import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
 import me.ryandw11.ultrabar.listener.OnJoin;
 import me.ryandw11.ultrabar.listener.OnMove;
 import me.ryandw11.ultrabar.typemgr.Typemgr;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_9_R1;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_10_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_11_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_12_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
@@ -37,12 +39,12 @@ public class UltraBar extends JavaPlugin{
 	public PlaceholderAPIDepend papi;
 	public boolean worldguard = false;
 	public boolean placeholderAPI;
-	
+
 	@Override
 	public void onEnable(){
 		plugin = this;
 		bossbars = new ArrayList<BossBar>();
-		
+
 		if(setupPlug()){
 			loadMethod();
 			registerConfig();
@@ -76,7 +78,7 @@ public class UltraBar extends JavaPlugin{
 		else
 			placeholderAPI = false;
 		setupPlaceholderAPI();
-		
+
 		if(getConfig().getBoolean("update_checker")){
 			UpdateChecker updater = new UpdateChecker(this, 20113);
 			try {
@@ -88,8 +90,7 @@ public class UltraBar extends JavaPlugin{
 			}
 		} //End of update checker
 	}
-	
-	
+
 	@Override
 	public void onDisable(){
 		for(BossBar b : bossbars){
@@ -103,15 +104,14 @@ public class UltraBar extends JavaPlugin{
 			barMessage = null;
 		}
 		getLogger().info("UltraBar for 1.11 - 1.13 has been disabled correctly!"); // same thing
-		
+
 	}
-	
-	
+
 	private void registerConfig() {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 	}
-	
+
 	public void loadMethod(){
 		getCommand("bar").setExecutor(new BarCommand());
 		getCommand("utitle").setExecutor(new TitleCommands(this));
@@ -121,17 +121,14 @@ public class UltraBar extends JavaPlugin{
 		if(plugin.getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard == true){
 			Bukkit.getServer().getPluginManager().registerEvents(new OnMove(this), this);
 		}
-		
-	}
-	
-	private boolean setupPlug() {
 
+	}
+
+	private boolean setupPlug() {
         String version;
 
         try {
-
             version = Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
-
         } catch (ArrayIndexOutOfBoundsException w0w) {
             return false;
         }
@@ -139,21 +136,29 @@ public class UltraBar extends JavaPlugin{
         getLogger().info("Your server is running version " + version + "!");
 
         if (version.equals("v1_13_R1")) {
-            
+
             mgr = new Typemgr_1_13_R1();
         }
         else if (version.equals("v1_12_R1")) {
-            
+
             mgr = new Typemgr_1_12_R1();
         }
         else if (version.equals("v1_11_R1")) {
-            
+
             mgr = new Typemgr_1_11_R1();
         }
-        
+		else if (version.equals("v1_10_R1")) {
+
+            mgr = new Typemgr_1_10_R1();
+        }
+		else if (version.equals("v1_9_R1")) {
+
+            mgr = new Typemgr_1_9_R1();
+        }
+
         return mgr != null;
     }
-	
+
 	private void setupPlaceholderAPI(){
 		if(placeholderAPI){
 			papi = new PAPIExists();

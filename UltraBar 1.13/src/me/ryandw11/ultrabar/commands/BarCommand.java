@@ -16,7 +16,9 @@ import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class BarCommand implements CommandExecutor {
+
 	private UltraBar plugin;
+
 	public BarCommand(){
 		this.plugin = UltraBar.plugin;
 	}
@@ -25,13 +27,13 @@ public class BarCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
 		CommandSender p = sender;
-		
+
 		if(!p.hasPermission("ultrabar.bar")){
 			p.sendMessage(ChatColor.RED + "You do not have permission for this command.");
 			return true;
 		}
-		
-		if(args.length == 0)	{
+
+		if(args.length == 0){
 			if(args.length == 0){
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7==========[&6BarMessage&7]============"));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar send (player) (message) (color) (style) (time) [health] &7- Send a boss bar message to a player!"));

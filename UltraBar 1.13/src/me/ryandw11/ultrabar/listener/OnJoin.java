@@ -57,7 +57,7 @@ public class OnJoin implements Listener {
 		for(BossBar b : UltraBar.bossbars){
 			b.addPlayer(p);
 		}
-		if(!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled"))
+		if(!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null)
 			UltraBar.barMessage.addPlayer(p);
 		
 	}

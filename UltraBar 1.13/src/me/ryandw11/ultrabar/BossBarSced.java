@@ -34,7 +34,7 @@ public class BossBarSced extends BukkitRunnable{
 	
 	public void startProgram(){
 		if(num <= 0){
-			b.getLogger().warning("OnJoin.BossBarMessages.Number_Of_Messages is set to 0! Please change enabled to false or add a message!");
+			b.getLogger().warning("BossBarMessages.Number_Of_Messages is set to 0! Please change enabled to false or add a message!");
 			return;
 		}
 		BossBar bar = Bukkit.createBossBar(

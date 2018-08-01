@@ -5,6 +5,8 @@
 #Here is some more information on it like what it collects and how to disable it all togeather and not just for this plugin.
 # https://bstats.org/getting-started
 bstats: true
+#If the plugin should check for updates. It will not if set to false. (Note: The plugin does not automaticly update.)
+update_checker: true
 #Note time is in seconds!
 WorldGuardRegion:
     Enabled: true

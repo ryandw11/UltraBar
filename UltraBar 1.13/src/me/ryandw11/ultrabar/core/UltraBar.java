@@ -31,7 +31,7 @@ import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
 public class UltraBar extends JavaPlugin{
 
 	public static ArrayList<BossBar> bossbars;
-	public static BossBar barMessage;
+	public static BossBar barMessage; //TODO remove static maybe?
 	public static UltraBar plugin;
 	public Typemgr mgr;
 	public PlaceholderAPIDepend papi;
@@ -77,15 +77,16 @@ public class UltraBar extends JavaPlugin{
 			placeholderAPI = false;
 		setupPlaceholderAPI();
 		
-		
-		 UpdateChecker updater = new UpdateChecker(this, 20113);
-		    try {
-		        if (updater.checkForUpdates())
-		            getLogger().info("An update was found! New version: " + updater.getLatestVersion() + " download: " + updater.getResourceURL());
-		    } catch (Exception e) {
-		        getLogger().warning("Could not check for updates! Stacktrace:");
-		        e.printStackTrace();
-		    }
+		if(getConfig().getBoolean("update_checker")){
+			UpdateChecker updater = new UpdateChecker(this, 20113);
+			try {
+				if (updater.checkForUpdates())
+					getLogger().info("An update was found! New version: " + updater.getLatestVersion() + " download: " + updater.getResourceURL());
+			} catch (Exception e) {
+				getLogger().warning("Could not check for updates! Stacktrace:");
+				e.printStackTrace();
+			}
+		} //End of update checker
 	}
 	
 	
@@ -96,9 +97,11 @@ public class UltraBar extends JavaPlugin{
 			b.removeAll();
 		}
 		bossbars.clear();
-		barMessage.setVisible(false);
-		barMessage.removeAll();
-		barMessage = null;
+		if(barMessage != null){
+			barMessage.setVisible(false);
+			barMessage.removeAll();
+			barMessage = null;
+		}
 		getLogger().info("UltraBar for 1.11 - 1.13 has been disabled correctly!"); // same thing
 		
 	}

@@ -13,11 +13,13 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class OnMove implements Listener {
+
 	private UltraBar plugin;
+
 	public OnMove(UltraBar plugin){
 		this.plugin = plugin;
 	}
-	
+
 	@EventHandler
 	public void onMove(PlayerMoveEvent event){
 		if(!plugin.getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard != true){
@@ -38,7 +40,7 @@ public class OnMove implements Listener {
 				break;
 			}
 		}
-		
+
 	}
-	
+
 }

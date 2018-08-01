@@ -13,7 +13,8 @@ import me.ryandw11.ultrabar.core.UltraBar;
 
 public class UltraBarAPI {
 	private UltraBar plugin;
-	public UltraBarAPI (){
+
+	public UltraBarAPI(){
 		plugin = UltraBar.plugin;
 	}
 	/**

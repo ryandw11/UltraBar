@@ -11,12 +11,9 @@ import org.bukkit.entity.Player;
 
 public class Typemgr_1_12_R1 implements Typemgr{
 
-	
-
-	
 	public Typemgr_1_12_R1(){
 	}
-	
+
 	/*Bar Style method created.
 	 * 
 	 * # of Notched lines.
@@ -25,6 +22,7 @@ public class Typemgr_1_12_R1 implements Typemgr{
 	public void title(String message, Player p, int fadein, int time, int fadeout, String subtitle){
 		p.sendTitle(message, subtitle, fadein, time, fadeout);
 	}
+
 	@Override
 	public void actionBar(Player player, String message){
 		CraftPlayer p = (CraftPlayer) player;
@@ -32,8 +30,5 @@ public class Typemgr_1_12_R1 implements Typemgr{
 		PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(ppoc);
 	}
-	
-	
-	
-	
+
 }

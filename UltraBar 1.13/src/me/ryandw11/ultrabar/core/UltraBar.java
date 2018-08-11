@@ -47,7 +47,7 @@ public class UltraBar extends JavaPlugin{
 			loadMethod();
 			registerConfig();
 			getLogger().info(String.format("UltraBar is enabled and running fine! V: %s", getDescription().getVersion()));
-			if(getConfig().getBoolean("OnJoin.BossBarMessages.Enabled")){
+			if(getConfig().getBoolean("BossBarMessages.Enabled")){
 				BossBarSced b = new BossBarSced();
 				b.startProgram();
 			}

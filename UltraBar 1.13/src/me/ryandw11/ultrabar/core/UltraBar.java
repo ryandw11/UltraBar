@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ryandw11.ultrabar.BossBarSced;
@@ -37,11 +38,13 @@ public class UltraBar extends JavaPlugin{
 	public PlaceholderAPIDepend papi;
 	public boolean worldguard = false;
 	public boolean placeholderAPI;
+	private ArrayList<Player> toggledPlayers;
 	
 	@Override
 	public void onEnable(){
 		plugin = this;
 		bossbars = new ArrayList<BossBar>();
+		toggledPlayers = new ArrayList<Player>();
 		
 		if(setupPlug()){
 			loadMethod();
@@ -51,7 +54,7 @@ public class UltraBar extends JavaPlugin{
 				BossBarSced b = new BossBarSced();
 				b.startProgram();
 			}
-			if(Bukkit.getPluginManager().getPlugin("WorldGuard") != null){
+			if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")){
 				getLogger().info("WorldGuard detected. WorldGuard addon activated");
 				worldguard = true;
 			}
@@ -118,7 +121,7 @@ public class UltraBar extends JavaPlugin{
 		getCommand("actionbar").setExecutor(new ActionBarCommands(this));
 		getCommand("ultrabar").setExecutor(new Help(this));
 		Bukkit.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
-		if(plugin.getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard == true){
+		if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard){
 			Bukkit.getServer().getPluginManager().registerEvents(new OnMove(this), this);
 		}
 		
@@ -160,6 +163,28 @@ public class UltraBar extends JavaPlugin{
 			return;
 		}
 		papi = new PAPINotFound();
+	}
+	/**
+	 * Grab the list of players that have the messages toggled.
+	 * @return List of toggled
+	 */
+	public ArrayList<Player> getToggledPlayers(){
+		return toggledPlayers;
+	}
+	
+	/**
+	 * Add a player to the list of messages toggled.
+	 * @param p
+	 */	
+	public void addTogglePlayer(Player p){
+		toggledPlayers.add(p);
+	}
+	/**
+	 * Remove a player from the list of messages toggled.
+	 * @param p
+	 */
+	public void removeTogglePlayer(Player p){
+		toggledPlayers.remove(p);
 	}
 }
 

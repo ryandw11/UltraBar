@@ -1,5 +1,6 @@
 package me.ryandw11.ultrabar.api;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -82,5 +83,29 @@ public class UltraBarAPI {
 	@SuppressWarnings("static-access")
 	public List<BossBar> getActiveBars(){
 		return plugin.bossbars;
+	}
+	
+	/**
+	 * Grab the list of toggled players. (API Use)
+	 * @return
+	 */
+	public ArrayList<Player> getToggledPlayers(){
+		return plugin.getToggledPlayers();
+	}
+	
+	/**
+	 * Add a player to the toggled list. (API Use)
+	 * @param p
+	 */
+	public void addToggledPlayer(Player p){
+		plugin.addTogglePlayer(p);
+	}
+	
+	/**
+	 * Add a player to the toggled list. (API Use)
+	 * @param p
+	 */
+	public void removeToggledPlayer(Player p){
+		plugin.removeTogglePlayer(p);
 	}
 }

@@ -4,6 +4,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
 
 import me.ryandw11.ultrabar.BossBarSced;
@@ -27,6 +28,7 @@ public class Help implements CommandExecutor {
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/utitle &7- Commands for the title command"));
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/actionbar &7- Commands for the actionbar command"));
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar reload &7- Reload the plugin."));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar toggle &7- Toggle if you will recive bossbar announcements."));
 				}
 				else{
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
@@ -54,6 +56,23 @@ public class Help implements CommandExecutor {
 				}
 				else{
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
+				}
+			}
+			else if(args.length == 1 && args[0].equalsIgnoreCase("toggle")){
+				if(!(p instanceof Player)){
+					p.sendMessage(ChatColor.RED + "Only players can use this command!");
+					return true;
+				}
+				if(!p.hasPermission("ultrabar.toggle")){
+					p.sendMessage(ChatColor.RED + "You do not have permission for this command.");
+					return true;
+				}
+				if(plugin.getToggledPlayers().contains((Player) p)){
+					plugin.removeTogglePlayer((Player) p);
+					p.sendMessage(ChatColor.GREEN + "Boss Bar announcements will now show!");
+				}else{
+					plugin.addTogglePlayer((Player) p);
+					p.sendMessage(ChatColor.RED + "Boss Bar announcements will no longer show!");
 				}
 			}
 		

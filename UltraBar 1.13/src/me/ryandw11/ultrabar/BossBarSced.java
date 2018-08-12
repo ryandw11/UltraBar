@@ -90,13 +90,13 @@ public class BossBarSced extends BukkitRunnable{
         	for(Player p : bar.getPlayers()){
         		if(!p.isOnline()){
         			bar.removePlayer(p);
-        		}
+        		} else if(b.getConfig().getBoolean("BossBarmessages.Enabled")){
+				if(!b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
+					bar.removePlayer(p);
+				}
+			}
         	}
-//        	for(Player p : Bukkit.getOnlinePlayers()){ (Unused)
-//        		if(!bar.getPlayers().contains(p)){
-//        			bar.addPlayer(p);
-//        		}
-//        	}
+
         	if(!b.getConfig().contains("BossBarMessages." + currentNum) 
         			|| GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")) == null){
         		b.getLogger().severe("There is an error with the configuration!");

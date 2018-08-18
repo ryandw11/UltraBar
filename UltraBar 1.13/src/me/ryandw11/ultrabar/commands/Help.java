@@ -9,6 +9,8 @@ import org.bukkit.ChatColor;
 
 import me.ryandw11.ultrabar.BossBarSced;
 import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.schedulers.ActionBarSched;
+import me.ryandw11.ultrabar.schedulers.TitleSched;
 
 public class Help implements CommandExecutor {
 
@@ -46,12 +48,21 @@ public class Help implements CommandExecutor {
 						UltraBar.barMessage.removeAll();
 						UltraBar.barMessage = null;
 					}
+					
 					plugin.reloadConfig();
 					p.sendMessage(ChatColor.GREEN + "The config file was reloaded!");
 					plugin.getLogger().info("[UltraBar] The config files were reloaded!");
 					if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")){
 						BossBarSced b = new BossBarSced();
 						b.startProgram();
+					}
+					if(plugin.getConfig().getBoolean("Title_Announcements.Enabled")){
+						TitleSched ts = new TitleSched();
+						ts.startProgram();
+					}
+					if(plugin.getConfig().getBoolean("Action_Announcements.Enabled")){
+						ActionBarSched as = new ActionBarSched();
+						as.startProgram();
 					}
 				}
 				else{

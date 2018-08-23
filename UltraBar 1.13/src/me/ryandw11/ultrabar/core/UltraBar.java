@@ -18,8 +18,12 @@ import me.ryandw11.ultrabar.commands.TitleCommands;
 import me.ryandw11.ultrabar.depends.PAPIExists;
 import me.ryandw11.ultrabar.depends.PAPINotFound;
 import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
+import me.ryandw11.ultrabar.listener.OnCommand;
+import me.ryandw11.ultrabar.listener.OnDeath;
 import me.ryandw11.ultrabar.listener.OnJoin;
 import me.ryandw11.ultrabar.listener.OnMove;
+import me.ryandw11.ultrabar.schedulers.ActionBarSched;
+import me.ryandw11.ultrabar.schedulers.TitleSched;
 import me.ryandw11.ultrabar.typemgr.Typemgr;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_11_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_12_R1;
@@ -50,10 +54,7 @@ public class UltraBar extends JavaPlugin{
 			loadMethod();
 			registerConfig();
 			getLogger().info(String.format("UltraBar is enabled and running fine! V: %s", getDescription().getVersion()));
-			if(getConfig().getBoolean("BossBarMessages.Enabled")){
-				BossBarSced b = new BossBarSced();
-				b.startProgram();
-			}
+			loadSched();
 			if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")){
 				getLogger().info("WorldGuard detected. WorldGuard addon activated");
 				worldguard = true;
@@ -121,10 +122,27 @@ public class UltraBar extends JavaPlugin{
 		getCommand("actionbar").setExecutor(new ActionBarCommands(this));
 		getCommand("ultrabar").setExecutor(new Help(this));
 		Bukkit.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
 		if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard){
 			Bukkit.getServer().getPluginManager().registerEvents(new OnMove(this), this);
 		}
 		
+	}
+	
+	private void loadSched(){
+		if(getConfig().getBoolean("BossBarMessages.Enabled")){
+			BossBarSced b = new BossBarSced();
+			b.startProgram();
+		}
+		if(getConfig().getBoolean("Title_Announcements.Enabled")){
+			TitleSched ts = new TitleSched();
+			ts.startProgram();
+		}
+		if(getConfig().getBoolean("Action_Announcements.Enabled")){
+			ActionBarSched as = new ActionBarSched();
+			as.startProgram();
+		}
 	}
 	
 	private boolean setupPlug() {

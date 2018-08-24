@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ryandw11.ultrabar.BossBarSced;
@@ -17,8 +18,12 @@ import me.ryandw11.ultrabar.commands.TitleCommands;
 import me.ryandw11.ultrabar.depends.PAPIExists;
 import me.ryandw11.ultrabar.depends.PAPINotFound;
 import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
+import me.ryandw11.ultrabar.listener.OnCommand;
+import me.ryandw11.ultrabar.listener.OnDeath;
 import me.ryandw11.ultrabar.listener.OnJoin;
 import me.ryandw11.ultrabar.listener.OnMove;
+import me.ryandw11.ultrabar.schedulers.ActionBarSched;
+import me.ryandw11.ultrabar.schedulers.TitleSched;
 import me.ryandw11.ultrabar.typemgr.Typemgr;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_9_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_10_R1;
@@ -39,21 +44,19 @@ public class UltraBar extends JavaPlugin{
 	public PlaceholderAPIDepend papi;
 	public boolean worldguard = false;
 	public boolean placeholderAPI;
+	private ArrayList<Player> toggledPlayers;
 
 	@Override
 	public void onEnable(){
 		plugin = this;
-		bossbars = new ArrayList<BossBar>();
-
+		bossbars = new ArrayList<>();
+		toggledPlayers = new ArrayList<>();
 		if(setupPlug()){
 			loadMethod();
 			registerConfig();
 			getLogger().info(String.format("UltraBar is enabled and running fine! V: %s", getDescription().getVersion()));
-			if(getConfig().getBoolean("OnJoin.BossBarMessages.Enabled")){
-				BossBarSced b = new BossBarSced();
-				b.startProgram();
-			}
-			if(Bukkit.getPluginManager().getPlugin("WorldGuard") != null){
+			loadSched();
+			if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")){
 				getLogger().info("WorldGuard detected. WorldGuard addon activated");
 				worldguard = true;
 			}
@@ -118,13 +121,31 @@ public class UltraBar extends JavaPlugin{
 		getCommand("actionbar").setExecutor(new ActionBarCommands(this));
 		getCommand("ultrabar").setExecutor(new Help(this));
 		Bukkit.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
-		if(plugin.getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard == true){
+		Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
+		Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
+		if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard){
 			Bukkit.getServer().getPluginManager().registerEvents(new OnMove(this), this);
 		}
 
 	}
 
-	private boolean setupPlug() {
+	private void loadSched(){
+		if(getConfig().getBoolean("BossBarMessages.Enabled")){
+			BossBarSced b = new BossBarSced();
+			b.startProgram();
+		}
+		if(getConfig().getBoolean("Title_Announcements.Enabled")){
+			TitleSched ts = new TitleSched();
+			ts.startProgram();
+		}
+		if(getConfig().getBoolean("Action_Announcements.Enabled")){
+			ActionBarSched as = new ActionBarSched();
+			as.startProgram();
+		}
+	}
+
+  private boolean setupPlug() {
+
         String version;
 
         try {
@@ -165,6 +186,28 @@ public class UltraBar extends JavaPlugin{
 			return;
 		}
 		papi = new PAPINotFound();
+	}
+	/**
+	 * Grab the list of players that have the messages toggled.
+	 * @return List of toggled
+	 */
+	public ArrayList<Player> getToggledPlayers(){
+		return toggledPlayers;
+	}
+	
+	/**
+	 * Add a player to the list of messages toggled.
+	 * @param p
+	 */	
+	public void addTogglePlayer(Player p){
+		toggledPlayers.add(p);
+	}
+	/**
+	 * Remove a player from the list of messages toggled.
+	 * @param p
+	 */
+	public void removeTogglePlayer(Player p){
+		toggledPlayers.remove(p);
 	}
 }
 

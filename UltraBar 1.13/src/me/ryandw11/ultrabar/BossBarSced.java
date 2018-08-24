@@ -9,6 +9,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.ChatColor;
 
 import me.ryandw11.ultrabar.core.UltraBar;
 
@@ -66,8 +67,6 @@ public class BossBarSced extends BukkitRunnable{
         	/*
         	 * What happens if the bar is done.
         	 * It resets!
-        	 * 
-        	 * 
         	 */
         	lastNum = currentNum;
         	currentNum += 1;
@@ -85,15 +84,17 @@ public class BossBarSced extends BukkitRunnable{
         	}
 
         	for(Player p : bar.getPlayers()){
-        		if(!p.isOnline()){
-        			bar.removePlayer(p);
+        		if(!b.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled")){
+        			if(!p.isOnline() || b.getToggledPlayers().contains(p)){
+        				bar.removePlayer(p);
+        			}
+        		}else{
+        			if(!p.isOnline() || b.getConfig().getList("BossBarMessages.World_Whitelist").contains(p.getWorld().getName()) || b.getToggledPlayers().contains(p)){
+        				bar.removePlayer(p);
+        			}
         		}
         	}
-//        	for(Player p : Bukkit.getOnlinePlayers()){ (Unused)
-//        		if(!bar.getPlayers().contains(p)){
-//        			bar.addPlayer(p);
-//        		}
-//        	}
+        	
         	if(!b.getConfig().contains("BossBarMessages." + currentNum) 
         			|| GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")) == null){
         		b.getLogger().severe("There is an error with the configuration!");
@@ -115,11 +116,11 @@ public class BossBarSced extends BukkitRunnable{
     		for(Player p : Bukkit.getOnlinePlayers()){
     			if(b.getConfig().getBoolean("BossBarmessages.Enabled")){
     				if(b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
-    					if(!bar.getPlayers().contains(p))
+    					if(!bar.getPlayers().contains(p) && !b.getToggledPlayers().contains(p))
     						bar.addPlayer(p);
     				}
     			}else{
-    				if(!bar.getPlayers().contains(p))
+    				if(!bar.getPlayers().contains(p) && !b.getToggledPlayers().contains(p))
 						bar.addPlayer(p);
     			}
     		}

@@ -13,6 +13,7 @@ public class BossBarTimer extends BukkitRunnable{
 		this.b = bar;
 		this.progress = one / ticks;
 	}
+
 	@Override
 	public void run() {
 		double prog = b.getProgress() - progress;
@@ -24,8 +25,7 @@ public class BossBarTimer extends BukkitRunnable{
         else{
         	b.setProgress(prog);
         }
-		
+
 	}
-	
 
 }

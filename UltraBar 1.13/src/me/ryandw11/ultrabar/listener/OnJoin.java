@@ -16,21 +16,22 @@ import me.ryandw11.ultrabar.core.UltraBar;
 public class OnJoin implements Listener {
 
 	private UltraBar plugin;
+
 	public OnJoin(UltraBar plugin){
 		this.plugin = plugin;
 	}
-	
+
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event){
 		Player p = event.getPlayer();
-		
+
 		if(plugin.getConfig().getBoolean("OnJoin.BossBar.Enabled")){
 			BarColor color = GrabBarStyles.barColor(plugin.getConfig().getString("OnJoin.BossBar.Color"));
 			BarStyle style = GrabBarStyles.barStyle(plugin.getConfig().getString("OnJoin.BossBar.Style"));
 			String message = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnJoin.BossBar.Message").replace("{player}", p.getName())), p);
 			int time = plugin.getConfig().getInt("OnJoin.BossBar.Time");
 			double progress = plugin.getConfig().getDouble("OnJoin.BossBar.Health");
-			
+
 			BossBarMessage b = new BossBarMessage();
 			b.createMessageJoin(p, message, color, style, time, progress);
 		}
@@ -40,15 +41,15 @@ public class OnJoin implements Listener {
 			int fadein = plugin.getConfig().getInt("OnJoin.Title.fadein");
 			int fadeout = plugin.getConfig().getInt("OnJoin.Title.fadeout");
 			int time = plugin.getConfig().getInt("OnJoin.Title.time");
-			
-			plugin.mgr.title(message.replace("&", "ง").replace("{player}", p.getName()), p, fadein, time, fadeout, submessage.replace("&", "ง"));
+
+			plugin.mgr.title(message.replace("&", "ยง").replace("{player}", p.getName()), p, fadein, time, fadeout, submessage.replace("&", "ยง"));
 			
 		}
 		if(plugin.getConfig().getBoolean("OnJoin.ActionBar.Enabled")){
 			String message = plugin.papi.getMessage(plugin.getConfig().getString("OnJoin.ActionBar.Message"), p);
-			plugin.mgr.actionBar(p, message.replace("&", "ง").replace("{player}", p.getName()));
+			plugin.mgr.actionBar(p, message.replace("&", "ยง").replace("{player}", p.getName()));
 		}
-		
+
 		/*
 		 * Give the player all of the boss bars.
 		 */
@@ -57,7 +58,7 @@ public class OnJoin implements Listener {
 		}
 		if(!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null)
 			UltraBar.barMessage.addPlayer(p);
-		
+
 	}
-	
+
 }

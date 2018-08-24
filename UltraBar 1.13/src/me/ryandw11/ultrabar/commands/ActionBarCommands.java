@@ -10,8 +10,9 @@ import org.bukkit.entity.Player;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class ActionBarCommands implements CommandExecutor {
-	
+
 	private UltraBar plugin;
+
 	public ActionBarCommands(UltraBar plugin){
 		this.plugin = plugin;
 	}
@@ -33,7 +34,7 @@ public class ActionBarCommands implements CommandExecutor {
 							Message = Message + " " + args[i];
 						}
 						Player p2 = (Player) Bukkit.getServer().getPlayer(args[1]);
-						plugin.mgr.actionBar(p2, Message.replace("&", "ง"));
+						plugin.mgr.actionBar(p2, Message.replace("&", "ยง"));
 					}
 					else{
 						p.sendMessage(ChatColor.RED + "Invalid usage: /actionbar send (player) (message)");
@@ -46,13 +47,13 @@ public class ActionBarCommands implements CommandExecutor {
 			else if(args[0].equalsIgnoreCase("sendall")){
 				if(p.hasPermission("ultrabar.actionbar.sendall")){
 					if(args.length >= 2){
-					
+
 						String Message = "";
 						for (int i = 1; i < args.length; i++){
 						Message = Message + " " + args[i];
 						}
 						for(Player p1 : Bukkit.getOnlinePlayers()){
-						plugin.mgr.actionBar(p1,(Message.replace("&", "ง")));
+						plugin.mgr.actionBar(p1,(Message.replace("&", "ยง")));
 						}	
 					}
 					else{

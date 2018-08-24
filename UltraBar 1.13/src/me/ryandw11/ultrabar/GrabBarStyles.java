@@ -4,6 +4,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
 public class GrabBarStyles {
+
 	public static BarColor barColor(String color){
 		BarColor bar;
 		switch(color.toLowerCase()){
@@ -34,6 +35,7 @@ public class GrabBarStyles {
 		}
 		return bar;
 	}
+
 	public static BarStyle barStyle(String sty){
 		BarStyle st;
 		switch(sty){

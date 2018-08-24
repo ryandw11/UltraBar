@@ -15,11 +15,11 @@ import me.ryandw11.ultrabar.schedulers.TitleSched;
 public class Help implements CommandExecutor {
 
 	private UltraBar plugin;
+
 	public Help(UltraBar plugin){
 		this.plugin = plugin;
 	}
-	
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 		CommandSender p = sender;
@@ -85,8 +85,8 @@ public class Help implements CommandExecutor {
 					plugin.addTogglePlayer((Player) p);
 					p.sendMessage(ChatColor.RED + "Boss Bar announcements will no longer show!");
 				}
-			}
-		
+      }
+
 		return false;
 	}
 

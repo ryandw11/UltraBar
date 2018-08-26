@@ -1,0 +1,20 @@
+name: UltraBar
+version: 1.6.1-Pre1
+main: me.ryandw11.ultrabar.core.UltraBar
+author: ryandw11
+description: Use Titles, Actionbars, and Boss bars!
+softdepend: [WorldGuard, PlaceholderAPI]
+api-version: 1.13
+commands:
+    bar:
+     description: use boss bars!
+     aliases: [ubar, bossbar]
+    utitle:
+     description: use titles!
+     aliases: [ut, ultratitle]
+    actionbar:
+     description: use actionbars!
+     aliases: [ab, uactionbar, uab]
+    UltraBar:
+     description: Help Command
+     aliases: [ub, ultrab]

@@ -26,6 +26,7 @@ public class TitleCommands implements CommandExecutor {
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7===========[&6Title&7]==========="));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/utitle send (player) (message) &7- Send a player a title"));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/utitle sendall (message) &7- Send the server a title"));
+				return true;
 			}
 			else if(args[0].equalsIgnoreCase("send")){
 				if(p.hasPermission("ultrabar.title")){
@@ -44,6 +45,7 @@ public class TitleCommands implements CommandExecutor {
 				else{
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
 				}
+				return true;
 			}
 			else if(args[0].equalsIgnoreCase("sendall")){
 				if(p.hasPermission("ultrabar.title.sendall")){
@@ -64,9 +66,10 @@ public class TitleCommands implements CommandExecutor {
 				else{
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
 				}
+				return true;
 			}
 			
-
+			p.sendMessage(ChatColor.RED + "Unknown subcommand. Type /utitle for help.");
 		
 		return false;
 	}

@@ -45,13 +45,15 @@ public class BossBarSced extends BukkitRunnable{
 		UltraBar.barMessage = bar;
 		this.bar = bar;
 		Double ticks = (double) 1;
-		time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20;
+		time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20; //Multiply by 20 to convert seconds to ticks.
 		this.progress = ticks / time;
 		bar.setProgress(1);
 		
 		for(Player p : Bukkit.getOnlinePlayers()){ //adds all players online to the bar
 			bar.addPlayer(p);
 		}
+		
+		//long delay = b.getConfig().getInt("BossBarMessages.Delay"); //Default of 5
 		
 		this.runTaskTimer(b, 5L, 1L);
 	}
@@ -91,7 +93,7 @@ public class BossBarSced extends BukkitRunnable{
         				bar.removePlayer(p);
         			}
         		}else{
-        			if(!p.isOnline() || b.getConfig().getList("BossBarMessages.World_Whitelist").contains(p.getWorld().getName()) || b.getToggledPlayers().contains(p)){
+        			if(!p.isOnline() || !b.getConfig().getList("BossBarMessages.World_Whitelist").contains(p.getWorld().getName()) || b.getToggledPlayers().contains(p)){
         				bar.removePlayer(p);
         			}
         		}
@@ -116,19 +118,20 @@ public class BossBarSced extends BukkitRunnable{
     		this.progress = ticks / time;
     		
     		for(Player p : Bukkit.getOnlinePlayers()){
-    			if(b.getConfig().getBoolean("BossBarmessages.Enabled")){
+    			if(b.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled")){ //Bug Fix in 1.6.1 | Capitolization error.
     				if(b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
     					if(!bar.getPlayers().contains(p) && !b.getToggledPlayers().contains(p))
     						bar.addPlayer(p);
     				}
-    			}else{
+    			}
+    			else{
     				if(!bar.getPlayers().contains(p) && !b.getToggledPlayers().contains(p))
 						bar.addPlayer(p);
     			}
     		}
     		
     		
-        }
+        } //End of if the bar needs to be reset.
         else{
         	bar.setProgress(prog);
         }

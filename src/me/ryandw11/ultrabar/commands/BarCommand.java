@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.BossBarMessage;
 import me.ryandw11.ultrabar.GrabBarStyles;
+import me.ryandw11.ultrabar.api.UltraBarAPI;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class BarCommand implements CommandExecutor {
@@ -34,8 +35,8 @@ public class BarCommand implements CommandExecutor {
 		if(args.length == 0)	{
 			if(args.length == 0){
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7==========[&6BarMessage&7]============"));
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar send (player) (message) (color) (style) (time) [health] &7- Send a boss bar message to a player!"));
-				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar sendall (message) (color) (style) (time) [health] [world] &7- Send a boss bar message to the server!"));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar send (player) (message) (color) (style) (time) [health] [id:1;] &7- Send a boss bar message to a player!"));
+				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar sendall (message) (color) (style) (time) [health] [world] [id:1;] &7- Send a boss bar message to the server!"));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar cancel &7- Removes all of the bars."));
 				p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Note: All times are in seconds!"));
 			}
@@ -79,8 +80,10 @@ public class BarCommand implements CommandExecutor {
 					progress = 1;
 				}
 			}
+			
+			int id = this.getId(this.combineArgs(args));
 			BossBarMessage b = new BossBarMessage();
-			b.createMessage(pl, message, color, style, time, progress);
+			b.createMessage(pl, message, color, style, time, progress, id);
 		}
 		/*
 		 * send all command
@@ -130,32 +133,56 @@ public class BarCommand implements CommandExecutor {
 					progress = 1;
 				}
 			}
+			int id = this.getId(this.combineArgs(args));
 			BossBarMessage b = new BossBarMessage();
 			if(time == -1){
 				if(w != null){
 					b.createPermMessageWorld(Bukkit.getOnlinePlayers(), message, color, style, progress, w);
 				}else{
-					b.createPermMessage(Bukkit.getOnlinePlayers(), message, color, style, progress);
+					b.createPermMessage(Bukkit.getOnlinePlayers(), message, color, style, progress, id);
 				}
 				return true;
 			}
 			if(w == null){
-				b.createMessageAll(message, color, style, time, progress); //creating the bar
+				b.createMessageAll(message, color, style, time, progress, id); //creating the bar
 			}else{
-				b.createMessageAll(message, color, style, time, progress, w);
+				b.createMessageAll(message, color, style, time, progress, w, id);
 			}
 		}
 		else if(args[0].equalsIgnoreCase("cancel")){
-			for(BossBar b : UltraBar.bossbars){
-				b.setVisible(false);
-				b.removeAll();
-			}
-			UltraBar.bossbars.clear();
+			UltraBarAPI ubapi = new UltraBarAPI();
+			ubapi.clearBar();
 			plugin.getLogger().info("All of the boss bars have been removed.");
 		}
 		else{
 			p.sendMessage(ChatColor.RED + "Invalid command. Do /bar for list of commands.");
 		}
 		return false;
+	}
+	
+	private int getId(String msg) {
+		plugin.getLogger().info("yeet");
+		if(!msg.contains("id:")) return -1;
+		
+		String[] out = msg.split("id:");
+		plugin.getLogger().info(out + "");
+		out = out[1].split(";");
+		String output = out[0];
+		int num = -1;
+		try {
+			num = Integer.parseInt(output);
+		}catch(NumberFormatException e) {
+			num = -1;
+		}
+		return num;
+	}
+	
+	private String combineArgs(String[] args) {
+		String output = "";
+		for(int i = 0; i < args.length; i++) {
+			output += args;
+			if(i + 1 < args.length) output += " ";
+		}
+		return output;
 	}
 }

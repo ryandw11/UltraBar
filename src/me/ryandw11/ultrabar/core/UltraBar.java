@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ryandw11.ultrabar.BossBarSced;
+import me.ryandw11.ultrabar.api.UltraBarAPI;
+import me.ryandw11.ultrabar.bars.UBar;
 import me.ryandw11.ultrabar.bstats.Metrics;
 import me.ryandw11.ultrabar.bstats.UpdateChecker;
 import me.ryandw11.ultrabar.commands.ActionBarCommands;
@@ -36,7 +38,7 @@ import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R2;
  */
 public class UltraBar extends JavaPlugin{
 
-	public static ArrayList<BossBar> bossbars;
+	public static ArrayList<UBar> bossbars;
 	public static BossBar barMessage; //TODO remove static maybe?
 	public static UltraBar plugin;
 	public Typemgr mgr;
@@ -48,7 +50,7 @@ public class UltraBar extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		plugin = this;
-		bossbars = new ArrayList<BossBar>();
+		bossbars = new ArrayList<UBar>();
 		toggledPlayers = new ArrayList<Player>();
 		
 		if(setupPlug()){
@@ -97,10 +99,8 @@ public class UltraBar extends JavaPlugin{
 	
 	@Override
 	public void onDisable(){
-		for(BossBar b : bossbars){
-			b.setVisible(false);
-			b.removeAll();
-		}
+		UltraBarAPI ubapi = new UltraBarAPI();
+		ubapi.clearBar();
 		bossbars.clear();
 		if(barMessage != null){
 			barMessage.setVisible(false);

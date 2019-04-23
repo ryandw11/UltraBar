@@ -28,7 +28,7 @@ public class OnDeath implements Listener{
 			int time = plugin.getConfig().getInt("OnDeath.BossBar.Time");
 			double health = plugin.getConfig().getDouble("OnDeath.BossBar.Health");
 			
-			bapi.sendBossBar(e.getEntity(), msg, color, style, time, health);
+			bapi.sendBossBar(e.getEntity(), msg, color, style, time, health, -1);
 		}
 		if(plugin.getConfig().getBoolean("OnDeath.Title.Enabled")){
 			String msg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnDeath.Title.Message")), e.getEntity());

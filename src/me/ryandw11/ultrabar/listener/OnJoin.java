@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import me.ryandw11.ultrabar.BossBarMessage;
 import me.ryandw11.ultrabar.GrabBarStyles;
+import me.ryandw11.ultrabar.bars.UBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class OnJoin implements Listener {
@@ -52,8 +53,8 @@ public class OnJoin implements Listener {
 		/*
 		 * Give the player all of the boss bars.
 		 */
-		for(BossBar b : UltraBar.bossbars){
-			b.addPlayer(p);
+		for(UBar b : UltraBar.bossbars){
+			b.getBossBar().addPlayer(p);
 		}
 		if(!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null)
 			UltraBar.barMessage.addPlayer(p);

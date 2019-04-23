@@ -1,13 +1,13 @@
 package me.ryandw11.ultrabar.commands;
 
-import org.bukkit.boss.BossBar;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.ChatColor;
 
 import me.ryandw11.ultrabar.BossBarSced;
+import me.ryandw11.ultrabar.api.UltraBarAPI;
 import me.ryandw11.ultrabar.core.UltraBar;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
@@ -40,11 +40,8 @@ public class Help implements CommandExecutor {
 			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")){
 				if(p.hasPermission("ultrabar.reload")){
 					if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")){
-						for(BossBar b : UltraBar.bossbars){
-							b.setVisible(false);
-							b.removeAll();
-						}
-						UltraBar.bossbars.clear();
+						UltraBarAPI ubapi = new UltraBarAPI();
+						ubapi.clearBar();
 						UltraBar.barMessage.setVisible(false);
 						UltraBar.barMessage.removeAll();
 						UltraBar.barMessage = null;

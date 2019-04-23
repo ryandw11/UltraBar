@@ -33,7 +33,7 @@ public class OnCommand implements Listener{
 					int time = plugin.getConfig().getInt("OnCommand." + s + ".BossBar.Time");
 					double health = plugin.getConfig().getDouble("OnCommand." + s + ".BossBar.Health");
 					
-					bapi.sendBossBar(e.getPlayer(), msg, color, style, time, health);
+					bapi.sendBossBar(e.getPlayer(), msg, color, style, time, health, -1);
 				}
 				if(plugin.getConfig().contains("OnCommand." + s + ".Title")){
 					String msg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnCommand." + s + ".Title.Message")), e.getPlayer());

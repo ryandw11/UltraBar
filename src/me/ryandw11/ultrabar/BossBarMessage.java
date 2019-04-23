@@ -9,6 +9,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
+import me.ryandw11.ultrabar.bars.UBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class BossBarMessage {
@@ -17,7 +18,7 @@ public class BossBarMessage {
 		this.plugin = UltraBar.plugin;
 	}
 	private int time;
-	public void createMessage(Collection<? extends Player> collection, String message, BarColor color, BarStyle notched10, int time, double progress){
+	public void createMessage(Collection<? extends Player> collection, String message, BarColor color, BarStyle notched10, int time, double progress, int id){
 		BossBar b = Bukkit.createBossBar(message, color, notched10);
 		b.setProgress(progress);
 		for(Player p : collection){
@@ -26,9 +27,10 @@ public class BossBarMessage {
 		this.time = time * 20;
 		BossBarTimer s = new BossBarTimer(b, this.time, 1, message);
 		s.runTaskTimer(plugin, 5L, 1L);
+		UltraBar.bossbars.add(new UBar(b, id, false));
 		//UltraBar.bossbars.add(b);
 	}
-	public void createMessageAll(String message, BarColor color, BarStyle notched10, int time, double progress){
+	public void createMessageAll(String message, BarColor color, BarStyle notched10, int time, double progress, int id){
 		BossBar b = Bukkit.createBossBar(message, color, notched10);
 		b.setProgress(progress);
 		for(Player p : Bukkit.getOnlinePlayers()){
@@ -37,9 +39,9 @@ public class BossBarMessage {
 		this.time = time * 20;
 		BossBarTimer s = new BossBarTimer(b, this.time, 1, message);
 		s.runTaskTimer(plugin, 5L, 1L);
-		UltraBar.bossbars.add(b);
+		UltraBar.bossbars.add(new UBar(b, id, true)); //TODO
 	}
-	public void createMessageAll(String message, BarColor color, BarStyle notched10, int time, double progress, World w){
+	public void createMessageAll(String message, BarColor color, BarStyle notched10, int time, double progress, World w, int id){
 		BossBar b = Bukkit.createBossBar(message, color, notched10);
 		b.setProgress(progress);
 		for(Player p : Bukkit.getOnlinePlayers()){
@@ -50,9 +52,9 @@ public class BossBarMessage {
 		this.time = time * 20;
 		BossBarTimer s = new BossBarTimer(b, this.time, 1, message);
 		s.runTaskTimer(plugin, 5L, 1L);
-		UltraBar.bossbars.add(b);
+		UltraBar.bossbars.add(new UBar(b, id, true)); //TODO
 	}
-	public void createMessage(Player p, String message, BarColor color, BarStyle notched10, int time, double progress){
+	public void createMessage(Player p, String message, BarColor color, BarStyle notched10, int time, double progress, int id){
 		BossBar b = Bukkit.createBossBar(message, color, notched10);
 		b.setProgress(progress);
 		b.addPlayer(p);
@@ -60,7 +62,7 @@ public class BossBarMessage {
 		this.time = time * 20;
 		BossBarTimer s = new BossBarTimer(b, this.time, progress, message);
 		s.runTaskTimer(plugin, 5L, 1L);
-		//UltraBar.bossbars.add(b);
+		UltraBar.bossbars.add(new UBar(b, id, false));
 	}
 	
 	public void createMessageJoin(Player p, String message, BarColor color, BarStyle notched10, int time, double progress){
@@ -73,7 +75,7 @@ public class BossBarMessage {
 		s.runTaskTimer(plugin, 5L, 1L);
 	}
 	
-	public void createMessage(Collection<? extends Player> collection, String message, BarColor color, BarStyle notched10, int time, double progress, World world){
+	public void createMessage(Collection<? extends Player> collection, String message, BarColor color, BarStyle notched10, int time, double progress, World world, int id){
 		BossBar b = Bukkit.createBossBar(message, color, notched10);
 		b.setProgress(progress);
 		for(Player p : collection){
@@ -84,6 +86,7 @@ public class BossBarMessage {
 		this.time = time * 20;
 		BossBarTimer s = new BossBarTimer(b, this.time, 1, message);
 		s.runTaskTimer(plugin, 5L, 1L);
+		UltraBar.bossbars.add(new UBar(b, id, false));
 	}
 	public void createPermMessageWorld(Collection<? extends Player> collection, String message, BarColor color, BarStyle notched10, double progress, World world){
 		BossBar b = Bukkit.createBossBar(message, color, notched10);
@@ -94,12 +97,12 @@ public class BossBarMessage {
 			}
 		}
 	}
-	public void createPermMessage(Collection<? extends Player> collection, String message, BarColor color, BarStyle notched10, double progress){
+	public void createPermMessage(Collection<? extends Player> collection, String message, BarColor color, BarStyle notched10, double progress, int id){
 		BossBar b = Bukkit.createBossBar(message, color, notched10);
 		b.setProgress(progress);
 		for(Player p : collection){
 			b.addPlayer(p);
 		}
-		UltraBar.bossbars.add(b);
+		UltraBar.bossbars.add(new UBar(b, id, true));
 	}
 }

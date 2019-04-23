@@ -10,6 +10,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.BossBarMessage;
+import me.ryandw11.ultrabar.bars.UBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class UltraBarAPI {
@@ -45,10 +46,11 @@ public class UltraBarAPI {
 	 * @param bstyle
 	 * @param time
 	 * @param progress
+	 * @param id The id for the bar. (-1 for general)
 	 */
-	public void sendBossBar(Player p, String message, BarColor color, BarStyle bstyle, int time, double progress){
+	public void sendBossBar(Player p, String message, BarColor color, BarStyle bstyle, int time, double progress, int id){
 		BossBarMessage bbm = new BossBarMessage();
-		bbm.createMessage(p, message, color, bstyle, time, progress);
+		bbm.createMessage(p, message, color, bstyle, time, progress, id);
 	}
 	/**
 	 * Send a boss bar to a collection of players.
@@ -58,10 +60,11 @@ public class UltraBarAPI {
 	 * @param bstyle
 	 * @param time
 	 * @param progress
+	 * @param id The id for the bar. (-1 for general)
 	 */
-	public void sendBossBar(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress){
+	public void sendBossBar(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress, int id){
 		BossBarMessage bbm = new BossBarMessage();
-		bbm.createMessage(p, message, color, bstyle, time, progress);
+		bbm.createMessage(p, message, color, bstyle, time, progress, id);
 	}
 	/**
 	 * Send a boss bar where the bar progress does not tick down.
@@ -71,18 +74,33 @@ public class UltraBarAPI {
 	 * @param bstyle
 	 * @param time
 	 * @param progress
+	 * @param id The id for the bar. (-1 for general)
 	 */
-	public void sendBossBarNoCountDown(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress){
+	public void sendBossBarNoCountDown(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress, int id){
 		BossBarMessage bbm = new BossBarMessage();
-		bbm.createMessage(p, message, color, bstyle, time, progress);
+		bbm.createMessage(p, message, color, bstyle, time, progress, id);
 	}
 	/**
 	 * Grab the active bossbars.
-	 * @return A list of possbars.
+	 * @return A list of possbars. (Returns empty list if none)
 	 */
 	@SuppressWarnings("static-access")
 	public List<BossBar> getActiveBars(){
-		return plugin.bossbars;
+		List <BossBar> output = new ArrayList<>();
+		for(UBar ub : UltraBar.bossbars) {
+			if(ub.isPublic()) output.add(ub.getBossBar());
+		}
+		return output;
+	}
+	
+	/**
+	 * Removes bars from the clear bars.
+	 */
+	public void clearBar() {
+		for(UBar ub : UltraBar.bossbars) {
+			ub.clear();
+			UltraBar.bossbars.remove(ub);
+		}
 	}
 	
 	/**
@@ -108,4 +126,6 @@ public class UltraBarAPI {
 	public void removeToggledPlayer(Player p){
 		plugin.removeTogglePlayer(p);
 	}
+	
+	
 }

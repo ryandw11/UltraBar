@@ -11,6 +11,11 @@ import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.core.UltraBar;
 
+/**
+ * Outdated way to make bossbars.
+ * @author Ryan
+ * @deprecated To be removed in future update. use {@link api.bars.BossBarBuilder}
+ */
 public class BossBarMessage {
 	private UltraBar plugin;
 	public BossBarMessage(){

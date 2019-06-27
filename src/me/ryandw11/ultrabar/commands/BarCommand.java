@@ -14,7 +14,11 @@ import org.bukkit.entity.Player;
 import me.ryandw11.ultrabar.BossBarMessage;
 import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.core.UltraBar;
-
+/**
+ * @deprecated To be removed in future update.
+ * @author Ryandw11
+ *
+ */
 public class BarCommand implements CommandExecutor {
 	private UltraBar plugin;
 	public BarCommand(){

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
@@ -27,6 +28,11 @@ public class NewBarCommand implements CommandExecutor {
 		
 		if(!p.hasPermission("ultrabar.bar")){
 			p.sendMessage(ChatColor.RED + "You do not have permission for this command.");
+			return true;
+		}
+		
+		if(args.length == 0) {
+			p.sendMessage(ChatColor.RED + "No parameter detected. Go to " + ChatColor.GREEN + "https://github.com/ryandw11/UltraBar/wiki/Bar-Command-Parameter " + ChatColor.RED + "for help!");
 			return true;
 		}
 		
@@ -147,27 +153,41 @@ public class NewBarCommand implements CommandExecutor {
 			else if(pair.getKey().equalsIgnoreCase("p") || pair.getKey().equalsIgnoreCase("player") || pair.getKey().equalsIgnoreCase("players")) {
 				if(pair.getValue().equalsIgnoreCase("@a") || pair.getValue().equalsIgnoreCase("all") || pair.getValue().equalsIgnoreCase("*")) {
 					bbb.setPlayerCollection((Collection<Player>) Bukkit.getOnlinePlayers());
+					if(!s.hasPermission("ultrabar.bar.player.all")) {
+						s.sendMessage(ChatColor.RED + "You do not have permission to send bars to everyone.");
+						return;
+					}
 				}
 				else if(pair.getValue().contains(",")) {
 					String sp = pair.getValue();
 					String[] ls = sp.split(",");
 					Collection<Player> players = new ArrayList<>();
 					for(String sa : ls) {
-						Player ptemp = Bukkit.getPlayer(sa);
+						@SuppressWarnings("deprecation")
+						OfflinePlayer ptemp = Bukkit.getOfflinePlayer(sa);
 						if(ptemp.isOnline()) {
-							players.add(ptemp);
+							players.add(Bukkit.getPlayer(sa));
 						}
 					}
 					bbb.setPlayerCollection(players);
+					if(!s.hasPermission("ultrabar.bar.player.list")) {
+						s.sendMessage(ChatColor.RED + "You do not have permission to send bars to a list of people.");
+						return;
+					}
 				}
 				else {
-					if(!Bukkit.getPlayer(pair.getValue()).isOnline()) {
+					if(!Bukkit.getOfflinePlayer(pair.getValue()).isOnline()) {
 						s.sendMessage(ChatColor.RED + "The player you requested is not online!");
+						return;
 					}
 					bbb.setSinglePlayer(Bukkit.getPlayer(pair.getValue()));
 				}
 			}
 			else if(pair.getKey().equalsIgnoreCase("perm")) {
+				if(!s.hasPermission("ultrabar.bar.perm")) {
+					s.sendMessage(ChatColor.RED + "You do not have permission to make permanent bars.");
+					return;
+				}
 				if(pair.getValue().equalsIgnoreCase("true")) {
 					perm = true;
 				}

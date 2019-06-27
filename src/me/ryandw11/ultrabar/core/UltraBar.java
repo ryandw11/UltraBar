@@ -65,7 +65,7 @@ public class UltraBar extends JavaPlugin{
 		}
 		else{
 			getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-			getLogger().info("This version is only for 1.11 - 1.14.0. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
+			getLogger().info("This version is only for 1.11 - 1.14.3. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
 			getLogger().info("The plugin will now be disabled!");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
@@ -109,7 +109,7 @@ public class UltraBar extends JavaPlugin{
 			barMessage.removeAll();
 			barMessage = null;
 		}
-		getLogger().info("UltraBar for 1.11 - 1.14.0 has been disabled correctly!"); // same thing
+		getLogger().info("UltraBar for 1.11 - 1.14.3 has been disabled correctly!"); // same thing
 		
 	}
 	

@@ -16,7 +16,7 @@ import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.core.UltraBar;
 /**
  * @deprecated To be removed in future update.
- * @author Ryan
+ * @author Ryandw11
  *
  */
 public class BarCommand implements CommandExecutor {

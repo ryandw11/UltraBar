@@ -12,8 +12,9 @@ import me.ryandw11.ultrabar.BossBarSced;
 import me.ryandw11.ultrabar.bstats.Metrics;
 import me.ryandw11.ultrabar.bstats.UpdateChecker;
 import me.ryandw11.ultrabar.commands.ActionBarCommands;
-import me.ryandw11.ultrabar.commands.BarCommand;
+import me.ryandw11.ultrabar.commands.BarCommandTabCompleter;
 import me.ryandw11.ultrabar.commands.Help;
+import me.ryandw11.ultrabar.commands.NewBarCommand;
 import me.ryandw11.ultrabar.commands.TitleCommands;
 import me.ryandw11.ultrabar.depends.PAPIExists;
 import me.ryandw11.ultrabar.depends.PAPINotFound;
@@ -21,7 +22,7 @@ import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
 import me.ryandw11.ultrabar.listener.OnCommand;
 import me.ryandw11.ultrabar.listener.OnDeath;
 import me.ryandw11.ultrabar.listener.OnJoin;
-import me.ryandw11.ultrabar.listener.OnMove;
+//import me.ryandw11.ultrabar.listener.OnMove;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
 import me.ryandw11.ultrabar.typemgr.Typemgr;
@@ -29,6 +30,7 @@ import me.ryandw11.ultrabar.typemgr.Typemgr_1_11_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_12_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R2;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_14_R1;
 
 /**
  * @author Ryandw11
@@ -63,7 +65,7 @@ public class UltraBar extends JavaPlugin{
 		}
 		else{
 			getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-			getLogger().info("This version is only for 1.11 - 1.13.1. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
+			getLogger().info("This version is only for 1.11 - 1.14.3. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
 			getLogger().info("The plugin will now be disabled!");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
@@ -107,7 +109,7 @@ public class UltraBar extends JavaPlugin{
 			barMessage.removeAll();
 			barMessage = null;
 		}
-		getLogger().info("UltraBar for 1.11 - 1.13.1 has been disabled correctly!"); // same thing
+		getLogger().info("UltraBar for 1.11 - 1.14.3 has been disabled correctly!"); // same thing
 		
 	}
 	
@@ -118,7 +120,8 @@ public class UltraBar extends JavaPlugin{
 	}
 	
 	public void loadMethod(){
-		getCommand("bar").setExecutor(new BarCommand());
+		getCommand("bar").setExecutor(new NewBarCommand());
+		getCommand("bar").setTabCompleter(new BarCommandTabCompleter());
 		getCommand("utitle").setExecutor(new TitleCommands(this));
 		getCommand("actionbar").setExecutor(new ActionBarCommands(this));
 		getCommand("ultrabar").setExecutor(new Help(this));
@@ -126,7 +129,7 @@ public class UltraBar extends JavaPlugin{
 		Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
 		if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard){
-			Bukkit.getServer().getPluginManager().registerEvents(new OnMove(this), this);
+//			Bukkit.getServer().getPluginManager().registerEvents(new OnMove(), this);
 		}
 		
 	}
@@ -159,7 +162,10 @@ public class UltraBar extends JavaPlugin{
         }
 
         getLogger().info("Your server is running version " + version + "!");
-        if (version.equals("v1_13_R2")) {
+        if(version.equals("v1_14_R1")) {
+        	mgr = new Typemgr_1_14_R1();
+        }
+        else if (version.equals("v1_13_R2")) {
             
             mgr = new Typemgr_1_13_R2();
         }

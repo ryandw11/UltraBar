@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import me.ryandw11.ultrabar.BossBarMessage;
 import me.ryandw11.ultrabar.core.UltraBar;
 
+@SuppressWarnings("deprecation")
 public class UltraBarAPI {
 	private UltraBar plugin;
 	public UltraBarAPI (){
@@ -39,12 +40,7 @@ public class UltraBarAPI {
 	}
 	/**
 	 * Send a boss bar to a certain player
-	 * @param p
-	 * @param message
-	 * @param color
-	 * @param bstyle
-	 * @param time
-	 * @param progress
+	 * @deprecated See {@link bars.BossBarBuilder}
 	 */
 	public void sendBossBar(Player p, String message, BarColor color, BarStyle bstyle, int time, double progress){
 		BossBarMessage bbm = new BossBarMessage();
@@ -52,12 +48,7 @@ public class UltraBarAPI {
 	}
 	/**
 	 * Send a boss bar to a collection of players.
-	 * @param p
-	 * @param message
-	 * @param color
-	 * @param bstyle
-	 * @param time
-	 * @param progress
+	 * @deprecated See {@link bars.BossBarBuilder}
 	 */
 	public void sendBossBar(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress){
 		BossBarMessage bbm = new BossBarMessage();
@@ -65,12 +56,7 @@ public class UltraBarAPI {
 	}
 	/**
 	 * Send a boss bar where the bar progress does not tick down.
-	 * @param p
-	 * @param message
-	 * @param color
-	 * @param bstyle
-	 * @param time
-	 * @param progress
+	 * @deprecated See {@link bars.BossBarBuilder}
 	 */
 	public void sendBossBarNoCountDown(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress){
 		BossBarMessage bbm = new BossBarMessage();

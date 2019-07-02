@@ -1,13 +1,18 @@
 package me.ryandw11.ultrabar.commands;
 
-import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ConcurrentModificationException;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import me.ryandw11.ultrabar.BossBarSced;
+import me.ryandw11.ultrabar.api.UltraBarAPI;
+import me.ryandw11.ultrabar.api.bars.UBossBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
@@ -32,6 +37,8 @@ public class Help implements CommandExecutor {
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar reload &7- Reload the plugin."));
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar toggle &7- Toggle if you will recive bossbar announcements."));
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar hooks &7- See the active hooks."));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar cancel &7- Remove all active bars."));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar clear (player) &7- Remove all active bars for that player."));
 				}
 				else{
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
@@ -40,11 +47,9 @@ public class Help implements CommandExecutor {
 			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")){
 				if(p.hasPermission("ultrabar.reload")){
 					if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")){
-						for(BossBar b : UltraBar.bossbars){
-							b.setVisible(false);
-							b.removeAll();
+						for(UBossBar b : UltraBar.ubossbars){
+							b.delete();
 						}
-						UltraBar.bossbars.clear();
 						UltraBar.barMessage.setVisible(false);
 						UltraBar.barMessage.removeAll();
 						UltraBar.barMessage = null;
@@ -92,10 +97,16 @@ public class Help implements CommandExecutor {
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
 					return true;
 				}
+				
+				String version = Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
+				
 				int num = 0;
 				p.sendMessage(ChatColor.GREEN + "Active Plugin Hooks:");
 				if(plugin.worldguard) {
-					p.sendMessage(ChatColor.BLUE + "- WorldGuard");
+					if(version.equals("v1_14_R1") || version.equals("v1_13_R1") || version.equals("v1_13_R2"))
+						p.sendMessage(ChatColor.BLUE + "- WorldGuard (1.13+)");
+					else
+						p.sendMessage(ChatColor.BLUE + "- WorldGuard (1.11.x - 1.12.x)");
 					num++;
 				}
 				if(plugin.placeholderAPI) {
@@ -104,6 +115,41 @@ public class Help implements CommandExecutor {
 				}
 				if(num == 0)
 					p.sendMessage(ChatColor.BLUE + "There are currently no active plugin hooks!");
+			}
+			else if(args[0].equalsIgnoreCase("cancelbars") || args[0].equalsIgnoreCase("cancel")){
+				if(!p.hasPermission("ultrabar.cancel")) {
+					p.sendMessage(ChatColor.RED + "You do not have permission for this command");
+					return true;
+				}
+				try {
+					for(UBossBar b : UltraBar.ubossbars){
+						b.delete();
+					}
+				}catch(ConcurrentModificationException e) {
+					
+				}
+				plugin.getLogger().info("All of the boss bars have been removed.");
+				p.sendMessage(ChatColor.GREEN + "Cleared all of the active bars!");
+			}
+			else if(args.length == 2 && args[0].equalsIgnoreCase("clear")) {
+				if(!p.hasPermission("ultrabar.clear")) {
+					p.sendMessage(ChatColor.RED + "You do not have permission for this command");
+					return true;
+				}
+				UltraBarAPI ubapi = new UltraBarAPI();
+				if(Bukkit.getOfflinePlayer(args[1]) == null) {
+					p.sendMessage(ChatColor.RED + "That player does not exist!");
+					return false;
+				}
+				if(!Bukkit.getPlayer(args[1]).isOnline()) {
+					p.sendMessage(ChatColor.RED + "That player is not online!");
+					return false;
+				}
+				for(UBossBar ub : ubapi.getBarsForPlayer(Bukkit.getPlayer(args[1]))) {
+					ub.removePlayer(Bukkit.getPlayer(args[1]));
+					ub.updatePlayers();
+				}
+				p.sendMessage(ChatColor.GREEN + "Cleared all bars for that player!");
 			}
 			else {
 				p.sendMessage(ChatColor.RED + "Unknown SubCommand. Type /ultrabar for help!");

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ryandw11.ultrabar.BossBarSced;
+import me.ryandw11.ultrabar.api.bars.UBossBar;
 import me.ryandw11.ultrabar.bstats.Metrics;
 import me.ryandw11.ultrabar.bstats.UpdateChecker;
 import me.ryandw11.ultrabar.commands.ActionBarCommands;
@@ -19,9 +20,12 @@ import me.ryandw11.ultrabar.commands.TitleCommands;
 import me.ryandw11.ultrabar.depends.PAPIExists;
 import me.ryandw11.ultrabar.depends.PAPINotFound;
 import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
+import me.ryandw11.ultrabar.listener.OnChangeWorld;
 import me.ryandw11.ultrabar.listener.OnCommand;
 import me.ryandw11.ultrabar.listener.OnDeath;
 import me.ryandw11.ultrabar.listener.OnJoin;
+import me.ryandw11.ultrabar.listener.OnMove_1_12_R1;
+import me.ryandw11.ultrabar.listener.OnMove_1_13_R1;
 //import me.ryandw11.ultrabar.listener.OnMove;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
@@ -38,7 +42,11 @@ import me.ryandw11.ultrabar.typemgr.Typemgr_1_14_R1;
  */
 public class UltraBar extends JavaPlugin{
 
-	public static ArrayList<BossBar> bossbars;
+	/**
+	 * Contains all of the tracked ubossbars for anything.
+	 * @since 2.1
+	 */
+	public static ArrayList<UBossBar> ubossbars;
 	public static BossBar barMessage; //TODO remove static maybe?
 	public static UltraBar plugin;
 	public Typemgr mgr;
@@ -50,7 +58,7 @@ public class UltraBar extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		plugin = this;
-		bossbars = new ArrayList<BossBar>();
+		ubossbars = new ArrayList<UBossBar>();
 		toggledPlayers = new ArrayList<Player>();
 		
 		if(setupPlug()){
@@ -99,11 +107,10 @@ public class UltraBar extends JavaPlugin{
 	
 	@Override
 	public void onDisable(){
-		for(BossBar b : bossbars){
-			b.setVisible(false);
-			b.removeAll();
+		for(UBossBar b : ubossbars){
+			if(b != null)
+				b.delete();
 		}
-		bossbars.clear();
 		if(barMessage != null){
 			barMessage.setVisible(false);
 			barMessage.removeAll();
@@ -128,9 +135,8 @@ public class UltraBar extends JavaPlugin{
 		Bukkit.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
-		if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard){
-//			Bukkit.getServer().getPluginManager().registerEvents(new OnMove(), this);
-		}
+		Bukkit.getServer().getPluginManager().registerEvents(new OnChangeWorld(), this);
+		
 		
 	}
 	
@@ -164,22 +170,32 @@ public class UltraBar extends JavaPlugin{
         getLogger().info("Your server is running version " + version + "!");
         if(version.equals("v1_14_R1")) {
         	mgr = new Typemgr_1_14_R1();
+        	if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
         }
         else if (version.equals("v1_13_R2")) {
             
             mgr = new Typemgr_1_13_R2();
+            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
         }
         else if (version.equals("v1_13_R1")) {
             
             mgr = new Typemgr_1_13_R1();
+            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
         }
         else if (version.equals("v1_12_R1")) {
             
             mgr = new Typemgr_1_12_R1();
+            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_12_R1(this), this);
         }
         else if (version.equals("v1_11_R1")) {
             
             mgr = new Typemgr_1_11_R1();
+            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_12_R1(this), this);
         }
         
         return mgr != null;

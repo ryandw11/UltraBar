@@ -9,6 +9,8 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.api.UltraBarAPI;
+import me.ryandw11.ultrabar.api.bars.BossBarBuilder;
+import me.ryandw11.ultrabar.api.bars.UBossBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class OnDeath implements Listener{
@@ -28,7 +30,17 @@ public class OnDeath implements Listener{
 			int time = plugin.getConfig().getInt("OnDeath.BossBar.Time");
 			double health = plugin.getConfig().getDouble("OnDeath.BossBar.Health");
 			
-			bapi.sendBossBar(e.getEntity(), msg, color, style, time, health);
+			BossBarBuilder bbb = new BossBarBuilder(false);
+			bbb.setSinglePlayer(e.getEntity());
+			bbb.setMessage(msg);
+			bbb.setColor(color);
+			bbb.setStyle(style);
+			bbb.setTime(time);
+			bbb.setProgress(health);
+			UBossBar bb = bbb.build();
+			
+			UltraBar.ubossbars.add(bb);
+			
 		}
 		if(plugin.getConfig().getBoolean("OnDeath.Title.Enabled")){
 			String msg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnDeath.Title.Message")), e.getEntity());
@@ -43,6 +55,14 @@ public class OnDeath implements Listener{
 			String msg = plugin.papi.getMessage(plugin.getConfig().getString("OnDeath.ActionBar.Message").replace('&', '§'), e.getEntity());
 			
 			bapi.sendActionBar(e.getEntity(), msg);
+		}
+		
+		for(UBossBar ub : UltraBar.ubossbars) {
+			if(!ub.getPlayers().contains(e.getEntity())) continue;
+			if(ub.getParameters() != null && ub.getParameters().containsKey("clear")) {
+				if(ub.getParameters().get("clear").equalsIgnoreCase("death"))
+					ub.getBar().removePlayer(e.getEntity());
+			}
 		}
 	}
 }

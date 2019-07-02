@@ -1,18 +1,19 @@
 package me.ryandw11.ultrabar.api;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
-import me.ryandw11.ultrabar.BossBarMessage;
+import me.ryandw11.ultrabar.api.bars.UBossBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
-@SuppressWarnings("deprecation")
+/**
+ * Removed depracted #sendBossBar in version 2.1.
+ * {@link api.bars.BossBarBuilder}
+ * @author Ryandw11
+ *
+ */
 public class UltraBarAPI {
 	private UltraBar plugin;
 	public UltraBarAPI (){
@@ -39,36 +40,11 @@ public class UltraBarAPI {
 		plugin.mgr.actionBar(p, message);
 	}
 	/**
-	 * Send a boss bar to a certain player
-	 * @deprecated See {@link bars.BossBarBuilder}
-	 */
-	public void sendBossBar(Player p, String message, BarColor color, BarStyle bstyle, int time, double progress){
-		BossBarMessage bbm = new BossBarMessage();
-		bbm.createMessage(p, message, color, bstyle, time, progress);
-	}
-	/**
-	 * Send a boss bar to a collection of players.
-	 * @deprecated See {@link bars.BossBarBuilder}
-	 */
-	public void sendBossBar(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress){
-		BossBarMessage bbm = new BossBarMessage();
-		bbm.createMessage(p, message, color, bstyle, time, progress);
-	}
-	/**
-	 * Send a boss bar where the bar progress does not tick down.
-	 * @deprecated See {@link bars.BossBarBuilder}
-	 */
-	public void sendBossBarNoCountDown(Collection<Player> p, String message, BarColor color, BarStyle bstyle, int time, double progress){
-		BossBarMessage bbm = new BossBarMessage();
-		bbm.createMessage(p, message, color, bstyle, time, progress);
-	}
-	/**
 	 * Grab the active bossbars.
-	 * @return A list of possbars.
+	 * @return A list of active bars.
 	 */
-	@SuppressWarnings("static-access")
-	public List<BossBar> getActiveBars(){
-		return plugin.bossbars;
+	public List<UBossBar> getActiveBars(){
+		return UltraBar.ubossbars;
 	}
 	
 	/**
@@ -93,5 +69,21 @@ public class UltraBarAPI {
 	 */
 	public void removeToggledPlayer(Player p){
 		plugin.removeTogglePlayer(p);
+	}
+	
+	/**
+	 * Find all active bars with a player.
+	 * @param p The player you want to find bars for.
+	 * @return Active bars for a player.
+	 * @since 2.1
+	 */
+	public List<UBossBar> getBarsForPlayer(Player p) {
+		List<UBossBar> output = new ArrayList<>();
+		for(UBossBar bb : UltraBar.ubossbars) {
+			if(bb.getPlayers().contains(p))
+				output.add(bb);
+		}
+		
+		return output;
 	}
 }

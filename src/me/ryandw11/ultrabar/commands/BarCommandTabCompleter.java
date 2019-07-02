@@ -13,7 +13,7 @@ public class BarCommandTabCompleter implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
 		ArrayList<String> completions = new ArrayList<>();
-		completions = new ArrayList<>( Arrays.asList("player:", "time:", "perm:", "msg:", "prog:", "w:", "color:", "style:"));
+		completions = new ArrayList<>( Arrays.asList("player:", "time:", "perm:", "msg:", "prog:", "w:", "color:", "style:", "clear:"));
 		return StringUtil.copyPartialMatches(args[args.length - 1], completions, new ArrayList<>());
 	}
 }

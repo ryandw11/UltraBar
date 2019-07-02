@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.api.bars.BossBarBuilder;
+import me.ryandw11.ultrabar.api.bars.UBossBar;
+import me.ryandw11.ultrabar.core.UltraBar;
 
 public class NewBarCommand implements CommandExecutor {
 
@@ -81,9 +83,9 @@ public class NewBarCommand implements CommandExecutor {
 				inString = false;
 				inKey = true;
 				if(tempString == "")
-					mp.put(tempKey.replace(":", ""), tempValue);
+					mp.put(tempKey.replace(":", "").toLowerCase(), tempValue.toLowerCase());
 				else if(tempValue.equals(""))
-					mp.put(tempKey.replace(":", ""), tempString.replace('"', ' '));
+					mp.put(tempKey.replace(":", "").toLowerCase(), tempString.replace('"', ' '));
 				tempKey = "";
 				tempValue = "";
 				tempString = "";
@@ -105,8 +107,9 @@ public class NewBarCommand implements CommandExecutor {
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation"})
 	protected void proccessInfo(CommandSender s, Map<String, String> mp) {
+		final Map<String, String> param = new HashMap<String, String>(mp); //Creates a copy of the params
 		@SuppressWarnings("rawtypes")
 		Iterator it = mp.entrySet().iterator();
 		BossBarBuilder bbb = new BossBarBuilder(false);
@@ -153,6 +156,7 @@ public class NewBarCommand implements CommandExecutor {
 			else if(pair.getKey().equalsIgnoreCase("p") || pair.getKey().equalsIgnoreCase("player") || pair.getKey().equalsIgnoreCase("players")) {
 				if(pair.getValue().equalsIgnoreCase("@a") || pair.getValue().equalsIgnoreCase("all") || pair.getValue().equalsIgnoreCase("*")) {
 					bbb.setPlayerCollection((Collection<Player>) Bukkit.getOnlinePlayers());
+					bbb.setPublicBar(true);
 					if(!s.hasPermission("ultrabar.bar.player.all")) {
 						s.sendMessage(ChatColor.RED + "You do not have permission to send bars to everyone.");
 						return;
@@ -163,7 +167,6 @@ public class NewBarCommand implements CommandExecutor {
 					String[] ls = sp.split(",");
 					Collection<Player> players = new ArrayList<>();
 					for(String sa : ls) {
-						@SuppressWarnings("deprecation")
 						OfflinePlayer ptemp = Bukkit.getOfflinePlayer(sa);
 						if(ptemp.isOnline()) {
 							players.add(Bukkit.getPlayer(sa));
@@ -195,24 +198,41 @@ public class NewBarCommand implements CommandExecutor {
 					perm = false;
 				}
 			}
+			else if(pair.getKey().equalsIgnoreCase("clear")) {
+				if(!s.hasPermission("ultrabar.bar.clear")) {
+					s.sendMessage(ChatColor.RED + "You do not have permission to set clear conditions on bars.");
+					return;
+				}
+				if(pair.getValue().equalsIgnoreCase("death")) {
+					
+				}else if(pair.getValue().equalsIgnoreCase("world")) {
+					
+				}else {
+					s.sendMessage(ChatColor.RED + "Invalid clear condition. It must be set to death or world");
+					return;
+				}
+			}
 			
 			it.remove();
 		}
 		
 		if(perm) {
-			boolean test = bbb.buildDead();
-			if(!test) {
+			UBossBar bar = bbb.buildDead();
+			if(bar == null){
 				s.sendMessage(ChatColor.RED + "Failed to send bossbar! Are you sure you have all of the required parameters?");
 			}
 			else {
 				s.sendMessage(ChatColor.GREEN + "Successfully sent bossbar!");
+				bar.setParameters(mp);
 			}
 		}else {
-			boolean test = bbb.build();
-			if(!test) {
+			UBossBar bar = bbb.build();
+			if(bar == null) {
 				s.sendMessage(ChatColor.RED + "Failed to send bossbar! Are you sure you have all of the required parameters?");
 			}else {
 				s.sendMessage(ChatColor.GREEN + "Successfully sent bossbar!");
+				bar.setParameters(param);
+				UltraBar.ubossbars.add(bar);
 			}
 		}
 		

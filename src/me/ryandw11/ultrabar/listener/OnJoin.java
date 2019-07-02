@@ -2,15 +2,15 @@ package me.ryandw11.ultrabar.listener;
 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import me.ryandw11.ultrabar.BossBarMessage;
 import me.ryandw11.ultrabar.GrabBarStyles;
+import me.ryandw11.ultrabar.api.bars.BossBarBuilder;
+import me.ryandw11.ultrabar.api.bars.UBossBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class OnJoin implements Listener {
@@ -31,8 +31,18 @@ public class OnJoin implements Listener {
 			int time = plugin.getConfig().getInt("OnJoin.BossBar.Time");
 			double progress = plugin.getConfig().getDouble("OnJoin.BossBar.Health");
 			
-			BossBarMessage b = new BossBarMessage();
-			b.createMessageJoin(p, message, color, style, time, progress);
+			/*
+			 * Update BossBarBuilder
+			 */
+			BossBarBuilder bbb = new BossBarBuilder(false);
+			bbb.setSinglePlayer(p);
+			bbb.setMessage(message);
+			bbb.setColor(color);
+			bbb.setStyle(style);
+			bbb.setTime(time);
+			bbb.setProgress(progress);
+			UBossBar bb = bbb.build();
+			bb.getTimer().setupTimer(bb);
 		}
 		if(plugin.getConfig().getBoolean("OnJoin.Title.Enabled")){
 			String message = plugin.papi.getMessage(plugin.getConfig().getString("OnJoin.Title.Message"), p);
@@ -52,8 +62,9 @@ public class OnJoin implements Listener {
 		/*
 		 * Give the player all of the boss bars.
 		 */
-		for(BossBar b : UltraBar.bossbars){
-			b.addPlayer(p);
+		for(UBossBar b : UltraBar.ubossbars){
+			if(b.isPublicBar())
+				b.addPlayer(p);
 		}
 		if(!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null)
 			UltraBar.barMessage.addPlayer(p);

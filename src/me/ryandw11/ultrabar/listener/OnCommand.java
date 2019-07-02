@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.api.UltraBarAPI;
+import me.ryandw11.ultrabar.api.bars.BossBarBuilder;
+import me.ryandw11.ultrabar.api.bars.UBossBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class OnCommand implements Listener{
@@ -33,7 +35,15 @@ public class OnCommand implements Listener{
 					int time = plugin.getConfig().getInt("OnCommand." + s + ".BossBar.Time");
 					double health = plugin.getConfig().getDouble("OnCommand." + s + ".BossBar.Health");
 					
-					bapi.sendBossBar(e.getPlayer(), msg, color, style, time, health);
+					BossBarBuilder bbb = new BossBarBuilder(false);
+					bbb.setSinglePlayer(e.getPlayer());
+					bbb.setMessage(msg);
+					bbb.setColor(color);
+					bbb.setStyle(style);
+					bbb.setTime(time);
+					bbb.setProgress(health);
+					UBossBar bb = bbb.build();
+					UltraBar.ubossbars.add(bb);
 				}
 				if(plugin.getConfig().contains("OnCommand." + s + ".Title")){
 					String msg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnCommand." + s + ".Title.Message")), e.getPlayer());

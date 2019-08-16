@@ -1,7 +1,7 @@
 name: UltraBar
-version: 2.1
+version: 2.1.2
 main: me.ryandw11.ultrabar.core.UltraBar
-author: ryandw11
+author: Ryandw11
 description: Use Titles, Actionbars, and Boss bars!
 softdepend: [WorldGuard, PlaceholderAPI]
 api-version: 1.13

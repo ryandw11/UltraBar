@@ -86,4 +86,19 @@ public class UltraBarAPI {
 		
 		return output;
 	}
+	
+	/**
+	 * Find all active bars with a certain id.
+	 * @param id The int id of the bar.
+	 * @return Active bars for the id.
+	 * @since 2.1.1
+	 */
+	public List<UBossBar> getBarsWithId(int id){
+		List<UBossBar> output = new ArrayList<>();
+		for(UBossBar bb : UltraBar.ubossbars) {
+			if(bb.getId() == id)
+				output.add(bb);
+		}
+		return output;
+	}
 }

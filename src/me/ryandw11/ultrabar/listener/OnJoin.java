@@ -34,13 +34,13 @@ public class OnJoin implements Listener {
 			/*
 			 * Update BossBarBuilder
 			 */
-			BossBarBuilder bbb = new BossBarBuilder(false);
-			bbb.setSinglePlayer(p);
-			bbb.setMessage(message);
-			bbb.setColor(color);
-			bbb.setStyle(style);
-			bbb.setTime(time);
-			bbb.setProgress(progress);
+			BossBarBuilder bbb = new BossBarBuilder(false)
+					.setSinglePlayer(p)
+					.setMessage(message)
+					.setColor(color)
+					.setStyle(style)
+					.setTime(time)
+					.setProgress(progress);
 			UBossBar bb = bbb.build();
 			bb.getTimer().setupTimer(bb);
 		}

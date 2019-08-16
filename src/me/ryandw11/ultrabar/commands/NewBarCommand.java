@@ -157,6 +157,7 @@ public class NewBarCommand implements CommandExecutor {
 				if(pair.getValue().equalsIgnoreCase("@a") || pair.getValue().equalsIgnoreCase("all") || pair.getValue().equalsIgnoreCase("*")) {
 					bbb.setPlayerCollection((Collection<Player>) Bukkit.getOnlinePlayers());
 					bbb.setPublicBar(true);
+					bbb.setTracked(true);
 					if(!s.hasPermission("ultrabar.bar.player.all")) {
 						s.sendMessage(ChatColor.RED + "You do not have permission to send bars to everyone.");
 						return;
@@ -210,6 +211,19 @@ public class NewBarCommand implements CommandExecutor {
 				}else {
 					s.sendMessage(ChatColor.RED + "Invalid clear condition. It must be set to death or world");
 					return;
+				}
+			}
+			else if(pair.getKey().equalsIgnoreCase("id")) {
+				if(!s.hasPermission("ultrabar.bar.id")) {
+					s.sendMessage(ChatColor.RED + "You do not have permission to set an id on bars.");
+					return;
+				}
+				try {
+					bbb.setId(Integer.parseInt(pair.getValue()));
+				}
+				catch(NumberFormatException e) {
+					s.sendMessage(ChatColor.RED + "Unable to set the id! The value provided was not a valid number. Set id to default (-1)");
+					bbb.setId(-1);
 				}
 			}
 			

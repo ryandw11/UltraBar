@@ -34,6 +34,7 @@ public class UBossBar {
 	private BossBarTimer timer;
 	private BossBar bar;
 	private boolean publicBar;
+	private int id = -1;
 	
 	private Map<String, String> parameters;
 	
@@ -54,6 +55,7 @@ public class UBossBar {
 		this.setTracked(bbb.getTracked());
 		this.timer = timer;
 		this.bar = bar;
+		this.id = bbb.getId();
 	}
 
 	public String getMessage() {
@@ -94,6 +96,14 @@ public class UBossBar {
 
 	public void setProgress(double progress) {
 		this.progress = progress;
+	}
+	
+	/**
+	 * Get the id
+	 * @return The id.
+	 */
+	public int getId() {
+		return id;
 	}
 
 	/**

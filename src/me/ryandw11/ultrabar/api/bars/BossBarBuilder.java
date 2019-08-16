@@ -31,6 +31,7 @@ public class BossBarBuilder {
 	private World world;
 	private boolean tracked;
 	private boolean publicBar = false;
+	private int id = -1;
 	
 	/**
 	 * The api for building bossbars.
@@ -73,13 +74,18 @@ public class BossBarBuilder {
 		return tracked;
 	}
 	
+	protected int getId() {
+		return id;
+	}
+	
 	/**
 	 * Set the message of the boss bar.
 	 * <b>Required</b>
 	 * @param s
 	 */
-	public void setMessage(String s) {
+	public BossBarBuilder setMessage(String s) {
 		message = s;
+		return this;
 	}
 	
 	/**
@@ -87,8 +93,9 @@ public class BossBarBuilder {
 	 * <b>Required</b>
 	 * @param color
 	 */
-	public void setColor(BarColor color) {
+	public BossBarBuilder setColor(BarColor color) {
 		this.color = color;
+		return this;
 	}
 	
 	/**
@@ -96,16 +103,18 @@ public class BossBarBuilder {
 	 * <b>Required</b>
 	 * @param style
 	 */
-	public void setStyle(BarStyle style) {
+	public BossBarBuilder setStyle(BarStyle style) {
 		this.style = style;
+		return this;
 	}
 	/**
 	 * Set the time of the bossbar.
 	 * <b>Required</b>
 	 * @param time
 	 */
-	public void setTime(int time) {
+	public BossBarBuilder setTime(int time) {
 		this.time = time;
+		return this;
 	}
 	
 	/**
@@ -113,32 +122,50 @@ public class BossBarBuilder {
 	 * <b>Required</b>
 	 * @param progress
 	 */
-	public void setProgress(double progress) {
+	public BossBarBuilder setProgress(double progress) {
 		this.progress = progress;
+		return this;
 	}
 	
 	/**
 	 * Set a single player to a bar.
 	 * @param p The player
 	 */
-	public void setSinglePlayer(Player p) {
+	public BossBarBuilder setSinglePlayer(Player p) {
 		players.add(p);
+		return this;
 	}
 	
 	/**
 	 * Set a collection of players.
 	 * @param players The collection of players.
 	 */
-	public void setPlayerCollection(Collection<Player> players) {
+	public BossBarBuilder setPlayerCollection(Collection<Player> players) {
 		this.players = players;
+		return this;
 	}
 	
 	/**
 	 * Set the world a player/players need to be in.
 	 * @param w
 	 */
-	public void setWorld(World w) {
+	public BossBarBuilder setWorld(World w) {
 		this.world = w;
+		return this;
+	}
+	
+	/**
+	 * Set the id of the bar. (Can be used to retrieve the bar later)
+	 * @param id The int id.
+	 */
+	public BossBarBuilder setId(int id) {
+		this.id = id;
+		return this;
+	}
+	
+	public BossBarBuilder setTracked(boolean value) {
+		this.tracked = value;
+		return this;
 	}
 	
 	/**
@@ -153,8 +180,9 @@ public class BossBarBuilder {
 		return this.publicBar;
 	}
 	
-	public void setPublicBar(boolean bool) {
+	public BossBarBuilder setPublicBar(boolean bool) {
 		this.publicBar = bool;
+		return this;
 	}
 	
 	/**

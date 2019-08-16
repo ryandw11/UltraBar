@@ -37,7 +37,7 @@ public class Help implements CommandExecutor {
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar reload &7- Reload the plugin."));
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar toggle &7- Toggle if you will recive bossbar announcements."));
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar hooks &7- See the active hooks."));
-					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar cancel &7- Remove all active bars."));
+					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar cancel [id] &7- Remove all active bars."));
 					p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar clear (player) &7- Remove all active bars for that player."));
 				}
 				else{
@@ -121,15 +121,33 @@ public class Help implements CommandExecutor {
 					p.sendMessage(ChatColor.RED + "You do not have permission for this command");
 					return true;
 				}
-				try {
-					for(UBossBar b : UltraBar.ubossbars){
+				if(args.length == 2) {
+					int id = -1;
+					try {
+						id = Integer.parseInt(args[1]);
+					}
+					catch(NumberFormatException e) {
+						p.sendMessage(ChatColor.RED + "Invalid number!");
+						return true;
+					}
+					
+					UltraBarAPI uapi = new UltraBarAPI();
+					for(UBossBar b : uapi.getBarsWithId(id)) {
 						b.delete();
 					}
-				}catch(ConcurrentModificationException e) {
+					p.sendMessage(ChatColor.GREEN + "Removed all bossbars with that id!");
 					
+				}else {
+					try {
+						for(UBossBar b : UltraBar.ubossbars){
+							b.delete();
+						}
+					}catch(ConcurrentModificationException e) {
+					
+					}
+					plugin.getLogger().info("All of the boss bars have been removed.");
+					p.sendMessage(ChatColor.GREEN + "Cleared all of the active bars!");
 				}
-				plugin.getLogger().info("All of the boss bars have been removed.");
-				p.sendMessage(ChatColor.GREEN + "Cleared all of the active bars!");
 			}
 			else if(args.length == 2 && args[0].equalsIgnoreCase("clear")) {
 				if(!p.hasPermission("ultrabar.clear")) {

@@ -47,7 +47,7 @@ public class Help implements CommandExecutor {
 			else if(args.length == 1 && args[0].equalsIgnoreCase("reload")){
 				if(p.hasPermission("ultrabar.reload")){
 					if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")){
-						for(UBossBar b : UltraBar.ubossbars){
+						for(UBossBar b : UltraBar.trackedBars){
 							b.delete();
 						}
 						UltraBar.barMessage.setVisible(false);
@@ -139,7 +139,7 @@ public class Help implements CommandExecutor {
 					
 				}else {
 					try {
-						for(UBossBar b : UltraBar.ubossbars){
+						for(UBossBar b : UltraBar.trackedBars){
 							b.delete();
 						}
 					}catch(ConcurrentModificationException e) {

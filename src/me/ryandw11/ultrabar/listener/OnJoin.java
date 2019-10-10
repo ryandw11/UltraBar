@@ -62,9 +62,11 @@ public class OnJoin implements Listener {
 		/*
 		 * Give the player all of the boss bars.
 		 */
-		for(UBossBar b : UltraBar.ubossbars){
-			if(b.isPublicBar())
+		for(UBossBar b : UltraBar.trackedBars){
+			if(b.isPublicBar()) {
 				b.addPlayer(p);
+				b.updatePlayers();
+			}
 		}
 		if(!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null)
 			UltraBar.barMessage.addPlayer(p);

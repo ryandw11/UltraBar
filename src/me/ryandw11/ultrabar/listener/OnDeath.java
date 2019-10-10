@@ -39,7 +39,7 @@ public class OnDeath implements Listener{
 			bbb.setProgress(health);
 			UBossBar bb = bbb.build();
 			
-			UltraBar.ubossbars.add(bb);
+			UltraBar.trackedBars.add(bb);
 			
 		}
 		if(plugin.getConfig().getBoolean("OnDeath.Title.Enabled")){
@@ -57,7 +57,7 @@ public class OnDeath implements Listener{
 			bapi.sendActionBar(e.getEntity(), msg);
 		}
 		
-		for(UBossBar ub : UltraBar.ubossbars) {
+		for(UBossBar ub : UltraBar.trackedBars) {
 			if(!ub.getPlayers().contains(e.getEntity())) continue;
 			if(ub.getParameters() != null && ub.getParameters().containsKey("clear")) {
 				if(ub.getParameters().get("clear").equalsIgnoreCase("death"))

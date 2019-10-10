@@ -246,7 +246,7 @@ public class NewBarCommand implements CommandExecutor {
 			}else {
 				s.sendMessage(ChatColor.GREEN + "Successfully sent bossbar!");
 				bar.setParameters(param);
-				UltraBar.ubossbars.add(bar);
+				UltraBar.trackedBars.add(bar);
 			}
 		}
 		

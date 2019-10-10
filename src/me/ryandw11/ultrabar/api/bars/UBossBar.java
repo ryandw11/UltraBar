@@ -53,6 +53,7 @@ public class UBossBar {
 		this.setPlayers(bbb.getPlayers());
 		this.setWorld(bbb.getWorld());
 		this.setTracked(bbb.getTracked());
+		this.setPublic(bbb.getPublicBar());
 		this.timer = timer;
 		this.bar = bar;
 		this.id = bbb.getId();
@@ -92,6 +93,10 @@ public class UBossBar {
 
 	public double getProgress() {
 		return progress;
+	}
+	
+	public void setPublic(boolean pub) {
+		this.publicBar = pub;
 	}
 
 	public void setProgress(double progress) {
@@ -202,8 +207,8 @@ public class UBossBar {
 		}
 		
 		this.bar.setVisible(false);
-		if(UltraBar.ubossbars.contains(this)) {
-			UltraBar.ubossbars.remove(this);
+		if(UltraBar.trackedBars.contains(this)) {
+			UltraBar.trackedBars.remove(this);
 		}
 	}
 

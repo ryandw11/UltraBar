@@ -43,7 +43,7 @@ public class OnCommand implements Listener{
 					bbb.setTime(time);
 					bbb.setProgress(health);
 					UBossBar bb = bbb.build();
-					UltraBar.ubossbars.add(bb);
+					UltraBar.trackedBars.add(bb);
 				}
 				if(plugin.getConfig().contains("OnCommand." + s + ".Title")){
 					String msg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnCommand." + s + ".Title.Message")), e.getPlayer());

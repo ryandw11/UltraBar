@@ -1,6 +1,7 @@
 package me.ryandw11.ultrabar.core;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,7 +47,7 @@ public class UltraBar extends JavaPlugin{
 	 * Contains all of the tracked ubossbars for anything.
 	 * @since 2.1
 	 */
-	public static ArrayList<UBossBar> ubossbars;
+	public static List<UBossBar> trackedBars;
 	public static BossBar barMessage; //TODO remove static maybe?
 	public static UltraBar plugin;
 	public Typemgr mgr;
@@ -58,7 +59,7 @@ public class UltraBar extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		plugin = this;
-		ubossbars = new ArrayList<UBossBar>();
+		trackedBars = new ArrayList<UBossBar>();
 		toggledPlayers = new ArrayList<Player>();
 		
 		if(setupPlug()){
@@ -107,10 +108,13 @@ public class UltraBar extends JavaPlugin{
 	
 	@Override
 	public void onDisable(){
-		for(UBossBar b : ubossbars){
-			if(b != null)
-				b.delete();
+		for(UBossBar bar : trackedBars) {
+			if(bar.getTimer() != null)
+				bar.getTimer().cancel();
+			if(bar.getBar() != null)
+				bar.getBar().setVisible(false);
 		}
+		trackedBars.removeAll(trackedBars);
 		if(barMessage != null){
 			barMessage.setVisible(false);
 			barMessage.removeAll();

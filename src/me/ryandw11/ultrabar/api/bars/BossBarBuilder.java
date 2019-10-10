@@ -220,7 +220,7 @@ public class BossBarBuilder {
 					UBossBar bb = new UBossBar(this,b,s);
 					bb.getTimer().setupTimer(bb);
 					if(tracked)
-						UltraBar.ubossbars.add(bb);
+						UltraBar.trackedBars.add(bb);
 					return bb;
 				}
 			} // If the world is not there.
@@ -233,7 +233,7 @@ public class BossBarBuilder {
 				UBossBar bb = new UBossBar(this,b,s);
 				bb.getTimer().setupTimer(bb);
 				if(tracked)
-					UltraBar.ubossbars.add(bb);
+					UltraBar.trackedBars.add(bb);
 				return bb;
 			}
 		}
@@ -254,7 +254,7 @@ public class BossBarBuilder {
 				UBossBar bb = new UBossBar(this,b,s);
 				bb.getTimer().setupTimer(bb);
 				if(tracked)
-					UltraBar.ubossbars.add(bb);
+					UltraBar.trackedBars.add(bb);
 				return bb;
 			}else {
 				BossBar b = Bukkit.createBossBar(message, color, style);
@@ -267,7 +267,7 @@ public class BossBarBuilder {
 				UBossBar bb = new UBossBar(this,b,s);
 				bb.getTimer().setupTimer(bb);
 				if(tracked)
-					UltraBar.ubossbars.add(bb);
+					UltraBar.trackedBars.add(bb);
 				return bb;
 			}
 		}
@@ -297,7 +297,7 @@ public class BossBarBuilder {
 					b.addPlayer(Iterables.get(players, 0));
 					UBossBar bb = new UBossBar(this, b, null);
 					if(tracked)
-						UltraBar.ubossbars.add(bb);
+						UltraBar.trackedBars.add(bb);
 					return bb;
 				}
 			} // If the world is not there.
@@ -307,7 +307,7 @@ public class BossBarBuilder {
 				b.addPlayer(Iterables.get(players, 0));
 				UBossBar bb = new UBossBar(this, b, null);
 				if(tracked)
-					UltraBar.ubossbars.add(bb);
+					UltraBar.trackedBars.add(bb);
 				return bb;
 			}
 		}
@@ -325,7 +325,7 @@ public class BossBarBuilder {
 				}
 				UBossBar bb = new UBossBar(this, b, null);
 				if(tracked)
-					UltraBar.ubossbars.add(bb);
+					UltraBar.trackedBars.add(bb);
 				return bb;
 			}else {
 				BossBar b = Bukkit.createBossBar(message, color, style);
@@ -335,7 +335,7 @@ public class BossBarBuilder {
 				}
 				UBossBar bb = new UBossBar(this, b, null);
 				if(tracked)
-					UltraBar.ubossbars.add(bb);
+					UltraBar.trackedBars.add(bb);
 				return bb;
 			}
 		}

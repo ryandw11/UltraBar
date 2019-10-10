@@ -42,9 +42,10 @@ public class UltraBarAPI {
 	/**
 	 * Grab the active bossbars.
 	 * @return A list of active bars.
+	 * @since 2.1.3
 	 */
-	public List<UBossBar> getActiveBars(){
-		return UltraBar.ubossbars;
+	public List<UBossBar> getTrackedBars(){
+		return UltraBar.trackedBars;
 	}
 	
 	/**
@@ -79,7 +80,7 @@ public class UltraBarAPI {
 	 */
 	public List<UBossBar> getBarsForPlayer(Player p) {
 		List<UBossBar> output = new ArrayList<>();
-		for(UBossBar bb : UltraBar.ubossbars) {
+		for(UBossBar bb : UltraBar.trackedBars) {
 			if(bb.getPlayers().contains(p))
 				output.add(bb);
 		}
@@ -95,7 +96,7 @@ public class UltraBarAPI {
 	 */
 	public List<UBossBar> getBarsWithId(int id){
 		List<UBossBar> output = new ArrayList<>();
-		for(UBossBar bb : UltraBar.ubossbars) {
+		for(UBossBar bb : UltraBar.trackedBars) {
 			if(bb.getId() == id)
 				output.add(bb);
 		}

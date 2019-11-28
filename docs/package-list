@@ -1,4 +1,5 @@
 me.ryandw11.ultrabar
 me.ryandw11.ultrabar.api
-me.ryandw11.ultrabar.api.bars
-me.ryandw11.ultrabar.core
+me.ryandw11.ultrabar.api.events
+me.ryandw11.ultrabar.api.parameters
+me.ryandw11.ultrabar.typemgr

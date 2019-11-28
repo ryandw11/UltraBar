@@ -9,8 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import me.ryandw11.ultrabar.GrabBarStyles;
-import me.ryandw11.ultrabar.api.bars.BossBarBuilder;
-import me.ryandw11.ultrabar.api.bars.UBossBar;
+import me.ryandw11.ultrabar.api.BossBarBuilder;
+import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class OnJoin implements Listener {

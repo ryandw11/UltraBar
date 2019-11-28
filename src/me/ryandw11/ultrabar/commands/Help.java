@@ -11,8 +11,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import me.ryandw11.ultrabar.BossBarSced;
+import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.UltraBarAPI;
-import me.ryandw11.ultrabar.api.bars.UBossBar;
+import me.ryandw11.ultrabar.api.events.BarTerminateEvent;
+import me.ryandw11.ultrabar.api.events.TerminationReason;
+import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.core.UltraBar;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
@@ -20,8 +23,10 @@ import me.ryandw11.ultrabar.schedulers.TitleSched;
 public class Help implements CommandExecutor {
 
 	private UltraBar plugin;
+	private UltraBarAPI uba;
 	public Help(UltraBar plugin){
 		this.plugin = plugin;
+		this.uba = new UltraBarAPI();
 	}
 	
 	
@@ -48,7 +53,9 @@ public class Help implements CommandExecutor {
 				if(p.hasPermission("ultrabar.reload")){
 					if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")){
 						for(UBossBar b : UltraBar.trackedBars){
-							b.delete();
+							uba.deleteBar(b);
+							BarTerminateEvent bte = new BarTerminateEvent(b, TerminationReason.BAR_CANCEL);
+				        	Bukkit.getServer().getPluginManager().callEvent(bte);
 						}
 						UltraBar.barMessage.setVisible(false);
 						UltraBar.barMessage.removeAll();
@@ -113,6 +120,12 @@ public class Help implements CommandExecutor {
 					p.sendMessage(ChatColor.BLUE + "- PlaceHolderAPI");
 					num++;
 				}
+				for(BarParameter bp : plugin.getBarParameters()) {
+					if(bp.getPluginName() != null) {
+						p.sendMessage(ChatColor.BLUE + "- " + bp.getPluginName());
+						num++;
+					}
+				}
 				if(num == 0)
 					p.sendMessage(ChatColor.BLUE + "There are currently no active plugin hooks!");
 			}
@@ -132,15 +145,20 @@ public class Help implements CommandExecutor {
 					}
 					
 					UltraBarAPI uapi = new UltraBarAPI();
+					Bukkit.getLogger().info(UltraBar.trackedBars + "");
 					for(UBossBar b : uapi.getBarsWithId(id)) {
-						b.delete();
+						uba.deleteBar(b);
+						BarTerminateEvent bte = new BarTerminateEvent(b, TerminationReason.BAR_CANCEL);
+			        	Bukkit.getServer().getPluginManager().callEvent(bte);
 					}
 					p.sendMessage(ChatColor.GREEN + "Removed all bossbars with that id!");
 					
 				}else {
 					try {
 						for(UBossBar b : UltraBar.trackedBars){
-							b.delete();
+							uba.deleteBar(b);
+							BarTerminateEvent bte = new BarTerminateEvent(b, TerminationReason.BAR_TIME_OUT);
+				        	Bukkit.getServer().getPluginManager().callEvent(bte);
 						}
 					}catch(ConcurrentModificationException e) {
 					

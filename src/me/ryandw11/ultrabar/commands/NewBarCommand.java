@@ -17,8 +17,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.GrabBarStyles;
-import me.ryandw11.ultrabar.api.bars.BossBarBuilder;
-import me.ryandw11.ultrabar.api.bars.UBossBar;
+import me.ryandw11.ultrabar.api.BossBarBuilder;
+import me.ryandw11.ultrabar.api.UBossBar;
+import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class NewBarCommand implements CommandExecutor {
@@ -112,7 +113,7 @@ public class NewBarCommand implements CommandExecutor {
 		final Map<String, String> param = new HashMap<String, String>(mp); //Creates a copy of the params
 		@SuppressWarnings("rawtypes")
 		Iterator it = mp.entrySet().iterator();
-		BossBarBuilder bbb = new BossBarBuilder(false);
+		BossBarBuilder bbb = new BossBarBuilder(true);
 		bbb.setProgress(1);
 		bbb.setColor(BarColor.PURPLE);
 		bbb.setStyle(BarStyle.SEGMENTED_10);
@@ -226,6 +227,14 @@ public class NewBarCommand implements CommandExecutor {
 					bbb.setId(-1);
 				}
 			}
+			else {
+				for(BarParameter bp : UltraBar.plugin.getBarParameters()) {
+					if(bp.aliases().contains(pair.getKey())) {
+						bp.barCreation(pair.getValue(), bbb, s);
+						break;
+					}
+				}
+			}
 			
 			it.remove();
 		}
@@ -246,7 +255,6 @@ public class NewBarCommand implements CommandExecutor {
 			}else {
 				s.sendMessage(ChatColor.GREEN + "Successfully sent bossbar!");
 				bar.setParameters(param);
-				UltraBar.trackedBars.add(bar);
 			}
 		}
 		

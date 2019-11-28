@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.ryandw11.ultrabar.BossBarSced;
-import me.ryandw11.ultrabar.api.bars.UBossBar;
+import me.ryandw11.ultrabar.api.UBossBar;
+import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.bstats.Metrics;
 import me.ryandw11.ultrabar.bstats.UpdateChecker;
 import me.ryandw11.ultrabar.commands.ActionBarCommands;
@@ -21,13 +22,14 @@ import me.ryandw11.ultrabar.commands.TitleCommands;
 import me.ryandw11.ultrabar.depends.PAPIExists;
 import me.ryandw11.ultrabar.depends.PAPINotFound;
 import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
+import me.ryandw11.ultrabar.listener.DeleteBars;
 import me.ryandw11.ultrabar.listener.OnChangeWorld;
 import me.ryandw11.ultrabar.listener.OnCommand;
 import me.ryandw11.ultrabar.listener.OnDeath;
 import me.ryandw11.ultrabar.listener.OnJoin;
 import me.ryandw11.ultrabar.listener.OnMove_1_12_R1;
 import me.ryandw11.ultrabar.listener.OnMove_1_13_R1;
-//import me.ryandw11.ultrabar.listener.OnMove;
+import me.ryandw11.ultrabar.parameters.CommandParameter;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
 import me.ryandw11.ultrabar.typemgr.Typemgr;
@@ -54,13 +56,15 @@ public class UltraBar extends JavaPlugin{
 	public PlaceholderAPIDepend papi;
 	public boolean worldguard = false;
 	public boolean placeholderAPI;
-	private ArrayList<Player> toggledPlayers;
+	private List<Player> toggledPlayers;
+	private List<BarParameter> barParameters;
 	
 	@Override
 	public void onEnable(){
 		plugin = this;
 		trackedBars = new ArrayList<UBossBar>();
 		toggledPlayers = new ArrayList<Player>();
+		barParameters = new ArrayList<BarParameter>();
 		
 		if(setupPlug()){
 			loadMethod();
@@ -74,7 +78,7 @@ public class UltraBar extends JavaPlugin{
 		}
 		else{
 			getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-			getLogger().info("This version is only for 1.11 - 1.14.3. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
+			getLogger().info("This version is only for 1.11 - 1.14.4. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
 			getLogger().info("The plugin will now be disabled!");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
@@ -120,7 +124,7 @@ public class UltraBar extends JavaPlugin{
 			barMessage.removeAll();
 			barMessage = null;
 		}
-		getLogger().info("UltraBar for 1.11 - 1.14.3 has been disabled correctly!"); // same thing
+		getLogger().info("UltraBar for 1.11 - 1.14.4 has been disabled correctly!"); // same thing
 		
 	}
 	
@@ -140,8 +144,9 @@ public class UltraBar extends JavaPlugin{
 		Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnChangeWorld(), this);
+//		Bukkit.getServer().getPluginManager().registerEvents(new DeleteBars(), this);
 		
-		
+		this.registerParameter(new CommandParameter());
 	}
 	
 	private void loadSched(){
@@ -216,7 +221,7 @@ public class UltraBar extends JavaPlugin{
 	 * Grab the list of players that have the messages toggled.
 	 * @return List of toggled
 	 */
-	public ArrayList<Player> getToggledPlayers(){
+	public List<Player> getToggledPlayers(){
 		return toggledPlayers;
 	}
 	
@@ -233,6 +238,19 @@ public class UltraBar extends JavaPlugin{
 	 */
 	public void removeTogglePlayer(Player p){
 		toggledPlayers.remove(p);
+	}
+	
+	/**
+	 * Not to be used.
+	 * @see me.ryandw11.ultrabar.api.UltraBarAPI#registerParameter
+	 * @param bp
+	 */
+	public void registerParameter(BarParameter bp) {
+		barParameters.add(bp);
+	}
+	
+	public ArrayList<BarParameter> getBarParameters() {
+		return new ArrayList<BarParameter>(this.barParameters);
 	}
 }
 

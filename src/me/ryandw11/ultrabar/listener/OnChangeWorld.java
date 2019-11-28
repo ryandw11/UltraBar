@@ -3,7 +3,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 
-import me.ryandw11.ultrabar.api.bars.UBossBar;
+import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 public class OnChangeWorld implements Listener {

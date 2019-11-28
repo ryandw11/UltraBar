@@ -2,10 +2,11 @@ package me.ryandw11.ultrabar.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
-import me.ryandw11.ultrabar.api.bars.UBossBar;
+import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.core.UltraBar;
 
 /**
@@ -52,7 +53,7 @@ public class UltraBarAPI {
 	 * Grab the list of toggled players. (API Use)
 	 * @return
 	 */
-	public ArrayList<Player> getToggledPlayers(){
+	public List<Player> getToggledPlayers(){
 		return plugin.getToggledPlayers();
 	}
 	
@@ -101,5 +102,41 @@ public class UltraBarAPI {
 				output.add(bb);
 		}
 		return output;
+	}
+	
+	/**
+	 * Register a bar parameter.
+	 * @param bp The parameter to register.
+	 */
+	public void registerParameter(BarParameter bp) {
+		plugin.registerParameter(bp);
+	}
+	
+	/**
+	 * Get a bar with a certain pid.
+	 * @param pid
+	 * @return
+	 */
+	public UBossBar getBarWithPid(UUID pid) {
+		for(UBossBar bb : UltraBar.trackedBars) {
+			if(bb.getPID() == pid)
+				return bb;
+		}
+		return null;
+	}
+	
+	/**
+	 * Delete a bar.
+	 * @param bar Delete a bar.
+	 */
+	public void deleteBar(UBossBar bar) {
+		if(bar.timer != null) {
+			bar.timer.cancel();
+		}
+		bar.bar.setVisible(false);
+		bar.bar = null;
+		bar.timer = null;
+		if(UltraBar.trackedBars.indexOf(bar) != -1)
+			UltraBar.trackedBars.remove(UltraBar.trackedBars.indexOf(bar));
 	}
 }

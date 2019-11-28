@@ -1,9 +1,10 @@
-package me.ryandw11.ultrabar.api.bars;
+package me.ryandw11.ultrabar.api;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -14,7 +15,6 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import me.ryandw11.ultrabar.BossBarTimer;
-import me.ryandw11.ultrabar.core.UltraBar;
 
 /**
  * Any active bossbar on the server.
@@ -26,17 +26,19 @@ public class UBossBar {
 	private String message;
 	private BarColor color;
 	private BarStyle style;
-	private int time = -1;
+	protected int time = -1;
 	private double progress = -1;
 	private Collection<Player> players;
 	private World world;
 	private boolean tracked;
-	private BossBarTimer timer;
-	private BossBar bar;
+	protected BossBarTimer timer;
+	protected BossBar bar;
 	private boolean publicBar;
 	private int id = -1;
+	private UUID pid;
 	
 	private Map<String, String> parameters;
+	private Map<String, String> storedData;
 	
 	/**
 	 *
@@ -57,6 +59,8 @@ public class UBossBar {
 		this.timer = timer;
 		this.bar = bar;
 		this.id = bbb.getId();
+		this.storedData = bbb.getData();
+		this.pid = UUID.randomUUID();
 	}
 
 	public String getMessage() {
@@ -101,6 +105,43 @@ public class UBossBar {
 
 	public void setProgress(double progress) {
 		this.progress = progress;
+	}
+	
+	/**
+	 * Set a data value
+	 * @param key the key
+	 * @param value the data
+	 */
+	public void setData(String key, String value) {
+		this.storedData.put(key, value);
+	}
+	
+	/**
+	 * If a key exists
+	 * @param key the key
+	 * @return if the key exists
+	 */
+	public boolean containsKey(String key) {
+		return this.storedData.containsKey(key);
+	}
+	
+	/**
+	 * Get a piece of data
+	 * @param key The key
+	 * @return The piece of data.
+	 */
+	public String getData(String key) {
+		return this.storedData.get(key);
+	}
+	
+	/**
+	 * Delete data from the stored data.
+	 * @param key The key to delete.
+	 */
+	public void deleteData(String key) {
+		if(this.storedData.containsKey(key)) {
+			this.storedData.remove(key);
+		}
 	}
 	
 	/**
@@ -198,18 +239,8 @@ public class UBossBar {
 		}
 	}
 	
-	/**
-	 * Delete the bossbar. Once completed this action can not be undone.
-	 */
-	public void delete() {
-		if(this.timer != null) {
-			this.timer.cancel();
-		}
-		
-		this.bar.setVisible(false);
-		if(UltraBar.trackedBars.contains(this)) {
-			UltraBar.trackedBars.remove(this);
-		}
+	public UUID getPID() {
+		return this.pid;
 	}
 
 	/**
@@ -218,6 +249,16 @@ public class UBossBar {
 	 */
 	public boolean isPublicBar() {
 		return publicBar;
+	}
+	
+	public boolean equals(Object o) {
+		if(!(o instanceof UBossBar)) return false;
+		UBossBar ub = (UBossBar) o;
+		return this.pid == ub.pid;
+	}
+	
+	public int hashCode() {
+		return this.pid.hashCode();
 	}
 
 }

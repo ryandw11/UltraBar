@@ -1,7 +1,9 @@
-package me.ryandw11.ultrabar.api.bars;
+package me.ryandw11.ultrabar.api;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -32,6 +34,7 @@ public class BossBarBuilder {
 	private boolean tracked;
 	private boolean publicBar = false;
 	private int id = -1;
+	private Map<String, String> storedData;
 	
 	/**
 	 * The api for building bossbars.
@@ -40,6 +43,7 @@ public class BossBarBuilder {
 	public BossBarBuilder(boolean tracked) {
 		players = new ArrayList<Player>();
 		this.tracked = tracked;
+		this.storedData = new HashMap<>();
 	}
 	
 	protected String getMessage() {
@@ -193,6 +197,19 @@ public class BossBarBuilder {
 	}
 	
 	/**
+	 * Store data on the boss bar.
+	 * @param key The key for the data.
+	 * @param value The data itself.
+	 */
+	public void setData(String key, String value) {
+		this.storedData.put(key, value);
+	}
+	
+	protected Map<String, String> getData() {
+		return this.storedData;
+	}
+	
+	/**
 	 * Build the bar (aka, create it).
 	 * @return The UBossBar class. <b>Returns null if the setup is invalid</b>
 	 */
@@ -234,6 +251,7 @@ public class BossBarBuilder {
 				bb.getTimer().setupTimer(bb);
 				if(tracked)
 					UltraBar.trackedBars.add(bb);
+				Bukkit.getLogger().info(UltraBar.trackedBars + "");
 				return bb;
 			}
 		}

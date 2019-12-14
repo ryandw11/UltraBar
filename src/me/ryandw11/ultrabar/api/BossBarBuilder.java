@@ -251,7 +251,6 @@ public class BossBarBuilder {
 				bb.getTimer().setupTimer(bb);
 				if(tracked)
 					UltraBar.trackedBars.add(bb);
-				Bukkit.getLogger().info(UltraBar.trackedBars + "");
 				return bb;
 			}
 		}

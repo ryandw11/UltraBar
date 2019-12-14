@@ -145,7 +145,6 @@ public class Help implements CommandExecutor {
 					}
 					
 					UltraBarAPI uapi = new UltraBarAPI();
-					Bukkit.getLogger().info(UltraBar.trackedBars + "");
 					for(UBossBar b : uapi.getBarsWithId(id)) {
 						uba.deleteBar(b);
 						BarTerminateEvent bte = new BarTerminateEvent(b, TerminationReason.BAR_CANCEL);

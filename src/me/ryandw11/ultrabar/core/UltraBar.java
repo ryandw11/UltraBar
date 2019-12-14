@@ -38,6 +38,7 @@ import me.ryandw11.ultrabar.typemgr.Typemgr_1_12_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R2;
 import me.ryandw11.ultrabar.typemgr.Typemgr_1_14_R1;
+import me.ryandw11.ultrabar.typemgr.Typemgr_1_15_R1;
 
 /**
  * @author Ryandw11
@@ -78,7 +79,7 @@ public class UltraBar extends JavaPlugin{
 		}
 		else{
 			getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-			getLogger().info("This version is only for 1.11 - 1.14.4. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
+			getLogger().info("This version is only for 1.11 - 1.15. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
 			getLogger().info("The plugin will now be disabled!");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
@@ -124,7 +125,7 @@ public class UltraBar extends JavaPlugin{
 			barMessage.removeAll();
 			barMessage = null;
 		}
-		getLogger().info("UltraBar for 1.11 - 1.14.4 has been disabled correctly!"); // same thing
+		getLogger().info("UltraBar for 1.11 - 1.15 has been disabled correctly!"); // same thing
 		
 	}
 	
@@ -177,7 +178,12 @@ public class UltraBar extends JavaPlugin{
         }
 
         getLogger().info("Your server is running version " + version + "!");
-        if(version.equals("v1_14_R1")) {
+        if(version.equals("v1_15_R1")) {
+        	mgr = new Typemgr_1_15_R1();
+        	if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+        }
+        else if(version.equals("v1_14_R1")) {
         	mgr = new Typemgr_1_14_R1();
         	if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
     			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);

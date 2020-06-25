@@ -38,13 +38,13 @@ public class BossBarSced extends BukkitRunnable{
 			return;
 		}
 		BossBar bar = Bukkit.createBossBar(
-				ChatColor.translateAlternateColorCodes('&', b.getConfig().getString("BossBarMessages." + currentNum + ".Message")), 
+				b.chatColorUtil.translateChatColor( b.getConfig().getString("BossBarMessages." + currentNum + ".Message")),
 				GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")), 
 				GrabBarStyles.barStyle(b.getConfig().getString("BossBarMessages." + currentNum + ".Style")
 						));
 		UltraBar.barMessage = bar;
 		this.bar = bar;
-		Double ticks = (double) 1;
+		double ticks = 1;
 		time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20; //Multiply by 20 to convert seconds to ticks.
 		this.progress = ticks / time;
 		bar.setProgress(1);
@@ -111,14 +111,14 @@ public class BossBarSced extends BukkitRunnable{
         	}
         	bar.setColor(GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")));
         	bar.setStyle(GrabBarStyles.barStyle(b.getConfig().getString("BossBarMessages." + currentNum + ".Style")));
-        	bar.setTitle(ChatColor.translateAlternateColorCodes('&', b.papi.getMessage(b.getConfig().getString("BossBarMessages." + currentNum + ".Message"), null)));
+        	bar.setTitle(b.chatColorUtil.translateChatColor(b.papi.getMessage(b.getConfig().getString("BossBarMessages." + currentNum + ".Message"), null)));
         	bar.setProgress(1);
-        	Double ticks = (double) 1;
+        	double ticks = 1;
         	time = b.getConfig().getInt("BossBarMessages." + currentNum + ".Time") * 20;
     		this.progress = ticks / time;
     		
     		for(Player p : Bukkit.getOnlinePlayers()){
-    			if(b.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled")){ //Bug Fix in 1.6.1 | Capitolization error.
+    			if(b.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled")){ //Bug Fix in 1.6.1 | Capitalization error.
     				if(b.getConfig().getString("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())){
     					if(!bar.getPlayers().contains(p) && !b.getToggledPlayers().contains(p))
     						bar.addPlayer(p);

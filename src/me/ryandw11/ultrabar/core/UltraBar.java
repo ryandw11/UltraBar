@@ -3,6 +3,11 @@ package me.ryandw11.ultrabar.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.ryandw11.ultrabar.chatcolor.ChatColorUtil;
+import me.ryandw11.ultrabar.chatcolor.ChatColorUtil_1_16;
+import me.ryandw11.ultrabar.chatcolor.ChatColorUtil_Old;
+import me.ryandw11.ultrabar.commands.*;
+import me.ryandw11.ultrabar.typemgr.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BossBar;
@@ -14,11 +19,6 @@ import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.bstats.Metrics;
 import me.ryandw11.ultrabar.bstats.UpdateChecker;
-import me.ryandw11.ultrabar.commands.ActionBarCommands;
-import me.ryandw11.ultrabar.commands.BarCommandTabCompleter;
-import me.ryandw11.ultrabar.commands.Help;
-import me.ryandw11.ultrabar.commands.NewBarCommand;
-import me.ryandw11.ultrabar.commands.TitleCommands;
 import me.ryandw11.ultrabar.depends.PAPIExists;
 import me.ryandw11.ultrabar.depends.PAPINotFound;
 import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
@@ -27,18 +27,10 @@ import me.ryandw11.ultrabar.listener.OnChangeWorld;
 import me.ryandw11.ultrabar.listener.OnCommand;
 import me.ryandw11.ultrabar.listener.OnDeath;
 import me.ryandw11.ultrabar.listener.OnJoin;
-import me.ryandw11.ultrabar.listener.OnMove_1_12_R1;
 import me.ryandw11.ultrabar.listener.OnMove_1_13_R1;
 import me.ryandw11.ultrabar.parameters.CommandParameter;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
-import me.ryandw11.ultrabar.typemgr.Typemgr;
-import me.ryandw11.ultrabar.typemgr.Typemgr_1_11_R1;
-import me.ryandw11.ultrabar.typemgr.Typemgr_1_12_R1;
-import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R1;
-import me.ryandw11.ultrabar.typemgr.Typemgr_1_13_R2;
-import me.ryandw11.ultrabar.typemgr.Typemgr_1_14_R1;
-import me.ryandw11.ultrabar.typemgr.Typemgr_1_15_R1;
 
 /**
  * @author Ryandw11
@@ -53,6 +45,7 @@ public class UltraBar extends JavaPlugin{
 	public static List<UBossBar> trackedBars;
 	public static BossBar barMessage; //TODO remove static maybe?
 	public static UltraBar plugin;
+	public ChatColorUtil chatColorUtil;
 	public Typemgr mgr;
 	public PlaceholderAPIDepend papi;
 	public boolean worldguard = false;
@@ -63,9 +56,9 @@ public class UltraBar extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		plugin = this;
-		trackedBars = new ArrayList<UBossBar>();
-		toggledPlayers = new ArrayList<Player>();
-		barParameters = new ArrayList<BarParameter>();
+		trackedBars = new ArrayList<>();
+		toggledPlayers = new ArrayList<>();
+		barParameters = new ArrayList<>();
 		
 		if(setupPlug()){
 			loadMethod();
@@ -79,7 +72,7 @@ public class UltraBar extends JavaPlugin{
 		}
 		else{
 			getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-			getLogger().info("This version is only for 1.11 - 1.15. Please download 1.4.9 in order to use the plugin for 1.9 - 1.10");
+			getLogger().info("This version is only for 1.12 - 1.16.1.");
 			getLogger().info("The plugin will now be disabled!");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
@@ -125,7 +118,7 @@ public class UltraBar extends JavaPlugin{
 			barMessage.removeAll();
 			barMessage = null;
 		}
-		getLogger().info("UltraBar for 1.11 - 1.15 has been disabled correctly!"); // same thing
+		getLogger().info("UltraBar for 1.12 - 1.16.1 has been disabled correctly!"); // same thing
 		
 	}
 	
@@ -138,15 +131,14 @@ public class UltraBar extends JavaPlugin{
 	public void loadMethod(){
 		getCommand("bar").setExecutor(new NewBarCommand());
 		getCommand("bar").setTabCompleter(new BarCommandTabCompleter());
-		getCommand("utitle").setExecutor(new TitleCommands(this));
+		getCommand("utitle").setExecutor(new NewTitleCommand(this));
+		getCommand("utitle").setTabCompleter(new TitleCommandTabCompleter());
 		getCommand("actionbar").setExecutor(new ActionBarCommands(this));
 		getCommand("ultrabar").setExecutor(new Help(this));
 		Bukkit.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
 		Bukkit.getServer().getPluginManager().registerEvents(new OnChangeWorld(), this);
-//		Bukkit.getServer().getPluginManager().registerEvents(new DeleteBars(), this);
-		
 		this.registerParameter(new CommandParameter());
 	}
 	
@@ -178,40 +170,37 @@ public class UltraBar extends JavaPlugin{
         }
 
         getLogger().info("Your server is running version " + version + "!");
-        if(version.equals("v1_15_R1")) {
-        	mgr = new Typemgr_1_15_R1();
-        	if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
-        }
-        else if(version.equals("v1_14_R1")) {
-        	mgr = new Typemgr_1_14_R1();
-        	if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
-        }
-        else if (version.equals("v1_13_R2")) {
-            
-            mgr = new Typemgr_1_13_R2();
-            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
-        }
-        else if (version.equals("v1_13_R1")) {
-            
-            mgr = new Typemgr_1_13_R1();
-            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
-        }
-        else if (version.equals("v1_12_R1")) {
-            
-            mgr = new Typemgr_1_12_R1();
-            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_12_R1(this), this);
-        }
-        else if (version.equals("v1_11_R1")) {
-            
-            mgr = new Typemgr_1_11_R1();
-            if(getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-    			Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_12_R1(this), this);
-        }
+		switch (version) {
+			case "v1_16_R1":
+				mgr = new Typemgr_1_16_R1();
+				if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+					Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+				chatColorUtil = new ChatColorUtil_1_16();
+				break;
+			case "v1_15_R1":
+				mgr = new Typemgr_1_15_R1();
+				if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+					Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+				chatColorUtil = new ChatColorUtil_Old();
+				break;
+			case "v1_14_R1":
+				mgr = new Typemgr_1_14_R1();
+				if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+					Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+				chatColorUtil = new ChatColorUtil_Old();
+				break;
+			case "v1_13_R2":
+
+				mgr = new Typemgr_1_13_R2();
+				if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+					Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+				chatColorUtil = new ChatColorUtil_Old();
+				break;
+			case "v1_12_R1":
+				mgr = new Typemgr_1_12_R1();
+				chatColorUtil = new ChatColorUtil_Old();
+				break;
+		}
         
         return mgr != null;
     }

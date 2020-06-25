@@ -42,7 +42,7 @@ public class ActionBarSched extends BukkitRunnable {
 	public void run() {
 		
 		
-		String msg = plugin.getConfig().getString("Action_Announcements." + currentNum + ".Message").replace('&', '§');
+		String msg = plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("Action_Announcements." + currentNum + ".Message"));
 		for(Player p : Bukkit.getOnlinePlayers()){
 			msg = plugin.papi.getMessage(msg, p);
 			bapi.sendActionBar(p, msg);

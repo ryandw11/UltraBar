@@ -31,8 +31,8 @@ public class ActionBarCommands implements CommandExecutor {
 					for (int i = 2; i < args.length; i++){
 						Message = Message + " " + args[i];
 					}
-					Player p2 = (Player) Bukkit.getServer().getPlayer(args[1]);
-					plugin.mgr.actionBar(p2, Message.replace("&", "§"));
+					Player p2 = Bukkit.getServer().getPlayer(args[1]);
+					plugin.mgr.actionBar(p2, plugin.chatColorUtil.translateChatColor(Message));
 				}
 				else{
 					p.sendMessage(ChatColor.RED + "Invalid usage: /actionbar send (player) (message)");
@@ -51,7 +51,7 @@ public class ActionBarCommands implements CommandExecutor {
 					Message = Message + " " + args[i];
 					}
 					for(Player p1 : Bukkit.getOnlinePlayers()){
-					plugin.mgr.actionBar(p1,(Message.replace("&", "§")));
+					plugin.mgr.actionBar(p1,(plugin.chatColorUtil.translateChatColor(Message)));
 					}	
 				}
 				else{

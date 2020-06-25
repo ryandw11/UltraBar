@@ -24,7 +24,7 @@ public class OnMove_1_13_R1 implements Listener {
 	
 	@EventHandler
 	public void onMove(PlayerMoveEvent event){
-		if(!plugin.getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard != true){
+		if(!plugin.getConfig().getBoolean("WorldGuardRegion.Enabled") && !plugin.worldguard){
 			return;
 		}
 		Player p = event.getPlayer();
@@ -35,13 +35,13 @@ public class OnMove_1_13_R1 implements Listener {
 		if(set.size() > 1){
 			for (ProtectedRegion r : set) {
 					String name = r.getId();
-					plugin.mgr.actionBar(p, ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("WorldGuardRegion.Message2").replace("%region%", name).replace("%number%", (set.size() - 1) + "")));
+					plugin.mgr.actionBar(p, plugin.chatColorUtil.translateChatColor( plugin.getConfig().getString("WorldGuardRegion.Message2").replace("%region%", name).replace("%number%", (set.size() - 1) + "")));
 					break;
 				}
 		}else if(set.size() == 1){
 			for (ProtectedRegion r : set) {
 				String name = r.getId();
-				plugin.mgr.actionBar(p, ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("WorldGuardRegion.Message").replace("%region%", name)));
+				plugin.mgr.actionBar(p, plugin.chatColorUtil.translateChatColor( plugin.getConfig().getString("WorldGuardRegion.Message").replace("%region%", name)));
 				break;
 			}
 		}

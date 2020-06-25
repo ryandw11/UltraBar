@@ -29,7 +29,7 @@ public class OnCommand implements Listener{
 		for(String s : cmds){
 			if(e.getMessage().startsWith("/" + s)){
 				if(plugin.getConfig().contains("OnCommand." + s + ".BossBar")){
-					String msg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnCommand." + s + ".BossBar.Message")), e.getPlayer());
+					String msg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Message")), e.getPlayer());
 					BarColor color = GrabBarStyles.barColor(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Color"));
 					BarStyle style = GrabBarStyles.barStyle(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Style"));
 					int time = plugin.getConfig().getInt("OnCommand." + s + ".BossBar.Time");
@@ -46,8 +46,8 @@ public class OnCommand implements Listener{
 					UltraBar.trackedBars.add(bb);
 				}
 				if(plugin.getConfig().contains("OnCommand." + s + ".Title")){
-					String msg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnCommand." + s + ".Title.Message")), e.getPlayer());
-					String submsg = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnCommand." + s + ".Title.SubTitle")), e.getPlayer());
+					String msg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".Title.Message")), e.getPlayer());
+					String submsg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".Title.SubTitle")), e.getPlayer());
 					int fadein = plugin.getConfig().getInt("OnCommand." + s + ".Title.fadein");
 					int fadeout = plugin.getConfig().getInt("OnCommand." + s + ".Title.fadeout");
 					int time = plugin.getConfig().getInt("OnCommand." + s + ".Title.time");
@@ -55,7 +55,7 @@ public class OnCommand implements Listener{
 					bapi.sendTitle(e.getPlayer(), msg, submsg, fadein, time, fadeout);
 				}
 				if(plugin.getConfig().contains("OnCommand." + s + ".ActionBar")){
-					String msg = plugin.papi.getMessage( plugin.getConfig().getString("OnCommand." + s +".ActionBar.Message").replace('&', '§'), e.getPlayer());
+					String msg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s +".ActionBar.Message")), e.getPlayer());
 					
 					bapi.sendActionBar(e.getPlayer(), msg);
 				}

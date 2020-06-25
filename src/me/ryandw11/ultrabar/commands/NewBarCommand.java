@@ -110,7 +110,7 @@ public class NewBarCommand implements CommandExecutor {
 	
 	@SuppressWarnings({ "unchecked", "deprecation"})
 	protected void proccessInfo(CommandSender s, Map<String, String> mp) {
-		final Map<String, String> param = new HashMap<String, String>(mp); //Creates a copy of the params
+		final Map<String, String> param = new HashMap<>(mp); //Creates a copy of the params
 		@SuppressWarnings("rawtypes")
 		Iterator it = mp.entrySet().iterator();
 		BossBarBuilder bbb = new BossBarBuilder(true);
@@ -122,7 +122,7 @@ public class NewBarCommand implements CommandExecutor {
 			Map.Entry<String,String> pair = (Map.Entry<String, String>)it.next();
 			
 			if(pair.getKey().equalsIgnoreCase("message") || pair.getKey().equalsIgnoreCase("msg")) {
-				bbb.setMessage(ChatColor.translateAlternateColorCodes('&', pair.getValue()));
+				bbb.setMessage(UltraBar.plugin.chatColorUtil.translateChatColor(pair.getValue()));
 			}
 			else if(pair.getKey().equalsIgnoreCase("color") || pair.getKey().equalsIgnoreCase("c")) {
 				bbb.setColor(GrabBarStyles.barColor(pair.getValue()));

@@ -27,7 +27,7 @@ public class OnJoin implements Listener {
 		if(plugin.getConfig().getBoolean("OnJoin.BossBar.Enabled")){
 			BarColor color = GrabBarStyles.barColor(plugin.getConfig().getString("OnJoin.BossBar.Color"));
 			BarStyle style = GrabBarStyles.barStyle(plugin.getConfig().getString("OnJoin.BossBar.Style"));
-			String message = plugin.papi.getMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("OnJoin.BossBar.Message").replace("{player}", p.getName())), p);
+			String message = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor( plugin.getConfig().getString("OnJoin.BossBar.Message").replace("{player}", p.getName())), p);
 			int time = plugin.getConfig().getInt("OnJoin.BossBar.Time");
 			double progress = plugin.getConfig().getDouble("OnJoin.BossBar.Health");
 			
@@ -51,12 +51,12 @@ public class OnJoin implements Listener {
 			int fadeout = plugin.getConfig().getInt("OnJoin.Title.fadeout");
 			int time = plugin.getConfig().getInt("OnJoin.Title.time");
 			
-			plugin.mgr.title(message.replace("&", "§").replace("{player}", p.getName()), p, fadein, time, fadeout, submessage.replace("&", "§"));
+			plugin.mgr.title(plugin.chatColorUtil.translateChatColor(message.replace("{player}", p.getName())), p, fadein, time, fadeout, plugin.chatColorUtil.translateChatColor(submessage));
 			
 		}
 		if(plugin.getConfig().getBoolean("OnJoin.ActionBar.Enabled")){
 			String message = plugin.papi.getMessage(plugin.getConfig().getString("OnJoin.ActionBar.Message"), p);
-			plugin.mgr.actionBar(p, message.replace("&", "§").replace("{player}", p.getName()));
+			plugin.mgr.actionBar(p, plugin.chatColorUtil.translateChatColor(message.replace("{player}", p.getName())));
 		}
 		
 		/*

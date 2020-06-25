@@ -43,8 +43,8 @@ public class TitleSched extends BukkitRunnable {
 	public void run() {
 		
 		
-		String title = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Title_Announcements." + currentNum + ".Message"));
-		String subtitle = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Title_Announcements." + currentNum + ".SubTitle"));
+		String title = plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("Title_Announcements." + currentNum + ".Message"));
+		String subtitle = plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("Title_Announcements." + currentNum + ".SubTitle"));
 		int fadein = plugin.getConfig().getInt("Title_Announcements." + currentNum + ".fadein");
 		int fadeout = plugin.getConfig().getInt("Title_Announcements." + currentNum + ".fadeout");
 		int time = plugin.getConfig().getInt("Title_Announcements." + currentNum + ".time");

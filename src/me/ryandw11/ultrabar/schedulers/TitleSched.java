@@ -3,12 +3,11 @@ package me.ryandw11.ultrabar.schedulers;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.ryandw11.ultrabar.api.UltraBarAPI;
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 
 public class TitleSched extends BukkitRunnable {
 	

@@ -1,6 +1,6 @@
 package me.ryandw11.ultrabar.api.title;
 
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

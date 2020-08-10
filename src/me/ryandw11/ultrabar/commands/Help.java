@@ -16,7 +16,7 @@ import me.ryandw11.ultrabar.api.UltraBarAPI;
 import me.ryandw11.ultrabar.api.events.BarTerminateEvent;
 import me.ryandw11.ultrabar.api.events.TerminationReason;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
 

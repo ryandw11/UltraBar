@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 
 public class ActionBarCommands implements CommandExecutor {
 	

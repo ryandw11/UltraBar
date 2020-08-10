@@ -9,7 +9,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 
 import org.bukkit.command.Command;
 

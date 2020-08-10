@@ -13,7 +13,7 @@ import me.ryandw11.ultrabar.api.BossBarBuilder;
 import me.ryandw11.ultrabar.api.events.BarTerminateEvent;
 import me.ryandw11.ultrabar.api.events.TerminationReason;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 
 public class CommandParameter implements BarParameter, Listener {
 	

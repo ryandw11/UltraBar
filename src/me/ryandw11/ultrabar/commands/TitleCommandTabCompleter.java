@@ -12,8 +12,7 @@ import java.util.List;
 public class TitleCommandTabCompleter implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
-		ArrayList<String> completions = new ArrayList<>();
-		completions.addAll(Arrays.asList("player:", "title:", "subtitle:", "fadein:", "fadeout:", "time:"));
+		ArrayList<String> completions = new ArrayList<>(Arrays.asList("player:", "title:", "subtitle:", "fadein:", "fadeout:", "time:"));
 		return StringUtil.copyPartialMatches(args[args.length - 1], completions, new ArrayList<>());
 	}
 }

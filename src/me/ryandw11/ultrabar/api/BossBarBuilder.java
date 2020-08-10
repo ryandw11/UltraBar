@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import com.google.common.collect.Iterables;
 
 import me.ryandw11.ultrabar.BossBarTimer;
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 
 /**
  * Clean way to create a bossbar via the plugin.
@@ -233,7 +233,7 @@ public class BossBarBuilder {
 					b.setProgress(progress);
 					b.addPlayer(Iterables.get(players, 0));
 					BossBarTimer s = new BossBarTimer(time * 20, progress);
-					s.runTaskTimer(UltraBar.plugin, 5L, 1L);
+					s.runTaskTimer(UltraBar.plugin, 0, 1L);
 					UBossBar bb = new UBossBar(this,b,s);
 					bb.getTimer().setupTimer(bb);
 					if(tracked)
@@ -246,7 +246,7 @@ public class BossBarBuilder {
 				b.setProgress(progress);
 				b.addPlayer(Iterables.get(players, 0));
 				BossBarTimer s = new BossBarTimer(time * 20, progress);
-				s.runTaskTimer(UltraBar.plugin, 5L, 1L);
+				s.runTaskTimer(UltraBar.plugin, 0, 1L);
 				UBossBar bb = new UBossBar(this,b,s);
 				bb.getTimer().setupTimer(bb);
 				if(tracked)
@@ -267,7 +267,7 @@ public class BossBarBuilder {
 					}
 				}
 				BossBarTimer s = new BossBarTimer(time * 20, progress);
-				s.runTaskTimer(UltraBar.plugin, 5L, 1L);
+				s.runTaskTimer(UltraBar.plugin, 0, 1L);
 				UBossBar bb = new UBossBar(this,b,s);
 				bb.getTimer().setupTimer(bb);
 				if(tracked)
@@ -280,7 +280,7 @@ public class BossBarBuilder {
 						b.addPlayer(p);
 				}
 				BossBarTimer s = new BossBarTimer(time * 20, progress);
-				s.runTaskTimer(UltraBar.plugin, 5L, 1L);
+				s.runTaskTimer(UltraBar.plugin, 0, 1L);
 				UBossBar bb = new UBossBar(this,b,s);
 				bb.getTimer().setupTimer(bb);
 				if(tracked)

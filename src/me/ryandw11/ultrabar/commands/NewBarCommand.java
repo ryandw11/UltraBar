@@ -20,39 +20,37 @@ import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.api.BossBarBuilder;
 import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 
 public class NewBarCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
-		CommandSender p = sender;
-		
-		if(!p.hasPermission("ultrabar.bar")){
-			p.sendMessage(ChatColor.RED + "You do not have permission for this command.");
+		if(!sender.hasPermission("ultrabar.bar")){
+			sender.sendMessage(ChatColor.RED + "You do not have permission for this command.");
 			return true;
 		}
 		
 		if(args.length == 0) {
-			p.sendMessage(ChatColor.RED + "No parameter detected. Go to " + ChatColor.GREEN + "https://github.com/ryandw11/UltraBar/wiki/Bar-Command-Parameter " + ChatColor.RED + "for help!");
+			sender.sendMessage(ChatColor.RED + "No parameter detected. Go to " + ChatColor.GREEN + "https://github.com/ryandw11/UltraBar/wiki/Bar-Command-Parameter " + ChatColor.RED + "for help!");
 			return true;
 		}
 		
-		String finalarg = "";
+		StringBuilder finalarg = new StringBuilder();
 		for(String c : args) {
-			finalarg += c + " ";
+			finalarg.append(c).append(" ");
 		}
-		finalarg.trim();
-		finalarg = finalarg + " ";
+		finalarg = new StringBuilder(finalarg.toString().trim());
+		finalarg.append(" ");
 		
 		int length = finalarg.length();
 		
-		String tempKey = "";
+		StringBuilder tempKey = new StringBuilder();
 		boolean inKey = true;
-		String tempValue = "";
+		StringBuilder tempValue = new StringBuilder();
 		boolean inValue = false;
-		String tempString = "";
+		StringBuilder tempString = new StringBuilder();
 		boolean inString = false;
 		
 		Map<String, String> mp = new HashMap<>();
@@ -60,7 +58,7 @@ public class NewBarCommand implements CommandExecutor {
 		for(int i = 0; i < length; i++) {
 			char c = finalarg.charAt(i);
 			if(c != ' ' && inKey) {
-				tempKey += c;
+				tempKey.append(c);
 			}
 			if(!inString && !inKey && c == '"') {
 				inString = true;
@@ -69,27 +67,28 @@ public class NewBarCommand implements CommandExecutor {
 			else if(inString && c == '"') {
 				inString = false;
 				inValue = false;
-				tempValue = "";
+				tempValue = new StringBuilder();
 				
 			}
 			if(c != ' ' && inValue) {
-				tempValue += c;
+				tempValue.append(c);
 			}
 			if(inString) {
-				tempString += c;
+				tempString.append(c);
 				
 			}
 			if(!inString && c == ' ') {
 				inValue = false;
 				inString = false;
 				inKey = true;
-				if(tempString == "")
-					mp.put(tempKey.replace(":", "").toLowerCase(), tempValue.toLowerCase());
-				else if(tempValue.equals(""))
-					mp.put(tempKey.replace(":", "").toLowerCase(), tempString.replace('"', ' '));
-				tempKey = "";
-				tempValue = "";
-				tempString = "";
+				final String key = tempKey.toString().replace(":", "").toLowerCase();
+				if(tempString.toString().equals(""))
+					mp.put(key, tempValue.toString().toLowerCase());
+				else if(tempValue.toString().equals(""))
+					mp.put(key, tempString.toString().replace('"', ' '));
+				tempKey = new StringBuilder();
+				tempValue = new StringBuilder();
+				tempString = new StringBuilder();
 				
 			}
 			if(!inString && inKey && c == ':') {
@@ -100,26 +99,24 @@ public class NewBarCommand implements CommandExecutor {
 		}
 		
 		/*
-		 * Proccess the info.
+		 * Process the info.
 		 * 
 		 */
-		proccessInfo(sender, mp);
+		processInfo(sender, mp);
 		
 		return false;
 	}
-	
-	@SuppressWarnings({ "unchecked", "deprecation"})
-	protected void proccessInfo(CommandSender s, Map<String, String> mp) {
+
+	protected void processInfo(CommandSender s, Map<String, String> mp) {
 		final Map<String, String> param = new HashMap<>(mp); //Creates a copy of the params
-		@SuppressWarnings("rawtypes")
-		Iterator it = mp.entrySet().iterator();
+		Iterator<Map.Entry<String, String>> it = mp.entrySet().iterator();
 		BossBarBuilder bbb = new BossBarBuilder(true);
 		bbb.setProgress(1);
 		bbb.setColor(BarColor.PURPLE);
 		bbb.setStyle(BarStyle.SEGMENTED_10);
 		boolean perm = false;
 		while(it.hasNext()) {
-			Map.Entry<String,String> pair = (Map.Entry<String, String>)it.next();
+			Map.Entry<String,String> pair = it.next();
 			
 			if(pair.getKey().equalsIgnoreCase("message") || pair.getKey().equalsIgnoreCase("msg")) {
 				bbb.setMessage(UltraBar.plugin.chatColorUtil.translateChatColor(pair.getValue()));
@@ -132,7 +129,7 @@ public class NewBarCommand implements CommandExecutor {
 			}
 			else if(pair.getKey().equalsIgnoreCase("progress") || pair.getKey().equalsIgnoreCase("prog")) {
 				try {
-					bbb.setProgress(Double.valueOf(pair.getValue()));
+					bbb.setProgress(Double.parseDouble(pair.getValue()));
 				}
 				catch(NumberFormatException ex) {
 					s.sendMessage(ChatColor.RED + "The progress must be a number!");
@@ -193,23 +190,14 @@ public class NewBarCommand implements CommandExecutor {
 					s.sendMessage(ChatColor.RED + "You do not have permission to make permanent bars.");
 					return;
 				}
-				if(pair.getValue().equalsIgnoreCase("true")) {
-					perm = true;
-				}
-				else {
-					perm = false;
-				}
+				perm = pair.getValue().equalsIgnoreCase("true");
 			}
 			else if(pair.getKey().equalsIgnoreCase("clear")) {
 				if(!s.hasPermission("ultrabar.bar.clear")) {
 					s.sendMessage(ChatColor.RED + "You do not have permission to set clear conditions on bars.");
 					return;
 				}
-				if(pair.getValue().equalsIgnoreCase("death")) {
-					
-				}else if(pair.getValue().equalsIgnoreCase("world")) {
-					
-				}else {
+				if(!pair.getValue().equalsIgnoreCase("death") || !pair.getValue().equalsIgnoreCase("world")){
 					s.sendMessage(ChatColor.RED + "Invalid clear condition. It must be set to death or world");
 					return;
 				}

@@ -1,6 +1,5 @@
 package me.ryandw11.ultrabar.listener;
 
-import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.event.EventHandler;
@@ -11,7 +10,7 @@ import me.ryandw11.ultrabar.GrabBarStyles;
 import me.ryandw11.ultrabar.api.BossBarBuilder;
 import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.UltraBarAPI;
-import me.ryandw11.ultrabar.core.UltraBar;
+import me.ryandw11.ultrabar.UltraBar;
 
 public class OnDeath implements Listener{
 	private UltraBar plugin;

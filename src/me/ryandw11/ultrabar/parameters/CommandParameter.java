@@ -28,7 +28,7 @@ public class CommandParameter implements BarParameter, Listener {
 
 	@Override
 	public List<String> aliases() {
-		List<String> aliases = new ArrayList<String>();
+		List<String> aliases = new ArrayList<>();
 		aliases.add("command");
 		aliases.add("cmd");
 		return aliases;

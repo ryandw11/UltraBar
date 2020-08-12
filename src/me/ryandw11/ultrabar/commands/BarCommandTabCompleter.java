@@ -16,8 +16,7 @@ import org.bukkit.command.Command;
 public class BarCommandTabCompleter implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
-		ArrayList<String> completions = new ArrayList<>();
-		completions.addAll(Arrays.asList("player:", "time:", "perm:", "msg:", "prog:", "w:", "color:", "style:", "clear:", "id:"));
+		ArrayList<String> completions = new ArrayList<>(Arrays.asList("player:", "time:", "perm:", "persist:", "msg:", "prog:", "w:", "color:", "style:", "clear:", "id:"));
 		for(BarParameter bp : UltraBar.plugin.getBarParameters()) {
 			completions.add(bp.tab() + ":");
 		}

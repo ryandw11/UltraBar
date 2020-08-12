@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -16,6 +17,8 @@ import com.google.common.collect.Iterables;
 
 import me.ryandw11.ultrabar.BossBarTimer;
 import me.ryandw11.ultrabar.UltraBar;
+
+import javax.annotation.Nullable;
 
 /**
  * Clean way to create a bossbar via the plugin.
@@ -35,15 +38,17 @@ public class BossBarBuilder {
 	private boolean publicBar = false;
 	private int id = -1;
 	private Map<String, String> storedData;
+	private String permission;
 	
 	/**
 	 * The api for building bossbars.
 	 * @param tracked If the UBossBar class should be stored in the active bars list once built.
 	 */
 	public BossBarBuilder(boolean tracked) {
-		players = new ArrayList<Player>();
+		players = new ArrayList<>();
 		this.tracked = tracked;
 		this.storedData = new HashMap<>();
+		permission = null;
 	}
 	
 	protected String getMessage() {
@@ -124,7 +129,7 @@ public class BossBarBuilder {
 	/**
 	 * Set the progress of the bossbar.
 	 * <b>Required</b>
-	 * @param progress
+	 * @param progress The progress of the boss bar.
 	 */
 	public BossBarBuilder setProgress(double progress) {
 		this.progress = progress;
@@ -142,10 +147,20 @@ public class BossBarBuilder {
 	
 	/**
 	 * Set a collection of players.
+	 * <p>If a the permission string does not equal null, then only the players
+	 * with the specified permission will get added.</p>
 	 * @param players The collection of players.
 	 */
 	public BossBarBuilder setPlayerCollection(Collection<Player> players) {
-		this.players = players;
+		if(permission != null){
+			for(Player p : players){
+				if(p.hasPermission(permission)){
+					this.players.add(p);
+				}
+			}
+		}else{
+			this.players = players;
+		}
 		return this;
 	}
 	
@@ -207,6 +222,27 @@ public class BossBarBuilder {
 	
 	protected Map<String, String> getData() {
 		return this.storedData;
+	}
+
+	/**
+	 * Sets the permission for the bossbar.
+	 * <p>If the player list was already set, then players without the permission are removed.</p>
+	 * @param permission The permission.
+	 */
+	public void setPermission(String permission){
+		this.permission = permission;
+		if(hasPlayers()){
+			this.players = players.stream().filter(player -> player.hasPermission(permission)).collect(Collectors.toList());
+		}
+	}
+
+	/**
+	 * Get the permission of the bar.
+	 * @return The permission.
+	 */
+	@Nullable
+	public String getPermission(){
+		return permission;
 	}
 	
 	/**

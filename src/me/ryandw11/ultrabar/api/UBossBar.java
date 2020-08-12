@@ -30,6 +30,7 @@ public class UBossBar {
     private boolean publicBar;
     private int id = -1;
     private UUID pid;
+    private String permission;
 
     private Map<String, String> parameters;
     private Map<String, String> storedData;
@@ -53,6 +54,7 @@ public class UBossBar {
         this.id = bbb.getId();
         this.storedData = bbb.getData();
         this.pid = UUID.randomUUID();
+        this.permission = bbb.getPermission();
     }
 
     public String getMessage() {
@@ -167,7 +169,7 @@ public class UBossBar {
      * @param p The player.
      */
     public void removePlayer(Player p) {
-        List<Player> temp = new LinkedList<Player>(players);
+        List<Player> temp = new LinkedList<>(players);
         temp.remove(p);
         players = temp;
     }
@@ -178,7 +180,7 @@ public class UBossBar {
      * @param p the player
      */
     public void addPlayer(Player p) {
-        List<Player> temp = new LinkedList<Player>(players);
+        List<Player> temp = new LinkedList<>(players);
         temp.add(p);
         players = temp;
     }
@@ -272,6 +274,33 @@ public class UBossBar {
 
     public UUID getPID() {
         return this.pid;
+    }
+
+    /**
+     * Set the permission for the bar.
+     * @param permission The permission. (Null for none).
+     */
+    public void setPermission(@Nullable String permission){
+        this.permission = permission;
+    }
+
+    /**
+     * Get the permission for the bar.
+     * @return The optional of a string.
+     */
+    public Optional<String> getPermission(){
+        return Optional.ofNullable(permission);
+    }
+
+    /**
+     * Check to see if a player meets the conditions to be added to this bar.
+     * @param p The player to check.
+     * @return If the player meets the bar's conditions.
+     */
+    public boolean checkPlayerConditions(Player p){
+        if(permission != null && !p.hasPermission(permission))
+            return false;
+        return world == null || p.getWorld() == world;
     }
 
     /**

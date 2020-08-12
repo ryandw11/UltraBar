@@ -114,14 +114,14 @@ public class NewBarCommand implements CommandExecutor {
 		bbb.setProgress(1);
 		bbb.setColor(BarColor.PURPLE);
 		bbb.setStyle(BarStyle.SEGMENTED_10);
-		boolean perm = false;
+		boolean persistent = false;
 		while(it.hasNext()) {
 			Map.Entry<String,String> pair = it.next();
 			
 			if(pair.getKey().equalsIgnoreCase("message") || pair.getKey().equalsIgnoreCase("msg")) {
 				bbb.setMessage(UltraBar.plugin.chatColorUtil.translateChatColor(pair.getValue()));
 			}
-			else if(pair.getKey().equalsIgnoreCase("color") || pair.getKey().equalsIgnoreCase("c")) {
+			else if(pair.getKey().equalsIgnoreCase("color") || pair.getKey().equalsIgnoreCase("c") || pair.getKey().equalsIgnoreCase("colour")) {
 				bbb.setColor(GrabBarStyles.barColor(pair.getValue()));
 			}
 			else if(pair.getKey().equalsIgnoreCase("style") || pair.getKey().equalsIgnoreCase("s")) {
@@ -185,12 +185,25 @@ public class NewBarCommand implements CommandExecutor {
 					bbb.setSinglePlayer(Bukkit.getPlayer(pair.getValue()));
 				}
 			}
-			else if(pair.getKey().equalsIgnoreCase("perm")) {
-				if(!s.hasPermission("ultrabar.bar.perm")) {
-					s.sendMessage(ChatColor.RED + "You do not have permission to make permanent bars.");
+			// TODO Placeholder
+			else if(pair.getKey().equalsIgnoreCase("perm") || pair.getKey().equalsIgnoreCase("permission")) {
+				if(!s.hasPermission("ultrabar.bar.permission")) {
+					s.sendMessage(ChatColor.RED + "You do not have permission to add a permission onto a bar.");
 					return;
 				}
-				perm = pair.getValue().equalsIgnoreCase("true");
+				if(pair.getValue().equalsIgnoreCase("true")){
+					s.sendMessage(ChatColor.RED + "Invalid value on '" + pair.getKey() + "' parameter. Expected a permission string, instead received a boolean value. " +
+							"Did you mean to use the persistent parameter?");
+					return;
+				}
+				bbb.setPermission(pair.getValue());
+			}
+			else if(pair.getKey().equalsIgnoreCase("persistent") || pair.getKey().equalsIgnoreCase("persist")) {
+				if(!s.hasPermission("ultrabar.bar.persistent")) {
+					s.sendMessage(ChatColor.RED + "You do not have permission to make persistent bars.");
+					return;
+				}
+				persistent = pair.getValue().equalsIgnoreCase("true");
 			}
 			else if(pair.getKey().equalsIgnoreCase("clear")) {
 				if(!s.hasPermission("ultrabar.bar.clear")) {
@@ -227,7 +240,7 @@ public class NewBarCommand implements CommandExecutor {
 			it.remove();
 		}
 		
-		if(perm) {
+		if(persistent) {
 			UBossBar bar = bbb.buildDead();
 			if(bar == null){
 				s.sendMessage(ChatColor.RED + "Failed to send bossbar! Are you sure you have all of the required parameters?");

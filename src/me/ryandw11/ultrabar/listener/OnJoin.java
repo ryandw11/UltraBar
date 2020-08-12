@@ -62,7 +62,7 @@ public class OnJoin implements Listener {
          * Give the player all of the boss bars.
          */
         for (UBossBar b : UltraBar.trackedBars) {
-            if (b.isPublicBar()) {
+            if (b.isPublicBar() && b.checkPlayerConditions(p)) {
                 b.addPlayer(p);
                 b.updatePlayers();
             }

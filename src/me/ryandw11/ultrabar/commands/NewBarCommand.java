@@ -185,7 +185,6 @@ public class NewBarCommand implements CommandExecutor {
 					bbb.setSinglePlayer(Bukkit.getPlayer(pair.getValue()));
 				}
 			}
-			// TODO Placeholder
 			else if(pair.getKey().equalsIgnoreCase("perm") || pair.getKey().equalsIgnoreCase("permission")) {
 				if(!s.hasPermission("ultrabar.bar.permission")) {
 					s.sendMessage(ChatColor.RED + "You do not have permission to add a permission onto a bar.");
@@ -210,7 +209,7 @@ public class NewBarCommand implements CommandExecutor {
 					s.sendMessage(ChatColor.RED + "You do not have permission to set clear conditions on bars.");
 					return;
 				}
-				if(!pair.getValue().equalsIgnoreCase("death") || !pair.getValue().equalsIgnoreCase("world")){
+				if(!pair.getValue().equalsIgnoreCase("death") && !pair.getValue().equalsIgnoreCase("world")){
 					s.sendMessage(ChatColor.RED + "Invalid clear condition. It must be set to death or world");
 					return;
 				}

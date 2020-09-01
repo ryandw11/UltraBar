@@ -36,21 +36,21 @@ OnJoin:
         
 OnDeath:
     BossBar:
-        Enabled: true
+        Enabled: false
         Message: '&6Welcome Back &5{player}&6!'
         Color: 'green'
         Time: 10
         Style: '6'
         Health: 1
     Title:
-        Enabled: true
+        Enabled: false
         Message: '&6Welcome Back &5{player}&6'
         SubTitle: '&bto the best server ever!'
         fadein: 5
         fadeout: 5
         time: 20
     ActionBar:
-        Enabled: true
+        Enabled: false
         Message: '&6Welcome Back &5{player}&6!'
         
 OnCommand:

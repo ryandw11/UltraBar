@@ -65,7 +65,7 @@ public class UltraBar extends JavaPlugin {
             }
         } else {
             getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-            getLogger().info("This version is only for 1.12 - 1.16.2.");
+            getLogger().info("This version is only for 1.12 - 1.16.4.");
             getLogger().info("The plugin will now be disabled!");
             Bukkit.getPluginManager().disablePlugin(this);
         }
@@ -110,7 +110,7 @@ public class UltraBar extends JavaPlugin {
             barMessage.removeAll();
             barMessage = null;
         }
-        getLogger().info("UltraBar for 1.12 - 1.16.2 has been disabled correctly!"); // same thing
+        getLogger().info("UltraBar for 1.12 - 1.16.4 has been disabled correctly!"); // same thing
 
     }
 
@@ -164,6 +164,12 @@ public class UltraBar extends JavaPlugin {
 
         getLogger().info("Your server is running version " + version + "!");
         switch (version) {
+            case "v1_16_R3":
+                mgr = new Typemgr_1_16_R3();
+                if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+                    Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+                chatColorUtil = new ChatColorUtil_1_16();
+                break;
             case "v1_16_R2":
                 mgr = new Typemgr_1_16_R2();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)

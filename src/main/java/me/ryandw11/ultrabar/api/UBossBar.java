@@ -132,6 +132,15 @@ public class UBossBar {
     }
 
     /**
+     * Get the map of data.
+     *
+     * @return The map of data.
+     */
+    public Map<String, String> getData() {
+        return this.storedData;
+    }
+
+    /**
      * Delete data from the stored data.
      *
      * @param key The key to delete.
@@ -278,27 +287,30 @@ public class UBossBar {
 
     /**
      * Set the permission for the bar.
+     *
      * @param permission The permission. (Null for none).
      */
-    public void setPermission(@Nullable String permission){
+    public void setPermission(@Nullable String permission) {
         this.permission = permission;
     }
 
     /**
      * Get the permission for the bar.
+     *
      * @return The optional of a string.
      */
-    public Optional<String> getPermission(){
+    public Optional<String> getPermission() {
         return Optional.ofNullable(permission);
     }
 
     /**
      * Check to see if a player meets the conditions to be added to this bar.
+     *
      * @param p The player to check.
      * @return If the player meets the bar's conditions.
      */
-    public boolean checkPlayerConditions(Player p){
-        if(permission != null && !p.hasPermission(permission))
+    public boolean checkPlayerConditions(Player p) {
+        if (permission != null && !p.hasPermission(permission))
             return false;
         return world == null || p.getWorld() == world;
     }

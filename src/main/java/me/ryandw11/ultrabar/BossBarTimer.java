@@ -35,7 +35,7 @@ public class BossBarTimer extends BukkitRunnable {
             BarTerminateEvent bte = new BarTerminateEvent(ub, TerminationReason.BAR_TIME_OUT);
             Bukkit.getServer().getPluginManager().callEvent(bte);
         } else {
-            if (b.getPlayers().size() < 1) {
+            if (b.getPlayers().size() < 1 && (!ub.isTracked() || !ub.isPublicBar())) {
                 if (ub == null) {
                     this.cancel();
                 }

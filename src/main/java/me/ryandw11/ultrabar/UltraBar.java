@@ -1,5 +1,8 @@
 package me.ryandw11.ultrabar;
 
+import me.ryandw11.ods.ObjectDataStructure;
+import me.ryandw11.ods.Tag;
+import me.ryandw11.ods.tags.ObjectTag;
 import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.bstats.Metrics;
@@ -11,6 +14,7 @@ import me.ryandw11.ultrabar.commands.*;
 import me.ryandw11.ultrabar.depends.PAPIExists;
 import me.ryandw11.ultrabar.depends.PAPINotFound;
 import me.ryandw11.ultrabar.depends.PlaceholderAPIDepend;
+import me.ryandw11.ultrabar.io.BarTag;
 import me.ryandw11.ultrabar.listener.*;
 import me.ryandw11.ultrabar.parameters.CommandParameter;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
@@ -22,6 +26,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,17 +98,35 @@ public class UltraBar extends JavaPlugin {
                 e.printStackTrace();
             }
         } //End of update checker
+
+        // Add back unused bars.
+        if (!getConfig().getBoolean("save_persistent_bars")) return;
+        File f = new File(getDataFolder() + File.separator + "saved_bars.ubr");
+        if (!f.exists()) return;
+        ObjectDataStructure ods = new ObjectDataStructure(f);
+        List<Tag<?>> tags = ods.getAll();
+        for (Tag<?> tag : tags) {
+            ObjectTag obj = (ObjectTag) tag;
+            new BarTag(obj).buildBossBar();
+        }
     }
 
 
     @Override
     public void onDisable() {
+        ObjectDataStructure ods = new ObjectDataStructure(new File(getDataFolder() + File.separator + "saved_bars.ubr"));
+        List<Tag<?>> tags = new ArrayList<>();
+        getLogger().info("Saving tracked bars to file.");
         for (UBossBar bar : trackedBars) {
+            tags.add(new BarTag(bar));
             if (bar.getTimer() != null)
                 bar.getTimer().cancel();
             if (bar.getBar() != null)
                 bar.getBar().setVisible(false);
         }
+        if (getConfig().getBoolean("save_persistent_bars"))
+            ods.save(tags);
+        getLogger().info("Save complete!");
         trackedBars.clear();
         if (barMessage != null) {
             barMessage.setVisible(false);
@@ -111,7 +134,6 @@ public class UltraBar extends JavaPlugin {
             barMessage = null;
         }
         getLogger().info("UltraBar for 1.12 - 1.16.4 has been disabled correctly!"); // same thing
-
     }
 
 

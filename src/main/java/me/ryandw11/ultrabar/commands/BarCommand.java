@@ -22,7 +22,7 @@ import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.UltraBar;
 
-public class NewBarCommand implements CommandExecutor {
+public class BarCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {

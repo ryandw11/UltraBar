@@ -9,14 +9,12 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Date;
-
 public class BossBarTimer extends BukkitRunnable {
     private BossBar b;
     private UBossBar ub;
-    private double progress;
-    private UltraBar plugin;
-    private UltraBarAPI uba;
+    private final double progress;
+    private final UltraBar plugin;
+    private final UltraBarAPI uba;
 
     public BossBarTimer(int ticks, double one) {
         this.progress = one / ticks;
@@ -48,8 +46,8 @@ public class BossBarTimer extends BukkitRunnable {
             ub.setProgress(prog);
             b.setColor(ub.getColor());
             b.setStyle(ub.getStyle());
-            if (ub.getMessage() != null && b.getPlayers().get(0) != null) {
-                b.setTitle(replacePlaceholders(ub.getMessage(), b.getPlayers().get(0)));
+            if (ub.getMessage() != null && b.getPlayers().size() > 0) {
+                b.setTitle(replacePlaceholders(plugin.chatColorUtil.translateChatColor(ub.getMessage()), b.getPlayers().get(0)));
             }
         }
 
@@ -60,22 +58,22 @@ public class BossBarTimer extends BukkitRunnable {
         this.b = ub.getBar();
     }
 
-    private String replacePlaceholders(String title, Player p){
+    private String replacePlaceholders(String title, Player p) {
         return plugin.papi.getMessage(title, p)
-                .replace("%time_left%", (int)Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20))/20) + "")
-                .replace("%time_left_form%", getFormattedTime(Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20))/20)));
+                .replace("%time_left%", Math.max(0, (int) Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20)) / 20)) + "")
+                .replace("%time_left_form%", getFormattedTime(Math.max(0, Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20)) / 20))));
     }
 
-    private String getFormattedTime(double seconds){
+    private String getFormattedTime(double seconds) {
         double hours = seconds / 60;
         double second = Math.floor(seconds % 60);
         double minutes = Math.floor(hours % 60);
         hours = Math.floor(hours / 60);
         StringBuilder builder = new StringBuilder();
-        if(hours > 0){
+        if (hours > 0) {
             builder.append((int) hours).append("h ");
         }
-        if(minutes > 0){
+        if (minutes > 0) {
             builder.append((int) minutes).append("m ");
         }
         builder.append((int) second).append("s");

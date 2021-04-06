@@ -8,6 +8,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -40,8 +41,8 @@ public class BossBarSced extends BukkitRunnable {
         }
         BossBar bar = Bukkit.createBossBar(
                 b.chatColorUtil.translateChatColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Message")),
-                GrabBarStyles.barColor(b.getConfig().getString("BossBarMessages." + currentNum + ".Color")),
-                GrabBarStyles.barStyle(b.getConfig().getString("BossBarMessages." + currentNum + ".Style")
+                GrabBarStyles.barColor(Objects.requireNonNull(b.getConfig().getString("BossBarMessages." + currentNum + ".Color"))),
+                GrabBarStyles.barStyle(Objects.requireNonNull(b.getConfig().getString("BossBarMessages." + currentNum + ".Style"))
                 ));
         UltraBar.barMessage = bar;
         this.bar = bar;
@@ -136,7 +137,7 @@ public class BossBarSced extends BukkitRunnable {
             bar.setProgress(prog);
         }
 
-        bar.setTitle(ChatColor.translateAlternateColorCodes('&', b.papi.getMessage(b.getConfig().getString("BossBarMessages." + currentNum + ".Message"), null)));
+        bar.setTitle(b.chatColorUtil.translateChatColor(b.papi.getMessage(b.getConfig().getString("BossBarMessages." + currentNum + ".Message"), null)));
 
 
     }

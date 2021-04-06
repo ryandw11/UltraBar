@@ -14,8 +14,8 @@ import java.util.UUID;
  *
  * @author Ryandw11
  */
-public class UltraBarAPI {
-    private UltraBar plugin;
+public final class UltraBarAPI {
+    private final UltraBar plugin;
 
     public UltraBarAPI() {
         plugin = UltraBar.plugin;
@@ -150,7 +150,6 @@ public class UltraBarAPI {
         bar.bar.setVisible(false);
         bar.bar = null;
         bar.timer = null;
-        if (UltraBar.trackedBars.indexOf(bar) != -1)
-            UltraBar.trackedBars.remove(bar);
+        UltraBar.trackedBars.remove(bar);
     }
 }

@@ -13,11 +13,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class NewTitleCommand implements CommandExecutor {
+public class TitleCommand implements CommandExecutor {
 
     private UltraBar plugin;
 
-    public NewTitleCommand(UltraBar plugin) {
+    public TitleCommand(UltraBar plugin) {
         this.plugin = plugin;
     }
 

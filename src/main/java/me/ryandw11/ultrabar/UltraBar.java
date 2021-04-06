@@ -29,6 +29,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Ryandw11
@@ -55,7 +56,7 @@ public class UltraBar extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
-        trackedBars = new ArrayList<>();
+        trackedBars = new CopyOnWriteArrayList<>();
         toggledPlayers = new ArrayList<>();
         barParameters = new ArrayList<>();
 
@@ -143,9 +144,9 @@ public class UltraBar extends JavaPlugin {
     }
 
     public void loadMethod() {
-        getCommand("bar").setExecutor(new NewBarCommand());
+        getCommand("bar").setExecutor(new BarCommand());
         getCommand("bar").setTabCompleter(new BarCommandTabCompleter());
-        getCommand("utitle").setExecutor(new NewTitleCommand(this));
+        getCommand("utitle").setExecutor(new TitleCommand(this));
         getCommand("utitle").setTabCompleter(new TitleCommandTabCompleter());
         getCommand("actionbar").setExecutor(new ActionBarCommands(this));
         getCommand("ultrabar").setExecutor(new Help(this));

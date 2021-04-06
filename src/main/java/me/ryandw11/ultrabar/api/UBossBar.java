@@ -29,11 +29,11 @@ public class UBossBar {
     private boolean tracked;
     private boolean publicBar;
     private int id = -1;
-    private UUID pid;
+    private final UUID pid;
     private String permission;
 
     private Map<String, String> parameters;
-    private Map<String, String> storedData;
+    private final Map<String, String> storedData;
 
     /**
      * @param bbb   The instance of the builder.

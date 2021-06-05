@@ -17,5 +17,6 @@ public class OnLeave implements Listener {
             if(ub.getPlayers().contains(evt.getPlayer()))
                 ub.removePlayer(evt.getPlayer());
         }
+        UltraBar.plugin.getBarAnnouncer().removePlayer(evt.getPlayer());
     }
 }

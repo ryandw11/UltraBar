@@ -3,59 +3,42 @@ package me.ryandw11.ultrabar;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
+/**
+ * This class is responsible for grabbing the bar styles.
+ */
 public class GrabBarStyles {
-	public static BarColor barColor(String color){
-		BarColor bar;
-		switch(color.toLowerCase()){
-		case "blue":
-			bar = BarColor.BLUE;
-			break;
-		case "green":
-			bar = BarColor.GREEN;
-			break;
-		case "pink":
-			bar = BarColor.PINK;
-			break;
-		case "purple":
-			bar = BarColor.PURPLE;
-			break;
-		case "red":
-			bar = BarColor.RED;
-			break;
-		case "white":
-			bar = BarColor.WHITE;
-			break;
-		case "yellow":
-			bar = BarColor.YELLOW;
-			break;
-		default:
-				bar = BarColor.PURPLE;
-				break;
-		}
-		return bar;
-	}
-	public static BarStyle barStyle(String sty){
-		BarStyle st;
-		switch(sty){
-		case "6":
-			st = BarStyle.SEGMENTED_6;
-			break;
-		case "10":
-			st = BarStyle.SEGMENTED_10;
-			break;
-		case "12":
-			st = BarStyle.SEGMENTED_12;
-			break;
-		case "20":
-			st = BarStyle.SEGMENTED_20;
-			break;
-		case "":
-			st = BarStyle.SOLID;
-			break;
-		default:
-			st = BarStyle.SOLID;
-			break;
-		}
-		return st;
-	}
+    /**
+     * Get the bar color from a String.
+     *
+     * @param color The color in String form.
+     * @return The BarColor Enum. (Default is Purple).
+     */
+    public static BarColor barColor(String color) {
+        try {
+            return BarColor.valueOf(color.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            return BarColor.PURPLE;
+        }
+    }
+
+    /**
+     * Grab the BarStyle enum from a string.
+     *
+     * @param style The style.
+     * @return The enum. (Default Solid).
+     */
+    public static BarStyle barStyle(String style) {
+        switch (style) {
+            case "6":
+                return BarStyle.SEGMENTED_6;
+            case "10":
+                return BarStyle.SEGMENTED_10;
+            case "12":
+                return BarStyle.SEGMENTED_12;
+            case "20":
+                return BarStyle.SEGMENTED_20;
+            default:
+                return BarStyle.SOLID;
+        }
+    }
 }

@@ -3,6 +3,8 @@ package me.ryandw11.ultrabar;
 import me.ryandw11.ods.ObjectDataStructure;
 import me.ryandw11.ods.Tag;
 import me.ryandw11.ods.tags.ObjectTag;
+import me.ryandw11.ultrabar.announcements.Announcer;
+import me.ryandw11.ultrabar.announcements.IndividualBossBarAnnouncer;
 import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import me.ryandw11.ultrabar.bstats.Metrics;
@@ -22,7 +24,6 @@ import me.ryandw11.ultrabar.schedulers.TitleSched;
 import me.ryandw11.ultrabar.typemgr.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,7 +44,6 @@ public class UltraBar extends JavaPlugin {
      * @since 2.1
      */
     public static List<UBossBar> trackedBars;
-    public static BossBar barMessage; //TODO remove static maybe?
     public static UltraBar plugin;
     public ChatColorUtil chatColorUtil;
     public Typemgr mgr;
@@ -52,6 +52,7 @@ public class UltraBar extends JavaPlugin {
     public boolean placeholderAPI;
     private List<Player> toggledPlayers;
     private List<BarParameter> barParameters;
+    private Announcer barAnnouncer;
 
     @Override
     public void onEnable() {
@@ -71,7 +72,7 @@ public class UltraBar extends JavaPlugin {
             }
         } else {
             getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-            getLogger().info("This version is only for 1.12 - 1.16.4.");
+            getLogger().info("This version is only for 1.12 - 1.16.5.");
             getLogger().info("The plugin will now be disabled!");
             Bukkit.getPluginManager().disablePlugin(this);
         }
@@ -129,12 +130,8 @@ public class UltraBar extends JavaPlugin {
             ods.save(tags);
         getLogger().info("Save complete!");
         trackedBars.clear();
-        if (barMessage != null) {
-            barMessage.setVisible(false);
-            barMessage.removeAll();
-            barMessage = null;
-        }
-        getLogger().info("UltraBar for 1.12 - 1.16.4 has been disabled correctly!"); // same thing
+        barAnnouncer.stopProgram();
+        getLogger().info("UltraBar for 1.12 - 1.16.5 has been disabled correctly!"); // same thing
     }
 
 
@@ -149,7 +146,8 @@ public class UltraBar extends JavaPlugin {
         getCommand("utitle").setExecutor(new TitleCommand(this));
         getCommand("utitle").setTabCompleter(new TitleCommandTabCompleter());
         getCommand("actionbar").setExecutor(new ActionBarCommands(this));
-        getCommand("ultrabar").setExecutor(new Help(this));
+        getCommand("ultrabar").setExecutor(new UltraBarCommand(this));
+        getCommand("ultrabar").setTabCompleter(new UltraBarCommandTabCompleter());
         Bukkit.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
@@ -160,8 +158,10 @@ public class UltraBar extends JavaPlugin {
 
     private void loadSched() {
         if (getConfig().getBoolean("BossBarMessages.Enabled")) {
-            BossBarSced b = new BossBarSced();
-            b.startProgram();
+//            BossBarSced b = new BossBarSced();
+//            b.startProgram();
+            this.barAnnouncer = new IndividualBossBarAnnouncer();
+            barAnnouncer.startProgram();
         }
         if (getConfig().getBoolean("Title_Announcements.Enabled")) {
             TitleSched ts = new TitleSched();
@@ -284,6 +284,22 @@ public class UltraBar extends JavaPlugin {
      */
     public List<BarParameter> getBarParameters() {
         return new ArrayList<>(this.barParameters);
+    }
+
+    /**
+     * Get the boss bar announcer.
+     * @return The boss bar announcer.
+     */
+    public Announcer getBarAnnouncer() {
+        return barAnnouncer;
+    }
+
+    /**
+     * Reset the bar announcer.
+     */
+    public void resetBarAnnouncer() {
+        this.barAnnouncer = new IndividualBossBarAnnouncer();
+        this.barAnnouncer.startProgram();
     }
 }
 

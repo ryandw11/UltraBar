@@ -1,6 +1,5 @@
 package me.ryandw11.ultrabar.commands;
 
-import me.ryandw11.ultrabar.BossBarSced;
 import me.ryandw11.ultrabar.UltraBar;
 import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.UltraBarAPI;
@@ -18,12 +17,12 @@ import org.bukkit.entity.Player;
 
 import java.util.ConcurrentModificationException;
 
-public class Help implements CommandExecutor {
+public class UltraBarCommand implements CommandExecutor {
 
     private final UltraBar plugin;
     private final UltraBarAPI uba;
 
-    public Help(UltraBar plugin) {
+    public UltraBarCommand(UltraBar plugin) {
         this.plugin = plugin;
         this.uba = new UltraBarAPI();
     }
@@ -54,17 +53,14 @@ public class Help implements CommandExecutor {
                         BarTerminateEvent bte = new BarTerminateEvent(b, TerminationReason.BAR_CANCEL);
                         Bukkit.getServer().getPluginManager().callEvent(bte);
                     }
-                    UltraBar.barMessage.setVisible(false);
-                    UltraBar.barMessage.removeAll();
-                    UltraBar.barMessage = null;
+                    UltraBar.plugin.getBarAnnouncer().stopProgram();
                 }
 
                 plugin.reloadConfig();
                 p.sendMessage(ChatColor.GREEN + "The config file was reloaded!");
                 plugin.getLogger().info("[UltraBar] The config files were reloaded!");
                 if (plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
-                    BossBarSced b = new BossBarSced();
-                    b.startProgram();
+                    UltraBar.plugin.resetBarAnnouncer();
                 }
                 if (plugin.getConfig().getBoolean("Title_Announcements.Enabled")) {
                     TitleSched ts = new TitleSched();

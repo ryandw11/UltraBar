@@ -67,13 +67,16 @@ public class OnJoin implements Listener {
                 b.updatePlayers();
             }
         }
-        if (!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null)
-            UltraBar.barMessage.addPlayer(p);
-        else if (plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null) {
-            if (plugin.getConfig().getStringList("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())) {
-                UltraBar.barMessage.addPlayer(p);
-            }
+        if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
+            plugin.getBarAnnouncer().addPlayer(p);
         }
+//        if (!plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null)
+//            UltraBar.barMessage.addPlayer(p);
+//        else if (plugin.getConfig().getBoolean("BossBarMessages.World_Whitelist_Enabled") && plugin.getConfig().getBoolean("BossBarMessages.Enabled") && UltraBar.barMessage != null) {
+//            if (plugin.getConfig().getStringList("BossBarMessages.World_Whitelist").contains(p.getWorld().getName())) {
+//                UltraBar.barMessage.addPlayer(p);
+//            }
+//        }
 
     }
 

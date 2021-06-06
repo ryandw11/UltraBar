@@ -100,10 +100,8 @@ public class UltraBarCommand implements CommandExecutor {
             int num = 0;
             p.sendMessage(ChatColor.GREEN + "Active Plugin Hooks:");
             if (plugin.worldguard) {
-                if (version.equals("v1_14_R1") || version.equals("v1_13_R1") || version.equals("v1_13_R2"))
+                if (!version.equals("v1_12_R1"))
                     p.sendMessage(ChatColor.BLUE + "- WorldGuard (1.13+)");
-                else
-                    p.sendMessage(ChatColor.BLUE + "- WorldGuard (1.11.x - 1.12.x)");
                 num++;
             }
             if (plugin.placeholderAPI) {

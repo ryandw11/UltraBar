@@ -48,8 +48,8 @@ public class TitleSched extends BukkitRunnable {
 		int fadeout = plugin.getConfig().getInt("Title_Announcements." + currentNum + ".fadeout");
 		int time = plugin.getConfig().getInt("Title_Announcements." + currentNum + ".time");
 		for(Player p : Bukkit.getOnlinePlayers()){
-			title = plugin.papi.getMessage(title, p);
-			subtitle = plugin.papi.getMessage(subtitle, p);
+			title = plugin.papiTranslate.getMessage(title, p);
+			subtitle = plugin.papiTranslate.getMessage(subtitle, p);
 			bapi.sendTitle(p, title, subtitle, fadein, time, fadeout);
 		}
 		

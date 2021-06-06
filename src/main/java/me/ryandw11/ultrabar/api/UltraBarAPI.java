@@ -32,7 +32,7 @@ public final class UltraBarAPI {
      * @param fadeout  The time it should take to fade out.
      */
     public void sendTitle(Player p, String title, String subtitle, int fadein, int time, int fadeout) {
-        plugin.mgr.title(title, p, fadein, time, fadeout, subtitle);
+        plugin.typeManager.title(title, p, fadein, time, fadeout, subtitle);
     }
 
     /**
@@ -42,7 +42,7 @@ public final class UltraBarAPI {
      * @param message The message.
      */
     public void sendActionBar(Player p, String message) {
-        plugin.mgr.actionBar(p, message);
+        plugin.typeManager.actionBar(p, message);
     }
 
     /**

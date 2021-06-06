@@ -84,7 +84,8 @@ public class IndividualBossBarAnnouncer extends BukkitRunnable implements Announ
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if(!barMap.containsKey(p) && shouldPlayerSeeBar(p))
                     barMap.put(p, createBossBar(barData, p));
-                setBossBar(barData, p);
+                if(barMap.containsKey(p))
+                    setBossBar(barData, p);
             }
         } else {
             List<Player> playersToRemove = new ArrayList<>();
@@ -154,7 +155,7 @@ public class IndividualBossBarAnnouncer extends BukkitRunnable implements Announ
 
     @Override
     public void addPlayer(Player p) {
-        if(!this.barMap.containsKey(p))
+        if(!this.barMap.containsKey(p) && shouldPlayerSeeBar(p))
             this.barMap.put(p, createBossBar(barData, p));
     }
 

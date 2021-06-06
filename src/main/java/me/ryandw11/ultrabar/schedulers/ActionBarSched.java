@@ -44,7 +44,7 @@ public class ActionBarSched extends BukkitRunnable {
 		
 		String msg = plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("Action_Announcements." + currentNum + ".Message"));
 		for(Player p : Bukkit.getOnlinePlayers()){
-			msg = plugin.papi.getMessage(msg, p);
+			msg = plugin.papiTranslate.getMessage(msg, p);
 			bapi.sendActionBar(p, msg);
 		}
 		

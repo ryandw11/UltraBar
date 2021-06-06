@@ -1,6 +1,7 @@
 package me.ryandw11.ultrabar.listener;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -28,9 +29,9 @@ public class OnCommand implements Listener{
 		for(String s : cmds){
 			if(e.getMessage().startsWith("/" + s)){
 				if(plugin.getConfig().contains("OnCommand." + s + ".BossBar")){
-					String msg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Message")), e.getPlayer());
-					BarColor color = GrabBarStyles.barColor(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Color"));
-					BarStyle style = GrabBarStyles.barStyle(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Style"));
+					String msg = plugin.papiTranslate.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Message")), e.getPlayer());
+					BarColor color = GrabBarStyles.barColor(Objects.requireNonNull(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Color")));
+					BarStyle style = GrabBarStyles.barStyle(Objects.requireNonNull(plugin.getConfig().getString("OnCommand." + s + ".BossBar.Style")));
 					int time = plugin.getConfig().getInt("OnCommand." + s + ".BossBar.Time");
 					double health = plugin.getConfig().getDouble("OnCommand." + s + ".BossBar.Health");
 					
@@ -45,8 +46,8 @@ public class OnCommand implements Listener{
 					UltraBar.trackedBars.add(bb);
 				}
 				if(plugin.getConfig().contains("OnCommand." + s + ".Title")){
-					String msg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".Title.Message")), e.getPlayer());
-					String submsg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".Title.SubTitle")), e.getPlayer());
+					String msg = plugin.papiTranslate.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".Title.Message")), e.getPlayer());
+					String submsg = plugin.papiTranslate.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s + ".Title.SubTitle")), e.getPlayer());
 					int fadein = plugin.getConfig().getInt("OnCommand." + s + ".Title.fadein");
 					int fadeout = plugin.getConfig().getInt("OnCommand." + s + ".Title.fadeout");
 					int time = plugin.getConfig().getInt("OnCommand." + s + ".Title.time");
@@ -54,7 +55,7 @@ public class OnCommand implements Listener{
 					bapi.sendTitle(e.getPlayer(), msg, submsg, fadein, time, fadeout);
 				}
 				if(plugin.getConfig().contains("OnCommand." + s + ".ActionBar")){
-					String msg = plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s +".ActionBar.Message")), e.getPlayer());
+					String msg = plugin.papiTranslate.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnCommand." + s +".ActionBar.Message")), e.getPlayer());
 					
 					bapi.sendActionBar(e.getPlayer(), msg);
 				}

@@ -59,7 +59,7 @@ public class BossBarTimer extends BukkitRunnable {
     }
 
     private String replacePlaceholders(String title, Player p) {
-        return plugin.papi.getMessage(title, p)
+        return plugin.papiTranslate.getMessage(title, p)
                 .replace("%time_left%", Math.max(0, (int) Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20)) / 20)) + "")
                 .replace("%time_left_form%", getFormattedTime(Math.max(0, Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20)) / 20))));
     }

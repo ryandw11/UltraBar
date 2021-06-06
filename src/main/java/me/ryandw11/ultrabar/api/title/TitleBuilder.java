@@ -67,8 +67,8 @@ public class TitleBuilder {
      */
     public void send(){
         for(Player p : players){
-            plugin.mgr.title(plugin.papi.getMessage(UltraBar.plugin.chatColorUtil.translateChatColor(this.title), p), p,
-                    fadeIn, time, fadeOut, plugin.papi.getMessage(plugin.chatColorUtil.translateChatColor(this.subTitle), p));
+            plugin.typeManager.title(plugin.papiTranslate.getMessage(UltraBar.plugin.chatColorUtil.translateChatColor(this.title), p), p,
+                    fadeIn, time, fadeOut, plugin.papiTranslate.getMessage(plugin.chatColorUtil.translateChatColor(this.subTitle), p));
         }
         players.clear();
     }

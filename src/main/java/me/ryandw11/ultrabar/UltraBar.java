@@ -1,5 +1,6 @@
 package me.ryandw11.ultrabar;
 
+import me.ryandw11.ods.ODS;
 import me.ryandw11.ods.ObjectDataStructure;
 import me.ryandw11.ods.Tag;
 import me.ryandw11.ods.tags.ObjectTag;
@@ -24,17 +25,23 @@ import me.ryandw11.ultrabar.schedulers.TitleSched;
 import me.ryandw11.ultrabar.typemgr.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
+ * The main class for Ultra Bar
+ *
  * @author Ryandw11
- * The main class of Ultra Bar.
+ * @version 2.2.5
  */
 public class UltraBar extends JavaPlugin {
 
@@ -46,12 +53,15 @@ public class UltraBar extends JavaPlugin {
     public static List<UBossBar> trackedBars;
     public static UltraBar plugin;
     public ChatColorUtil chatColorUtil;
-    public Typemgr mgr;
-    public PlaceholderAPIDepend papi;
+    public Typemgr typeManager;
+    public PlaceholderAPIDepend papiTranslate;
     public boolean worldguard = false;
     public boolean placeholderAPI;
+    // The list of players that have toggle enabled.
     private List<Player> toggledPlayers;
+    // The list of bar parameters.
     private List<BarParameter> barParameters;
+    // The bar announcer (based on the new system).
     private Announcer barAnnouncer;
 
     @Override
@@ -61,15 +71,21 @@ public class UltraBar extends JavaPlugin {
         toggledPlayers = new ArrayList<>();
         barParameters = new ArrayList<>();
 
-        if (setupPlug()) {
+        if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+            getLogger().info("WorldGuard detected. WorldGuard addon activated");
+            worldguard = true;
+        }
+
+        if (setupVersionSpecificCode()) {
             loadMethod();
             registerConfig();
+            if (!checkForUpdate()) {
+                Bukkit.getPluginManager().disablePlugin(this);
+                getLogger().severe("UltraBar has been disabled to prevent damage.");
+                return;
+            }
             getLogger().info(String.format("UltraBar is enabled and running fine! V: %s", getDescription().getVersion()));
             loadSched();
-            if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
-                getLogger().info("WorldGuard detected. WorldGuard addon activated");
-                worldguard = true;
-            }
         } else {
             getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
             getLogger().info("This version is only for 1.12 - 1.16.5.");
@@ -77,7 +93,6 @@ public class UltraBar extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
         if (getConfig().getBoolean("bstats")) {
-            @SuppressWarnings("unused")
             Metrics metrics = new Metrics(this);
             getLogger().info("Bstat metrics for this plugin is enabled. Disable it in the config if you do not want it on.");
         } else {
@@ -128,6 +143,8 @@ public class UltraBar extends JavaPlugin {
         }
         if (getConfig().getBoolean("save_persistent_bars"))
             ods.save(tags);
+
+
         getLogger().info("Save complete!");
         trackedBars.clear();
         barAnnouncer.stopProgram();
@@ -140,14 +157,18 @@ public class UltraBar extends JavaPlugin {
         saveConfig();
     }
 
+    /**
+     * Loads all of the requires commands and listeners for the plugin.
+     */
     public void loadMethod() {
-        getCommand("bar").setExecutor(new BarCommand());
-        getCommand("bar").setTabCompleter(new BarCommandTabCompleter());
-        getCommand("utitle").setExecutor(new TitleCommand(this));
-        getCommand("utitle").setTabCompleter(new TitleCommandTabCompleter());
-        getCommand("actionbar").setExecutor(new ActionBarCommands(this));
-        getCommand("ultrabar").setExecutor(new UltraBarCommand(this));
-        getCommand("ultrabar").setTabCompleter(new UltraBarCommandTabCompleter());
+        Objects.requireNonNull(getCommand("bar")).setExecutor(new BarCommand());
+        Objects.requireNonNull(getCommand("bar")).setTabCompleter(new BarCommandTabCompleter());
+        Objects.requireNonNull(getCommand("utitle")).setExecutor(new TitleCommand(this));
+        Objects.requireNonNull(getCommand("utitle")).setTabCompleter(new TitleCommandTabCompleter());
+        Objects.requireNonNull(getCommand("actionbar")).setExecutor(new ActionBarCommands(this));
+        Objects.requireNonNull(getCommand("actionbar")).setTabCompleter(new ActionBarCommandTabCompleter());
+        Objects.requireNonNull(getCommand("ultrabar")).setExecutor(new UltraBarCommand(this));
+        Objects.requireNonNull(getCommand("ultrabar")).setTabCompleter(new UltraBarCommandTabCompleter());
         Bukkit.getServer().getPluginManager().registerEvents(new OnJoin(this), this);
         Bukkit.getServer().getPluginManager().registerEvents(new OnDeath(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new OnCommand(), this);
@@ -173,14 +194,17 @@ public class UltraBar extends JavaPlugin {
         }
     }
 
-    private boolean setupPlug() {
-
+    /**
+     * Setup code specific to a single version of minecraft.
+     * <p>
+     * 1.12 - 1.16.5 is supported.
+     *
+     * @return If the setup was successful.
+     */
+    private boolean setupVersionSpecificCode() {
         String version;
-
         try {
-
             version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-
         } catch (ArrayIndexOutOfBoundsException w0w) {
             return false;
         }
@@ -188,56 +212,59 @@ public class UltraBar extends JavaPlugin {
         getLogger().info("Your server is running version " + version + "!");
         switch (version) {
             case "v1_16_R3":
-                mgr = new Typemgr_1_16_R3();
+                typeManager = new Typemgr_1_16_R3();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-                    Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+                    Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
             case "v1_16_R2":
-                mgr = new Typemgr_1_16_R2();
+                typeManager = new Typemgr_1_16_R2();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-                    Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+                    Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
             case "v1_16_R1":
-                mgr = new Typemgr_1_16_R1();
+                typeManager = new Typemgr_1_16_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-                    Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+                    Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
             case "v1_15_R1":
-                mgr = new Typemgr_1_15_R1();
+                typeManager = new Typemgr_1_15_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-                    Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+                    Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
             case "v1_14_R1":
-                mgr = new Typemgr_1_14_R1();
+                typeManager = new Typemgr_1_14_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-                    Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+                    Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
             case "v1_13_R2":
-                mgr = new Typemgr_1_13_R2();
+                typeManager = new Typemgr_1_13_R2();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
-                    Bukkit.getServer().getPluginManager().registerEvents(new OnMove_1_13_R1(this), this);
+                    Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
             case "v1_12_R1":
-                mgr = new Typemgr_1_12_R1();
+                typeManager = new Typemgr_1_12_R1();
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
         }
 
-        return mgr != null;
+        return typeManager != null;
     }
 
+    /**
+     * Setup PlaceholderAPI support.
+     */
     private void setupPlaceholderAPI() {
         if (placeholderAPI) {
-            papi = new PAPIExists();
+            papiTranslate = new PAPIExists();
             return;
         }
-        papi = new PAPINotFound();
+        papiTranslate = new PAPINotFound();
     }
 
     /**
@@ -288,6 +315,7 @@ public class UltraBar extends JavaPlugin {
 
     /**
      * Get the boss bar announcer.
+     *
      * @return The boss bar announcer.
      */
     public Announcer getBarAnnouncer() {
@@ -301,15 +329,46 @@ public class UltraBar extends JavaPlugin {
         this.barAnnouncer = new IndividualBossBarAnnouncer();
         this.barAnnouncer.startProgram();
     }
-}
 
-/*
- * ultrabar.title.send
- * ultrabar.title.sendall
- * ultrabar.subtitle.send
- * ultrabar.subtitle.sendall
- * ultrabar.bar.send
- * ultrabar.bar.sendall
- * ultrabar.help
- * ultrabar.reload
- */
+    private boolean checkForUpdate() {
+        if (plugin.getConfig().contains("config_version") && !plugin.getConfig().contains("BossBarMessages.Number_Of_Messages")) {
+            return true;
+        }
+        getLogger().info("An older version of the plugin is detected. Automatically updating config file.");
+        File config = new File(getDataFolder(), "config.yml");
+        File configBackup = new File(getDataFolder(), "config.yml.backup");
+        try {
+            configBackup.createNewFile();
+            FileUtils.copyFile(config, configBackup);
+        } catch (IOException ex) {
+            getLogger().severe("A critical error was encountered when attempting to update plugin configuration" +
+                    " files!");
+            getLogger().severe("Unable to create backup of the config.yml file.");
+
+            return false;
+        }
+
+        getConfig().set("BossBarMessages.Messages", null);
+        saveConfig();
+
+        List<ConfigurationSection> sections = new ArrayList<>();
+        int numberOfBars = getConfig().getInt("BossBarMessages.Number_Of_Messages");
+        for (int i = 1; i <= numberOfBars; i++) {
+            sections.add(getConfig().getConfigurationSection("BossBarMessages." + i));
+            getConfig().set("BossBarMessages." + i, null);
+        }
+        getConfig().set("BossBarMessages.Number_Of_Messages", null);
+
+        int i = 1;
+        for (ConfigurationSection section : sections) {
+            getConfig().set("BossBarMessages.Messages.Message" + i, section);
+            i++;
+        }
+        getConfig().set("config_version", 1);
+
+        getLogger().info("Successfully updated the config to the latest version!");
+
+        saveConfig();
+        return true;
+    }
+}

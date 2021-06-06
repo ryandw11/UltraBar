@@ -12,7 +12,16 @@ import org.bukkit.boss.BarStyle;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class represents a Bar so that ODS can save it to a file.
+ */
 public class BarTag extends ObjectTag {
+
+    /**
+     * Create the BarTag from a UBossBar.
+     *
+     * @param bar The bar to create the BarTag from.
+     */
     public BarTag(UBossBar bar) {
         super(bar.getPID().toString());
 
@@ -34,13 +43,25 @@ public class BarTag extends ObjectTag {
         if (bar.getPermission().isPresent())
             this.addTag(new StringTag("permission", bar.getPermission().get()));
         this.addTag(new ByteTag("hasTimer", (byte) (bar.getTimer() == null ? 0 : 1)));
+
+        this.addTag(ODS.wrap("ver", 1));
     }
 
+    /**
+     * Create the bar tag from an object tag.
+     *
+     * @param objectTag The object tag to create a bar tag from.
+     */
     public BarTag(ObjectTag objectTag) {
         super(objectTag.getName());
         this.setValue(objectTag.getValue());
     }
 
+    /**
+     * Build the boss bar from the file.
+     *
+     * @return The boss bar from the file.
+     */
     public UBossBar buildBossBar() {
         int id = ODS.unwrap((IntTag) getTag("id"));
         String message = ODS.unwrap((StringTag) getTag("message"));

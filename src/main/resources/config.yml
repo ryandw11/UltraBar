@@ -3,10 +3,10 @@ config_version: 1
 #                        UltraBar                          #
 ############################################################
 #bstats is where data is sent. https://bstats.org/plugin/bukkit/UltraBar .
-#Here is some more information on it like what it collects and how to disable it all togeather and not just for this plugin.
+#Here is some more information on it like what it collects and how to disable it all together and not just for this plugin.
 # https://bstats.org/getting-started
 bstats: true
-#If the plugin should check for updates. It will not if set to false. (Note: The plugin does not automaticly update.)
+#If the plugin should check for updates. It will not if set to false. (Note: The plugin does not automatically update.)
 update_checker: true
 # Whether the plugin should save persistent bars when the server is stopped or reloaded.
 save_persistent_bars: true

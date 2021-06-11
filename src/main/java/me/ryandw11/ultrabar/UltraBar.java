@@ -7,7 +7,6 @@ import me.ryandw11.ultrabar.announcements.Announcer;
 import me.ryandw11.ultrabar.announcements.IndividualBossBarAnnouncer;
 import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
-import me.ryandw11.ultrabar.bstats.Metrics;
 import me.ryandw11.ultrabar.bstats.UpdateChecker;
 import me.ryandw11.ultrabar.chatcolor.ChatColorUtil;
 import me.ryandw11.ultrabar.chatcolor.ChatColorUtil_1_16;
@@ -22,6 +21,7 @@ import me.ryandw11.ultrabar.parameters.CommandParameter;
 import me.ryandw11.ultrabar.schedulers.ActionBarSched;
 import me.ryandw11.ultrabar.schedulers.TitleSched;
 import me.ryandw11.ultrabar.typemgr.*;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -100,7 +100,7 @@ public class UltraBar extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
         }
         if (getConfig().getBoolean("bstats")) {
-            Metrics metrics = new Metrics(this);
+            Metrics metrics = new Metrics(this, 1998);
             getLogger().info("Bstat metrics for this plugin is enabled. Disable it in the config if you do not want it on.");
         } else {
             getLogger().info("Bstat metrics is disabled for this plugin.");

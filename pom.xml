@@ -34,7 +34,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>com.ryandw11.structure.bstats</shadedPattern>
+                            <shadedPattern>me.ryandw11.ultrabar.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -234,6 +234,12 @@
             <artifactId>spigot</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

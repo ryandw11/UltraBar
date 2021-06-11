@@ -1,4 +1,5 @@
 me.ryandw11.ultrabar
+me.ryandw11.ultrabar.announcements
 me.ryandw11.ultrabar.api
 me.ryandw11.ultrabar.api.events
 me.ryandw11.ultrabar.api.parameters
@@ -7,6 +8,7 @@ me.ryandw11.ultrabar.bstats
 me.ryandw11.ultrabar.chatcolor
 me.ryandw11.ultrabar.commands
 me.ryandw11.ultrabar.depends
+me.ryandw11.ultrabar.io
 me.ryandw11.ultrabar.listener
 me.ryandw11.ultrabar.parameters
 me.ryandw11.ultrabar.schedulers

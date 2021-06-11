@@ -18,8 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Clean way to create a bossbar via the plugin.
- * <p>The recommended way</p>
+ * A clean way to create automatic countdown boss bars.
  *
  * @author Ryandw11
  */
@@ -89,7 +88,8 @@ public class BossBarBuilder {
      * Set the message of the boss bar.
      * <b>Required</b>
      *
-     * @param s
+     * @param s The message to set.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setMessage(String s) {
         message = s;
@@ -100,7 +100,8 @@ public class BossBarBuilder {
      * Set the color of the boss bar.
      * <b>Required</b>
      *
-     * @param color
+     * @param color The color of the boss bar.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setColor(BarColor color) {
         this.color = color;
@@ -111,7 +112,8 @@ public class BossBarBuilder {
      * Set the style of the boss bar.
      * <b>Required</b>
      *
-     * @param style
+     * @param style The style of the boss bar.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setStyle(BarStyle style) {
         this.style = style;
@@ -119,10 +121,12 @@ public class BossBarBuilder {
     }
 
     /**
-     * Set the time of the bossbar.
-     * <b>Required</b>
+     * Set the time of the boss bar.
      *
-     * @param time
+     * <p>This is only needed if you build a live bar via {@link #build()}.</p>
+     *
+     * @param time The time the boss bar should last. (In Seconds)
+     * @return The boss bar builder.
      */
     public BossBarBuilder setTime(int time) {
         this.time = time;
@@ -134,6 +138,7 @@ public class BossBarBuilder {
      * <b>Required</b>
      *
      * @param progress The progress of the boss bar.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setProgress(double progress) {
         this.progress = progress;
@@ -144,6 +149,7 @@ public class BossBarBuilder {
      * Set a single player to a bar.
      *
      * @param p The player
+     * @return The boss bar builder.
      */
     public BossBarBuilder setSinglePlayer(Player p) {
         players.add(p);
@@ -156,6 +162,7 @@ public class BossBarBuilder {
      * with the specified permission will get added.</p>
      *
      * @param players The collection of players.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setPlayerCollection(Collection<Player> players) {
         if (permission != null) {
@@ -173,7 +180,8 @@ public class BossBarBuilder {
     /**
      * Set the world a player/players need to be in.
      *
-     * @param w
+     * @param w The world a player needs to be in.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setWorld(World w) {
         this.world = w;
@@ -184,12 +192,25 @@ public class BossBarBuilder {
      * Set the id of the bar. (Can be used to retrieve the bar later)
      *
      * @param id The int id.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setId(int id) {
         this.id = id;
         return this;
     }
 
+    /**
+     * Set if the boss bar is tracked.
+     *
+     * <p>Tracked means that UltraBar will keep track of it in
+     * its internal system and manage it.</p>
+     *
+     * <p>Tracked bars are also automatically added to players on join if both
+     * {@link UBossBar#isPublicBar()} and {@link UBossBar#checkPlayerConditions(Player)} are true.</p>
+     *
+     * @param value If the bar should be tracked.
+     * @return The boss bar builder
+     */
     public BossBarBuilder setTracked(boolean value) {
         this.tracked = value;
         return this;
@@ -204,10 +225,21 @@ public class BossBarBuilder {
         return players.size() == 1;
     }
 
+    /**
+     * Get if the bar is a public bar.
+     *
+     * @return If the bar is a public bar.
+     */
     public boolean getPublicBar() {
         return this.publicBar;
     }
 
+    /**
+     * Set if the boss bar is a public bar.
+     *
+     * @param bool If the boss bar is a public bar.
+     * @return The boss bar builder.
+     */
     public BossBarBuilder setPublicBar(boolean bool) {
         this.publicBar = bool;
         return this;
@@ -215,6 +247,8 @@ public class BossBarBuilder {
 
     /**
      * If there are any players associated with the bar.
+     *
+     * @return If this bar has players assigned to it.
      */
     public boolean hasPlayers() {
         return players.size() > 0;
@@ -225,6 +259,7 @@ public class BossBarBuilder {
      *
      * @param key   The key for the data.
      * @param value The data itself.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setData(String key, String value) {
         this.storedData.put(key, value);
@@ -235,6 +270,7 @@ public class BossBarBuilder {
      * Store data on the boss bar.
      *
      * @param data The map of data to store.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setData(Map<String, String> data) {
         this.storedData = data;
@@ -250,6 +286,7 @@ public class BossBarBuilder {
      * <p>If the player list was already set, then players without the permission are removed.</p>
      *
      * @param permission The permission.
+     * @return The boss bar builder.
      */
     public BossBarBuilder setPermission(String permission) {
         this.permission = permission;
@@ -275,16 +312,16 @@ public class BossBarBuilder {
      * @return The UBossBar class. <b>Returns null if the setup is invalid</b>
      */
     public UBossBar build() {
+        if (this.message == null) return null;
+        if (this.color == null) return null;
+        if (this.style == null) return null;
+        if (this.progress < 0) return null;
+        if (this.time < 0) return null;
         //if (!hasPlayers()) return null;
         /*
          * If there is only one player
          */
         if (isOnePlayer()) {
-            if (this.message == null) return null;
-            if (this.color == null) return null;
-            if (this.style == null) return null;
-            if (this.progress < 0) return null;
-            if (this.time < 0) return null;
             if (world != null) {
                 if (Iterables.get(players, 0).getWorld() != world) {
                     return null;
@@ -357,15 +394,15 @@ public class BossBarBuilder {
      * @return The UBossBar class. <b>Returns null if the setup is invalid</b>
      */
     public UBossBar buildDead() {
+        if (this.message == null) return null;
+        if (this.color == null) return null;
+        if (this.style == null) return null;
+        if (this.progress < 0) return null;
         //if (!hasPlayers()) return null;
         /*
          * If there is only one player
          */
         if (isOnePlayer()) {
-            if (this.message == null) return null;
-            if (this.color == null) return null;
-            if (this.style == null) return null;
-            if (this.progress < 0) return null;
             if (world != null) {
                 if (Iterables.get(players, 0).getWorld() != world) {
                     return null;

@@ -9,12 +9,12 @@ import net.minecraft.server.v1_12_R1.PacketPlayOutChat;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class Typemgr_1_12_R1 implements Typemgr{
+public class TypeManager_1_12_R1 implements TypeManager {
 
 	
 
 	
-	public Typemgr_1_12_R1(){
+	public TypeManager_1_12_R1(){
 	}
 	
 	/*Bar Style method created.

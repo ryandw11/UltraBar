@@ -36,7 +36,13 @@ public class UBossBar {
     private final Map<String, String> storedData;
 
     /**
+     * Create a new UBossBar.
+     *
+     * <p>This is only meant for internal and advanced use. Please use
+     * {@link BossBarBuilder} to create boss bars.</p>
+     *
      * @param bbb   The instance of the builder.
+     * @param bar   The instance of the Bukkit Boss Bar.
      * @param timer The time (Can be null)
      */
     public UBossBar(BossBarBuilder bbb, BossBar bar, @Nullable BossBarTimer timer) {
@@ -57,52 +63,112 @@ public class UBossBar {
         this.permission = bbb.getPermission();
     }
 
+    /**
+     * Get the message of a boss bar.
+     *
+     * @return The message.
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Set the message of a boss bar.
+     *
+     * @param message The message of a boss bar.
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
+    /**
+     * Get the color of the boss bar.
+     *
+     * @return The color.
+     */
     public BarColor getColor() {
         return color;
     }
 
+    /**
+     * Set the color of the boss bar.
+     *
+     * @param color The color to set.
+     */
     public void setColor(BarColor color) {
         this.color = color;
     }
 
+    /**
+     * Get the style of the boss bar.
+     *
+     * @return The style of the boss bar.
+     */
     public BarStyle getStyle() {
         return style;
     }
 
+    /**
+     * SEt the style of the boss bar.
+     *
+     * @param style The style of the boss bar.
+     */
     public void setStyle(BarStyle style) {
         this.style = style;
     }
 
+    /**
+     * Get the time of the boss bar.
+     *
+     * <p>This is the time that the bar originally started with.
+     * This will not present the time left.</p>
+     *
+     * @return The time of the boss bar. (In Seconds).
+     */
     public int getTime() {
         return time;
     }
 
+    /**
+     * Set the time of the boss bar.
+     *
+     * @param time The time of the boss bar. (In Seconds).
+     */
     public void setTime(int time) {
         this.time = time;
     }
 
+    /**
+     * Get the progress of the boss bar.
+     *
+     * @return The progress of the boss bar.
+     */
     public double getProgress() {
         return progress;
     }
 
+    /**
+     * Set the progress of the boss bar.
+     *
+     * @param progress The progress of the boss bar.
+     */
     public void setProgress(double progress) {
         this.progress = progress;
     }
 
+    /**
+     * Set if the boss bar is public.
+     *
+     * <p>A public bar means players will be automatically added to it when they join.</p>
+     *
+     * @param pub If the boss bar should be public.
+     */
     public void setPublic(boolean pub) {
         this.publicBar = pub;
     }
 
     /**
-     * Set a data value
+     * Set a data value.
      *
      * @param key   the key
      * @param value the data
@@ -112,7 +178,7 @@ public class UBossBar {
     }
 
     /**
-     * If a key exists
+     * If a key exists.
      *
      * @param key the key
      * @return if the key exists
@@ -122,7 +188,7 @@ public class UBossBar {
     }
 
     /**
-     * Get a piece of data
+     * Get a piece of data.
      *
      * @param key The key
      * @return The piece of data.
@@ -150,7 +216,7 @@ public class UBossBar {
     }
 
     /**
-     * Get the id
+     * Get the id.
      *
      * @return The id.
      */
@@ -168,12 +234,21 @@ public class UBossBar {
         return players;
     }
 
+    /**
+     * Set the collection of players.
+     *
+     * <p>Use {@link #updatePlayers()} to sync the player list.</p>
+     *
+     * @param players The collection of players to set.
+     */
     public void setPlayers(Collection<Player> players) {
         this.players = players;
     }
 
     /**
      * A way to remove players as #remove does not work on Collections.
+     *
+     * <p>Use {@link #updatePlayers()} to sync the player list.</p>
      *
      * @param p The player.
      */
@@ -185,6 +260,8 @@ public class UBossBar {
 
     /**
      * Add a player to the player Collection
+     *
+     * <p>Use {@link #updatePlayers()} to sync the player list.</p>
      *
      * @param p the player
      */
@@ -267,12 +344,20 @@ public class UBossBar {
         return parameters;
     }
 
+    /**
+     * Set the map of parameters.
+     *
+     * @param param The map of parameters.
+     */
     public void setParameters(Map<String, String> param) {
         this.parameters = param;
     }
 
     /**
      * Update the list of players on the live bar.
+     *
+     * <p>This must be called if you want players to be added / removed from the
+     * actual boss bar.</p>
      */
     public void updatePlayers() {
         bar.removeAll();
@@ -281,6 +366,11 @@ public class UBossBar {
         }
     }
 
+    /**
+     * Get the UUID of the boss bar.
+     *
+     * @return The UUID of the boss bar.
+     */
     public UUID getPID() {
         return this.pid;
     }
@@ -324,12 +414,14 @@ public class UBossBar {
         return publicBar;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof UBossBar)) return false;
         UBossBar ub = (UBossBar) o;
         return this.pid == ub.pid;
     }
 
+    @Override
     public int hashCode() {
         return this.pid.hashCode();
     }

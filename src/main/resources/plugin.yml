@@ -2,19 +2,19 @@ name: UltraBar
 version: 2.3.0
 main: me.ryandw11.ultrabar.UltraBar
 author: Ryandw11
-description: Use Titles, Actionbars, and Boss bars!
+description: Send BossBars, Titles, and ActionBars to players.
 softdepend: [WorldGuard, WorldEdit, PlaceholderAPI]
 api-version: 1.13
 commands:
     bar:
-     description: use boss bars!
+     description: Send boss bars to the entire server or specific players.
      aliases: [ubar, bossbar]
     utitle:
-     description: use titles!
+     description: Send titles to the entire server or specific players.
      aliases: [ut, ultratitle]
     actionbar:
-     description: use actionbars!
+     description: Send actionbars to the entire server or specific players.
      aliases: [ab, uactionbar, uab]
     UltraBar:
-     description: Help Command
+     description: The base command for UltraBar!
      aliases: [ub, ultrab]

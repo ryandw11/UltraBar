@@ -9,7 +9,7 @@ import net.minecraft.server.v1_16_R2.SystemUtils;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class Typemgr_1_16_R2 implements Typemgr{
+public class TypeManager_1_16_R2 implements TypeManager {
 
 	@Override
 	public void title(String message, Player p, int fadein, int time, int fadeout, String subtitle){

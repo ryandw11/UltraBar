@@ -1,6 +1,5 @@
 package me.ryandw11.ultrabar;
 
-import me.ryandw11.ods.ODS;
 import me.ryandw11.ods.ObjectDataStructure;
 import me.ryandw11.ods.Tag;
 import me.ryandw11.ods.tags.ObjectTag;
@@ -41,7 +40,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * The main class for Ultra Bar
  *
  * @author Ryandw11
- * @version 2.2.5
+ * @version 2.3.0
  */
 public class UltraBar extends JavaPlugin {
 
@@ -53,7 +52,7 @@ public class UltraBar extends JavaPlugin {
     public static List<UBossBar> trackedBars;
     public static UltraBar plugin;
     public ChatColorUtil chatColorUtil;
-    public Typemgr typeManager;
+    public TypeManager typeManager;
     public PlaceholderAPIDepend papiTranslate;
     public boolean worldguard = false;
     public boolean placeholderAPI;
@@ -72,9 +71,17 @@ public class UltraBar extends JavaPlugin {
         barParameters = new ArrayList<>();
 
         if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
-            getLogger().info("WorldGuard detected. WorldGuard addon activated");
+            getLogger().info("WorldGuard detected. WorldGuard addon activated.");
             worldguard = true;
         }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            getLogger().info("PlaceholderAPI detected. PlaceholderAPI addon activated.");
+            placeholderAPI = true;
+        } else {
+            placeholderAPI = false;
+        }
+        setupPlaceholderAPI();
 
         if (setupVersionSpecificCode()) {
             loadMethod();
@@ -88,7 +95,7 @@ public class UltraBar extends JavaPlugin {
             loadSched();
         } else {
             getLogger().severe(ChatColor.RED + "UltraBar does not support the version you are currently on!");
-            getLogger().info("This version is only for 1.12 - 1.16.5.");
+            getLogger().info("This version is only for 1.12 - 1.17+.");
             getLogger().info("The plugin will now be disabled!");
             Bukkit.getPluginManager().disablePlugin(this);
         }
@@ -98,12 +105,6 @@ public class UltraBar extends JavaPlugin {
         } else {
             getLogger().info("Bstat metrics is disabled for this plugin.");
         }
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            getLogger().info("PlaceholderAPI detected. PlaceholderAPI addon detected.");
-            placeholderAPI = true;
-        } else
-            placeholderAPI = false;
-        setupPlaceholderAPI();
 
         if (getConfig().getBoolean("update_checker")) {
             UpdateChecker updater = new UpdateChecker(this, 20113);
@@ -148,7 +149,7 @@ public class UltraBar extends JavaPlugin {
         getLogger().info("Save complete!");
         trackedBars.clear();
         barAnnouncer.stopProgram();
-        getLogger().info("UltraBar for 1.12 - 1.16.5 has been disabled correctly!"); // same thing
+        getLogger().info("UltraBar was successfully disabled!");
     }
 
 
@@ -197,7 +198,7 @@ public class UltraBar extends JavaPlugin {
     /**
      * Setup code specific to a single version of minecraft.
      * <p>
-     * 1.12 - 1.16.5 is supported.
+     * 1.12 - 1.17 is supported.
      *
      * @return If the setup was successful.
      */
@@ -212,44 +213,51 @@ public class UltraBar extends JavaPlugin {
         getLogger().info("Your server is running version " + version + "!");
         switch (version) {
             case "v1_16_R3":
-                typeManager = new Typemgr_1_16_R3();
+                typeManager = new TypeManager_1_16_R3();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
             case "v1_16_R2":
-                typeManager = new Typemgr_1_16_R2();
+                typeManager = new TypeManager_1_16_R2();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
             case "v1_16_R1":
-                typeManager = new Typemgr_1_16_R1();
+                typeManager = new TypeManager_1_16_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
             case "v1_15_R1":
-                typeManager = new Typemgr_1_15_R1();
+                typeManager = new TypeManager_1_15_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
             case "v1_14_R1":
-                typeManager = new Typemgr_1_14_R1();
+                typeManager = new TypeManager_1_14_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
             case "v1_13_R2":
-                typeManager = new Typemgr_1_13_R2();
+                typeManager = new TypeManager_1_13_R2();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
             case "v1_12_R1":
-                typeManager = new Typemgr_1_12_R1();
+                typeManager = new TypeManager_1_12_R1();
                 chatColorUtil = new ChatColorUtil_Old();
+                break;
+            // UltraBar should now work by default for all new updates.
+            default:
+                typeManager = new ModernTypeManager();
+                if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
+                    Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
+                chatColorUtil = new ChatColorUtil_1_16();
                 break;
         }
 

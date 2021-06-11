@@ -29,8 +29,13 @@ Maven:
 `{version}` is the current version of the plugin, which can be found on the [SpigotMC](https://www.spigotmc.org/resources/ultra-bar.20113/) page.
 
 # Contributing
-In order to contibute to the project you must have all of the spigot versions from `1.12.2-1.16.4`. You can do this by running buildtools multiple times:
+In order to contribute to the project you must have all the spigot versions from `1.12.2-1.17`. 
+
+As of UltraBar 2.3.0, 1.17+ requires Spigot for general use.  
+
+You can do this by running buildtools multiple times:
 ```
+java -jar BuildTools.jar --rev 1.17
 java -jar BuildTools.jar --rev 1.16.4
 java -jar BuildTools.jar --rev 1.16.3
 java -jar BuildTools.jar --rev 1.16.2
@@ -40,6 +45,6 @@ java -jar BuildTools.jar --rev 1.14.4
 java -jar BuildTools.jar --rev 1.13.2
 java -jar BuildTools.jar --rev 1.12.2
 ```
-Then run `mvn clean install` to get all of the required dependencies.  
+Then run `mvn clean install` to get all the required dependencies.  
 
 To build UltraBar you can either use `package` or `install` to do so.

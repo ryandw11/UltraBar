@@ -14,7 +14,7 @@ import java.util.List;
 public class TitleBuilder {
     private String title;
     private String subTitle;
-    private UltraBar plugin;
+    private final UltraBar plugin;
     private List<Player> players;
     private int fadeIn;
     private int fadeOut;

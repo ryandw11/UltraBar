@@ -11,9 +11,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.Objects;
+
 public class OnJoin implements Listener {
 
-    private UltraBar plugin;
+    private final UltraBar plugin;
 
     public OnJoin(UltraBar plugin) {
         this.plugin = plugin;
@@ -23,9 +25,14 @@ public class OnJoin implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player p = event.getPlayer();
 
+        // Add the boss bar announcement first.
+        if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
+            plugin.getBarAnnouncer().addPlayer(p);
+        }
+
         if (plugin.getConfig().getBoolean("OnJoin.BossBar.Enabled")) {
-            BarColor color = GrabBarStyles.barColor(plugin.getConfig().getString("OnJoin.BossBar.Color"));
-            BarStyle style = GrabBarStyles.barStyle(plugin.getConfig().getString("OnJoin.BossBar.Style"));
+            BarColor color = GrabBarStyles.barColor(Objects.requireNonNull(plugin.getConfig().getString("OnJoin.BossBar.Color")));
+            BarStyle style = GrabBarStyles.barStyle(Objects.requireNonNull(plugin.getConfig().getString("OnJoin.BossBar.Style")));
             String message = plugin.papiTranslate.getMessage(plugin.chatColorUtil.translateChatColor(plugin.getConfig().getString("OnJoin.BossBar.Message").replace("{player}", p.getName())), p);
             int time = plugin.getConfig().getInt("OnJoin.BossBar.Time");
             double progress = plugin.getConfig().getDouble("OnJoin.BossBar.Health");
@@ -66,9 +73,6 @@ public class OnJoin implements Listener {
                 b.addPlayer(p);
                 b.updatePlayers();
             }
-        }
-        if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
-            plugin.getBarAnnouncer().addPlayer(p);
         }
 
     }

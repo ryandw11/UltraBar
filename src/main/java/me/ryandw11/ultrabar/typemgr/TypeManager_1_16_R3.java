@@ -1,27 +1,21 @@
 package me.ryandw11.ultrabar.typemgr;
 
 
-import net.minecraft.server.v1_16_R1.ChatMessageType;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
-import net.minecraft.server.v1_16_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_16_R1.PacketPlayOutChat;
-import net.minecraft.server.v1_16_R1.SystemUtils;
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_16_R3.ChatMessageType;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent;
+import net.minecraft.server.v1_16_R3.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_16_R3.PacketPlayOutChat;
+import net.minecraft.server.v1_16_R3.SystemUtils;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-public class Typemgr_1_16_R1 implements Typemgr{
+public class TypeManager_1_16_R3 implements TypeManager {
 
-	public Typemgr_1_16_R1(){
-	}
-	
-	/*Bar Style method created.
-	 * 
-	 * # of Notched lines.
-	 */
 	@Override
 	public void title(String message, Player p, int fadein, int time, int fadeout, String subtitle){
 		p.sendTitle(message, subtitle, fadein, time, fadeout);
 	}
+
 	@Override
 	public void actionBar(Player player, String message){
 		CraftPlayer p = (CraftPlayer) player;
@@ -29,8 +23,4 @@ public class Typemgr_1_16_R1 implements Typemgr{
 		PacketPlayOutChat ppoc = new PacketPlayOutChat(cbc, ChatMessageType.GAME_INFO, SystemUtils.b);
         p.getHandle().playerConnection.sendPacket(ppoc);
 	}
-	
-	
-	
-	
 }

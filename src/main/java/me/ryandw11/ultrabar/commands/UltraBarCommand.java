@@ -30,23 +30,22 @@ public class UltraBarCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
-        CommandSender p = sender;
         if (args.length == 0) {
-            if (p.hasPermission("ultrabar.help")) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7==========[&6UltraBar Help&7]=========="));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar &7- Commands for the boss bar."));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/utitle &7- Commands for the title command."));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/actionbar &7- Commands for the actionbar command."));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar reload &7- Reload the plugin."));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar toggle &7- Toggle if you will receive bar announcements."));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar hooks &7- See the active hooks."));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar cancel [id] &7- Remove all active bars."));
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar clear (player) &7- Remove all active bars for that player."));
+            if (sender.hasPermission("ultrabar.help")) {
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7==========[&6UltraBar Help&7]=========="));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/bar &7- Commands for the boss bar."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/utitle &7- Commands for the title command."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/actionbar &7- Commands for the actionbar command."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar reload &7- Reload the plugin."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar toggle &7- Toggle if you will receive bar announcements."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar hooks &7- See the active hooks."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar cancel [id] (player) &7- Remove all active bars."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar clear (player) &7- Remove all active bars for that player."));
             } else {
-                p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
+                sender.sendMessage(ChatColor.RED + "You do not have permission for this command!");
             }
         } else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-            if (p.hasPermission("ultrabar.reload")) {
+            if (sender.hasPermission("ultrabar.reload")) {
                 if (plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
                     for (UBossBar b : UltraBar.trackedBars) {
                         uba.deleteBar(b);
@@ -57,7 +56,7 @@ public class UltraBarCommand implements CommandExecutor {
                 }
 
                 plugin.reloadConfig();
-                p.sendMessage(ChatColor.GREEN + "The config file was reloaded!");
+                sender.sendMessage(ChatColor.GREEN + "The config file was reloaded!");
                 plugin.getLogger().info("[UltraBar] The config files were reloaded!");
                 if (plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
                     UltraBar.plugin.resetBarAnnouncer();
@@ -71,62 +70,85 @@ public class UltraBarCommand implements CommandExecutor {
                     as.startProgram();
                 }
             } else {
-                p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
+                sender.sendMessage(ChatColor.RED + "You do not have permission for this command!");
             }
         } else if (args.length == 1 && args[0].equalsIgnoreCase("toggle")) {
-            if (!(p instanceof Player)) {
-                p.sendMessage(ChatColor.RED + "Only players can use this command!");
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "Only players can use this command!");
                 return true;
             }
-            if (!p.hasPermission("ultrabar.toggle")) {
-                p.sendMessage(ChatColor.RED + "You do not have permission for this command.");
+            if (!sender.hasPermission("ultrabar.toggle")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission for this command.");
                 return true;
             }
-            if (plugin.getToggledPlayers().contains(p)) {
-                plugin.removeTogglePlayer((Player) p);
-                p.sendMessage(ChatColor.GREEN + "Boss Bar announcements will now show!");
+            if (plugin.getToggledPlayers().contains(sender)) {
+                plugin.removeTogglePlayer((Player) sender);
+                sender.sendMessage(ChatColor.GREEN + "Boss Bar announcements will now show!");
             } else {
-                plugin.addTogglePlayer((Player) p);
-                p.sendMessage(ChatColor.RED + "Boss Bar announcements will no longer show!");
+                plugin.addTogglePlayer((Player) sender);
+                sender.sendMessage(ChatColor.RED + "Boss Bar announcements will no longer show!");
             }
         } else if (args.length == 1 && (args[0].equalsIgnoreCase("hooks") || args[0].equalsIgnoreCase("hook"))) {
-            if (!p.hasPermission("ultrabar.hooks")) {
-                p.sendMessage(ChatColor.RED + "You do not have permission for this command!");
+            if (!sender.hasPermission("ultrabar.hooks")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission for this command!");
                 return true;
             }
 
             String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 
             int num = 0;
-            p.sendMessage(ChatColor.GREEN + "Active Plugin Hooks:");
+            sender.sendMessage(ChatColor.GREEN + "Active Plugin Hooks:");
             if (plugin.worldguard) {
                 if (!version.equals("v1_12_R1"))
-                    p.sendMessage(ChatColor.BLUE + "- WorldGuard (1.13+)");
+                    sender.sendMessage(ChatColor.BLUE + "- WorldGuard (1.13+)");
                 num++;
             }
             if (plugin.placeholderAPI) {
-                p.sendMessage(ChatColor.BLUE + "- PlaceHolderAPI");
+                sender.sendMessage(ChatColor.BLUE + "- PlaceHolderAPI");
                 num++;
             }
             for (BarParameter bp : plugin.getBarParameters()) {
                 if (bp.getPluginName() != null) {
-                    p.sendMessage(ChatColor.BLUE + "- " + bp.getPluginName());
+                    sender.sendMessage(ChatColor.BLUE + "- " + bp.getPluginName());
                     num++;
                 }
             }
             if (num == 0)
-                p.sendMessage(ChatColor.BLUE + "There are currently no active plugin hooks!");
+                sender.sendMessage(ChatColor.BLUE + "There are currently no active plugin hooks!");
         } else if (args[0].equalsIgnoreCase("cancelbars") || args[0].equalsIgnoreCase("cancel")) {
-            if (!p.hasPermission("ultrabar.cancel")) {
-                p.sendMessage(ChatColor.RED + "You do not have permission for this command");
+            if (!sender.hasPermission("ultrabar.cancel")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission for this command");
                 return true;
             }
-            if (args.length == 2) {
+            if (args.length == 3) {
                 int id = -1;
                 try {
                     id = Integer.parseInt(args[1]);
                 } catch (NumberFormatException e) {
-                    p.sendMessage(ChatColor.RED + "Invalid number!");
+                    sender.sendMessage(ChatColor.RED + "Invalid number!");
+                    return true;
+                }
+
+                String playerName = args[2];
+                Player player = Bukkit.getPlayer(playerName);
+                if(player == null) {
+                    sender.sendMessage(ChatColor.RED + "That player does not exist!");
+                    return true;
+                }
+
+                UltraBarAPI uapi = new UltraBarAPI();
+                for (UBossBar b : uapi.getBarsWithId(id)) {
+                    b.removePlayer(player);
+                    b.updatePlayers();
+                }
+                sender.sendMessage(ChatColor.GREEN + "Removed that player from all bars with that id!");
+
+            }else if (args.length == 2) {
+                int id = -1;
+                try {
+                    id = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    sender.sendMessage(ChatColor.RED + "Invalid number!");
                     return true;
                 }
 
@@ -136,7 +158,7 @@ public class UltraBarCommand implements CommandExecutor {
                     BarTerminateEvent bte = new BarTerminateEvent(b, TerminationReason.BAR_CANCEL);
                     Bukkit.getServer().getPluginManager().callEvent(bte);
                 }
-                p.sendMessage(ChatColor.GREEN + "Removed all bossbars with that id!");
+                sender.sendMessage(ChatColor.GREEN + "Removed all bossbars with that id!");
 
             } else {
                 try {
@@ -149,29 +171,29 @@ public class UltraBarCommand implements CommandExecutor {
 
                 }
                 plugin.getLogger().info("All of the boss bars have been removed.");
-                p.sendMessage(ChatColor.GREEN + "Cleared all of the active bars!");
+                sender.sendMessage(ChatColor.GREEN + "Cleared all of the active bars!");
             }
         } else if (args.length == 2 && args[0].equalsIgnoreCase("clear")) {
-            if (!p.hasPermission("ultrabar.clear")) {
-                p.sendMessage(ChatColor.RED + "You do not have permission for this command");
+            if (!sender.hasPermission("ultrabar.clear")) {
+                sender.sendMessage(ChatColor.RED + "You do not have permission for this command");
                 return true;
             }
             UltraBarAPI ubapi = new UltraBarAPI();
             if (Bukkit.getPlayer(args[1]) == null) {
-                p.sendMessage(ChatColor.RED + "That player does not exist!");
+                sender.sendMessage(ChatColor.RED + "That player does not exist!");
                 return false;
             }
             if (!Bukkit.getPlayer(args[1]).isOnline()) {
-                p.sendMessage(ChatColor.RED + "That player is not online!");
+                sender.sendMessage(ChatColor.RED + "That player is not online!");
                 return false;
             }
             for (UBossBar ub : ubapi.getBarsForPlayer(Bukkit.getPlayer(args[1]))) {
                 ub.removePlayer(Bukkit.getPlayer(args[1]));
                 ub.updatePlayers();
             }
-            p.sendMessage(ChatColor.GREEN + "Cleared all bars for that player!");
+            sender.sendMessage(ChatColor.GREEN + "Cleared all bars for that player!");
         } else {
-            p.sendMessage(ChatColor.RED + "Unknown SubCommand. Type /ultrabar for help!");
+            sender.sendMessage(ChatColor.RED + "Unknown SubCommand. Type /ultrabar for help!");
         }
 
         return false;

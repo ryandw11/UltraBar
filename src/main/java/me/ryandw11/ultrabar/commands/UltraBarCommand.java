@@ -52,7 +52,9 @@ public class UltraBarCommand implements CommandExecutor {
                         BarTerminateEvent bte = new BarTerminateEvent(b, TerminationReason.BAR_CANCEL);
                         Bukkit.getServer().getPluginManager().callEvent(bte);
                     }
-                    UltraBar.plugin.getBarAnnouncer().stopProgram();
+
+                    if(UltraBar.plugin.getBarAnnouncer() != null)
+                        UltraBar.plugin.getBarAnnouncer().stopProgram();
                 }
 
                 plugin.reloadConfig();

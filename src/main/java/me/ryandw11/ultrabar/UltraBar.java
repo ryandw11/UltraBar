@@ -148,7 +148,10 @@ public class UltraBar extends JavaPlugin {
 
         getLogger().info("Save complete!");
         trackedBars.clear();
-        barAnnouncer.stopProgram();
+        // Stop the bar announcer if it exists.
+        if(barAnnouncer != null) {
+            barAnnouncer.stopProgram();
+        }
         getLogger().info("UltraBar was successfully disabled!");
     }
 
@@ -338,6 +341,10 @@ public class UltraBar extends JavaPlugin {
         this.barAnnouncer.startProgram();
     }
 
+    /**
+     * Check for updates.
+     * @return If the updates were successful.
+     */
     private boolean checkForUpdate() {
         if (plugin.getConfig().contains("config_version") && !plugin.getConfig().contains("BossBarMessages.Number_Of_Messages")) {
             return true;

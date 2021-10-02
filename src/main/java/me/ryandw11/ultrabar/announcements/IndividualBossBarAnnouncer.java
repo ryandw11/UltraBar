@@ -124,7 +124,7 @@ public class IndividualBossBarAnnouncer extends BukkitRunnable implements Announ
     }
 
     private BossBar createBossBar(BarData data, Player player) {
-        BossBar bar = Bukkit.createBossBar(key, data.getTranslatedString(player), data.getBarColor(), data.getBarStyle());
+        BossBar bar = plugin.typeManager.createBossBar(key, data.getTranslatedString(player), data.getBarColor(), data.getBarStyle());
         bar.addPlayer(player);
         return bar;
     }

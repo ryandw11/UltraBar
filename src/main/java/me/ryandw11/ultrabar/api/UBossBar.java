@@ -1,6 +1,7 @@
 package me.ryandw11.ultrabar.api;
 
-import me.ryandw11.ultrabar.BossBarTimer;
+import me.ryandw11.ultrabar.api.enums.CountStyle;
+import me.ryandw11.ultrabar.timers.BossBarTimer;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -31,6 +32,7 @@ public class UBossBar {
     private int id = -1;
     private final UUID pid;
     private String permission;
+    private final CountStyle countStyle;
 
     private Map<String, String> parameters;
     private final Map<String, String> storedData;
@@ -61,6 +63,7 @@ public class UBossBar {
         this.storedData = bbb.getData();
         this.pid = UUID.randomUUID();
         this.permission = bbb.getPermission();
+        this.countStyle = bbb.getCountStyle();
     }
 
     /**
@@ -311,10 +314,10 @@ public class UBossBar {
     /**
      * Get the timer associated with the bar.
      *
-     * @return The BossBarTimer class. (Null if the bar has not BossBarTimer associated)
+     * @return The BossBarTimer.
      */
-    public BossBarTimer getTimer() {
-        return timer;
+    public Optional<BossBarTimer> getTimer() {
+        return Optional.ofNullable(timer);
     }
 
     /**
@@ -391,6 +394,15 @@ public class UBossBar {
      */
     public Optional<String> getPermission() {
         return Optional.ofNullable(permission);
+    }
+
+    /**
+     * Get the count style.
+     *
+     * @return The count style.
+     */
+    public CountStyle getCountStyle() {
+        return countStyle;
     }
 
     /**

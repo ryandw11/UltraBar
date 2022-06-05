@@ -1,5 +1,6 @@
-package me.ryandw11.ultrabar;
+package me.ryandw11.ultrabar.timers;
 
+import me.ryandw11.ultrabar.UltraBar;
 import me.ryandw11.ultrabar.api.UBossBar;
 import me.ryandw11.ultrabar.api.UltraBarAPI;
 import me.ryandw11.ultrabar.api.events.BarTerminateEvent;
@@ -7,25 +8,24 @@ import me.ryandw11.ultrabar.api.events.TerminationReason;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public class BossBarTimer extends BukkitRunnable {
+public class CountUpBossBarTimer extends BossBarTimer {
     private BossBar b;
     private UBossBar ub;
     private final double progress;
     private final UltraBar plugin;
     private final UltraBarAPI uba;
 
-    public BossBarTimer(int ticks, double one) {
-        this.progress = one / ticks;
+    public CountUpBossBarTimer(int ticks, double one) {
+        this.progress = (1 - one) / ticks;
         this.plugin = UltraBar.plugin;
         this.uba = new UltraBarAPI();
     }
 
     @Override
     public void run() {
-        double prog = ub.getProgress() - progress;
-        if (prog < 0) {
+        double prog = ub.getProgress() + progress;
+        if (prog > 1) {
             if (ub == null) {
                 this.cancel();
             }
@@ -53,6 +53,7 @@ public class BossBarTimer extends BukkitRunnable {
 
     }
 
+    @Override
     public void setupTimer(UBossBar ub) {
         this.ub = ub;
         this.b = ub.getBar();
@@ -60,8 +61,8 @@ public class BossBarTimer extends BukkitRunnable {
 
     private String replacePlaceholders(String title, Player p) {
         return plugin.papiTranslate.getMessage(title, p)
-                .replace("%time_left%", Math.max(0, (int) Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20)) / 20)) + "")
-                .replace("%time_left_form%", getFormattedTime(Math.max(0, Math.floor(((ub.getProgress() - progress) * (ub.getTime() * 20)) / 20))));
+                .replace("%time_left%", Math.max(0, (int) Math.floor(((ub.getProgress() + progress) * (ub.getTime() * 20)) / 20)) + "")
+                .replace("%time_left_form%", getFormattedTime(Math.max(0, Math.floor(((ub.getProgress() + progress) * (ub.getTime() * 20)) / 20))));
     }
 
     private String getFormattedTime(double seconds) {

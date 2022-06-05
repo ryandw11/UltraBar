@@ -1,20 +1,21 @@
 package me.ryandw11.ultrabar.api;
 
 import com.google.common.collect.Iterables;
-import me.ryandw11.ultrabar.BossBarTimer;
 import me.ryandw11.ultrabar.UltraBar;
+import me.ryandw11.ultrabar.api.enums.CountStyle;
+import me.ryandw11.ultrabar.timers.BossBarTimer;
+import me.ryandw11.ultrabar.timers.CountDownBossBarTimer;
+import me.ryandw11.ultrabar.timers.CountUpBossBarTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,6 +36,7 @@ public class BossBarBuilder {
     private int id = -1;
     private Map<String, String> storedData;
     private String permission;
+    private CountStyle countStyle;
 
     /**
      * The api for building bossbars.
@@ -46,6 +48,7 @@ public class BossBarBuilder {
         this.tracked = tracked;
         this.storedData = new HashMap<>();
         permission = null;
+        countStyle = CountStyle.DOWN;
     }
 
     protected String getMessage() {
@@ -64,7 +67,7 @@ public class BossBarBuilder {
         return time;
     }
 
-    protected double getProgress() {
+    public double getProgress() {
         return progress;
     }
 
@@ -307,6 +310,20 @@ public class BossBarBuilder {
     }
 
     /**
+     * Set the count style of the boss bar.
+     *
+     * @param countStyle The count style of the boss bar. (Not null)
+     */
+    public BossBarBuilder setCountStyle(@NotNull CountStyle countStyle) {
+        this.countStyle = Objects.requireNonNull(countStyle);
+        return this;
+    }
+
+    protected CountStyle getCountStyle() {
+        return countStyle;
+    }
+
+    /**
      * Build the bar (aka, create it).
      *
      * @return The UBossBar class. <b>Returns null if the setup is invalid</b>
@@ -323,33 +340,21 @@ public class BossBarBuilder {
          */
         if (isOnePlayer()) {
             if (world != null) {
-                if (Iterables.get(players, 0).getWorld() != world) {
+                if (Objects.requireNonNull(Iterables.get(players, 0)).getWorld() != world) {
                     return null;
                 } else {
                     //Create the boss bar and add the player.
                     BossBar b = Bukkit.createBossBar(message, color, style);
                     b.setProgress(progress);
-                    b.addPlayer(Iterables.get(players, 0));
-                    BossBarTimer s = new BossBarTimer(time * 20, progress);
-                    s.runTaskTimer(UltraBar.plugin, 0, 1L);
-                    UBossBar bb = new UBossBar(this, b, s);
-                    bb.getTimer().setupTimer(bb);
-                    if (tracked)
-                        UltraBar.trackedBars.add(bb);
-                    return bb;
+                    b.addPlayer(Objects.requireNonNull(Iterables.get(players, 0)));
+                    return setupTimer(b);
                 }
             } // If the world is not there.
             else {
                 BossBar b = Bukkit.createBossBar(message, color, style);
                 b.setProgress(progress);
-                b.addPlayer(Iterables.get(players, 0));
-                BossBarTimer s = new BossBarTimer(time * 20, progress);
-                s.runTaskTimer(UltraBar.plugin, 0, 1L);
-                UBossBar bb = new UBossBar(this, b, s);
-                bb.getTimer().setupTimer(bb);
-                if (tracked)
-                    UltraBar.trackedBars.add(bb);
-                return bb;
+                b.addPlayer(Objects.requireNonNull(Iterables.get(players, 0)));
+                return setupTimer(b);
             }
         }
         /*
@@ -364,28 +369,28 @@ public class BossBarBuilder {
                         b.addPlayer(p);
                     }
                 }
-                BossBarTimer s = new BossBarTimer(time * 20, progress);
-                s.runTaskTimer(UltraBar.plugin, 0, 1L);
-                UBossBar bb = new UBossBar(this, b, s);
-                bb.getTimer().setupTimer(bb);
-                if (tracked)
-                    UltraBar.trackedBars.add(bb);
-                return bb;
+                return setupTimer(b);
             } else {
                 BossBar b = Bukkit.createBossBar(message, color, style);
                 b.setProgress(progress);
                 for (Player p : players) {
                     b.addPlayer(p);
                 }
-                BossBarTimer s = new BossBarTimer(time * 20, progress);
-                s.runTaskTimer(UltraBar.plugin, 0, 1L);
-                UBossBar bb = new UBossBar(this, b, s);
-                bb.getTimer().setupTimer(bb);
-                if (tracked)
-                    UltraBar.trackedBars.add(bb);
-                return bb;
+                return setupTimer(b);
             }
         }
+    }
+
+    @NotNull
+    private UBossBar setupTimer(@NotNull BossBar b) {
+        BossBarTimer bossBarTimer = buildTimer(time * 20, progress);
+        bossBarTimer.runTaskTimer(UltraBar.plugin, 0, 1L);
+        UBossBar bb = new UBossBar(this, Objects.requireNonNull(b), bossBarTimer);
+        assert bb.getTimer().isPresent();
+        bb.getTimer().get().setupTimer(bb);
+        if (tracked)
+            UltraBar.trackedBars.add(bb);
+        return bb;
     }
 
     /**
@@ -410,7 +415,7 @@ public class BossBarBuilder {
                     //Create the boss bar and add the player.
                     BossBar b = Bukkit.createBossBar(message, color, style);
                     b.setProgress(progress);
-                    b.addPlayer(Iterables.get(players, 0));
+                    b.addPlayer(Objects.requireNonNull(Iterables.get(players, 0)));
                     UBossBar bb = new UBossBar(this, b, null);
                     if (tracked)
                         UltraBar.trackedBars.add(bb);
@@ -420,7 +425,7 @@ public class BossBarBuilder {
             else {
                 BossBar b = Bukkit.createBossBar(message, color, style);
                 b.setProgress(progress);
-                b.addPlayer(Iterables.get(players, 0));
+                b.addPlayer(Objects.requireNonNull(Iterables.get(players, 0)));
                 UBossBar bb = new UBossBar(this, b, null);
                 if (tracked)
                     UltraBar.trackedBars.add(bb);
@@ -455,6 +460,10 @@ public class BossBarBuilder {
                 return bb;
             }
         }
+    }
+
+    private BossBarTimer buildTimer(int ticks, double one) {
+        return countStyle == CountStyle.UP ? new CountUpBossBarTimer(ticks, one) : new CountDownBossBarTimer(ticks, one);
     }
 
 

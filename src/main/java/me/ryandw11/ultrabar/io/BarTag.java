@@ -4,6 +4,7 @@ import me.ryandw11.ods.ODS;
 import me.ryandw11.ods.tags.*;
 import me.ryandw11.ultrabar.api.BossBarBuilder;
 import me.ryandw11.ultrabar.api.UBossBar;
+import me.ryandw11.ultrabar.api.enums.CountStyle;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.boss.BarColor;
@@ -42,9 +43,10 @@ public class BarTag extends ObjectTag {
         this.addTag(new MapTag<>("data", map));
         if (bar.getPermission().isPresent())
             this.addTag(new StringTag("permission", bar.getPermission().get()));
-        this.addTag(new ByteTag("hasTimer", (byte) (bar.getTimer() == null ? 0 : 1)));
+        this.addTag(new ByteTag("hasTimer", (byte) (bar.getTimer().isPresent() ? 1 : 0)));
+        this.addTag(new ByteTag("countStyle", (byte) (bar.getCountStyle() == CountStyle.UP ? 0 : 1)));
 
-        this.addTag(ODS.wrap("ver", 1));
+        this.addTag(ODS.wrap("ver", 2));
     }
 
     /**
@@ -82,6 +84,9 @@ public class BarTag extends ObjectTag {
         if (hasTag("permission"))
             permission = ODS.unwrap((StringTag) getTag("permission"));
         boolean hasTimer = byteToBool(ODS.unwrap((ByteTag) getTag("hasTimer")));
+        CountStyle countStyle = CountStyle.DOWN;
+        if (hasTag("countStyle"))
+            countStyle = ODS.unwrap((ByteTag) getTag("countStyle")) == 0 ? CountStyle.UP : CountStyle.DOWN;
         BossBarBuilder bbb = new BossBarBuilder(byteToBool(ODS.unwrap((ByteTag) getTag("tracked"))))
                 .setId(id)
                 .setMessage(message)
@@ -93,7 +98,8 @@ public class BarTag extends ObjectTag {
                 .setPublicBar(publicBar)
                 .setData(data)
                 .setTracked(byteToBool(ODS.unwrap((ByteTag) getTag("tracked"))))
-                .setPermission(permission);
+                .setPermission(permission)
+                .setCountStyle(countStyle);
         if (hasTimer)
             return bbb.build();
         else

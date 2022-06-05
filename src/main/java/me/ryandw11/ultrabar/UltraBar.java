@@ -28,6 +28,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -137,8 +138,7 @@ public class UltraBar extends JavaPlugin {
         getLogger().info("Saving tracked bars to file.");
         for (UBossBar bar : trackedBars) {
             tags.add(new BarTag(bar));
-            if (bar.getTimer() != null)
-                bar.getTimer().cancel();
+            bar.getTimer().ifPresent(BukkitRunnable::cancel);
             if (bar.getBar() != null)
                 bar.getBar().setVisible(false);
         }
@@ -149,7 +149,7 @@ public class UltraBar extends JavaPlugin {
         getLogger().info("Save complete!");
         trackedBars.clear();
         // Stop the bar announcer if it exists.
-        if(barAnnouncer != null) {
+        if (barAnnouncer != null) {
             barAnnouncer.stopProgram();
         }
         getLogger().info("UltraBar was successfully disabled!");
@@ -343,6 +343,7 @@ public class UltraBar extends JavaPlugin {
 
     /**
      * Check for updates.
+     *
      * @return If the updates were successful.
      */
     private boolean checkForUpdate() {

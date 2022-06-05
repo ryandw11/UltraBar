@@ -3,6 +3,7 @@ package me.ryandw11.ultrabar.api;
 import me.ryandw11.ultrabar.UltraBar;
 import me.ryandw11.ultrabar.api.parameters.BarParameter;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,9 +145,7 @@ public final class UltraBarAPI {
      * @param bar Delete a bar.
      */
     public void deleteBar(UBossBar bar) {
-        if (bar.timer != null) {
-            bar.timer.cancel();
-        }
+        bar.getTimer().ifPresent(BukkitRunnable::cancel);
         bar.bar.setVisible(false);
         bar.bar = null;
         bar.timer = null;

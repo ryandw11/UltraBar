@@ -15,7 +15,7 @@ Maven:
 ```xml
 <repositories>
     <repository>
-        <id>Ryandw11-Releases</id>
+        <id>Ryandw11_Releases</id>
         <url>https://repo.ryandw11.com/repository/maven-releases/</url>
     </repository>
 </repositories>

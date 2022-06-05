@@ -1,6 +1,7 @@
 me.ryandw11.ultrabar
 me.ryandw11.ultrabar.announcements
 me.ryandw11.ultrabar.api
+me.ryandw11.ultrabar.api.enums
 me.ryandw11.ultrabar.api.events
 me.ryandw11.ultrabar.api.parameters
 me.ryandw11.ultrabar.api.title
@@ -12,4 +13,5 @@ me.ryandw11.ultrabar.io
 me.ryandw11.ultrabar.listener
 me.ryandw11.ultrabar.parameters
 me.ryandw11.ultrabar.schedulers
+me.ryandw11.ultrabar.timers
 me.ryandw11.ultrabar.typemgr

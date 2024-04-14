@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 
 /**
  * Provide support for older versions.
+ *
+ * TODO: Remove this.
  */
 public interface TypeManager {
     void title(String message, Player p, int fadein, int time, int fadeout, String subtitle);

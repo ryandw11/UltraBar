@@ -2,49 +2,48 @@ package me.ryandw11.ultrabar.chatcolor;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class ChatColorUtil_1_16 implements ChatColorUtil{
+public class ChatColorUtil_1_16 implements ChatColorUtil {
 
     @Override
     public String translateChatColor(String message) {
-        if(!message.contains("{"))
+        if (!message.contains("{"))
             return ChatColor.translateAlternateColorCodes('&', message);
         StringBuilder finalMessage = new StringBuilder();
         StringBuilder interior = new StringBuilder();
         boolean readInterior = false;
-        for (int i = 0; i < message.length(); i++){
+        for (int i = 0; i < message.length(); i++) {
             char c = message.charAt(i);
-            if(c == '{' && !readInterior){
+            if (c == '{' && !readInterior) {
                 readInterior = true;
-            }else if(!readInterior){
+            } else if (!readInterior) {
                 finalMessage.append(c);
-            } else if(c == '{'){
+            } else if (c == '{') {
                 finalMessage.append('{');
                 finalMessage.append(interior);
                 interior = new StringBuilder();
-            }else if(c == '}' && interior.toString().contains("#")){
+            } else if (c == '}' && interior.toString().contains("#")) {
                 readInterior = false;
                 try {
                     finalMessage.append(ChatColor.of(interior.toString()));
-                }catch(IllegalArgumentException ex){
+                } catch (IllegalArgumentException ex) {
                     finalMessage.append("{");
                     finalMessage.append(interior);
                     finalMessage.append("}");
-                }finally{
+                } finally {
                     interior = new StringBuilder();
                 }
 
-            }else if(c == '}'){
+            } else if (c == '}') {
                 readInterior = false;
                 finalMessage.append("{");
                 finalMessage.append(interior);
                 finalMessage.append("}");
                 interior = new StringBuilder();
-            }
-            else{
+            } else {
                 interior.append(c);
             }
         }
-        if(interior.toString().length() > 0){
+        if (interior.toString().length() > 0) {
             finalMessage.append('{');
             finalMessage.append(interior);
         }

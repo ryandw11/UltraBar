@@ -3,9 +3,11 @@ package me.ryandw11.ultrabar.api.title;
 import me.ryandw11.ultrabar.UltraBar;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class allows for Title information to be stored dynamically.
@@ -19,6 +21,7 @@ public class TitleBuilder {
     private int fadeIn;
     private int fadeOut;
     private int time;
+
     public TitleBuilder(UltraBar plugin){
         this.title = "";
         this.subTitle = "";
@@ -29,12 +32,12 @@ public class TitleBuilder {
         this.time = 10;
     }
 
-    public void setTitle(String title){
-        this.title = title;
+    public void setTitle(@NotNull String title){
+        this.title = Objects.requireNonNull(title);
     }
 
-    public void setSubTitle(String subTitle){
-        this.subTitle = subTitle;
+    public void setSubTitle(@NotNull String subTitle){
+        this.subTitle = Objects.requireNonNull(subTitle);
     }
 
     public void addPlayer(Player p){

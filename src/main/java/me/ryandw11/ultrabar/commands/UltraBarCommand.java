@@ -41,6 +41,7 @@ public class UltraBarCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar hooks &7- See the active hooks."));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar cancel [id] (player) &7- Remove all active bars."));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar clear (player) &7- Remove all active bars for that player."));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar purge &7- Purge all boss bars (including ones not creating by this plugin)."));
             } else {
                 sender.sendMessage(ChatColor.RED + "You do not have permission for this command!");
             }
@@ -53,7 +54,7 @@ public class UltraBarCommand implements CommandExecutor {
                         Bukkit.getServer().getPluginManager().callEvent(bte);
                     }
 
-                    if(UltraBar.plugin.getBarAnnouncer() != null)
+                    if (UltraBar.plugin.getBarAnnouncer() != null)
                         UltraBar.plugin.getBarAnnouncer().stopProgram();
                 }
 
@@ -133,7 +134,7 @@ public class UltraBarCommand implements CommandExecutor {
 
                 String playerName = args[2];
                 Player player = Bukkit.getPlayer(playerName);
-                if(player == null) {
+                if (player == null) {
                     sender.sendMessage(ChatColor.RED + "That player does not exist!");
                     return true;
                 }
@@ -145,7 +146,7 @@ public class UltraBarCommand implements CommandExecutor {
                 }
                 sender.sendMessage(ChatColor.GREEN + "Removed that player from all bars with that id!");
 
-            }else if (args.length == 2) {
+            } else if (args.length == 2) {
                 int id = -1;
                 try {
                     id = Integer.parseInt(args[1]);

@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 /**
  * Provide support for older versions.
  *
- * TODO: Remove this.
+ * <p>As of version 2.4.0, UltraBar no longer offers support for older versions of Spigot without
+ * built-in Title and ActionBar support. There is only one implementation of this interface.</p>
  */
 public interface TypeManager {
     void title(String message, Player p, int fadein, int time, int fadeout, String subtitle);
@@ -20,7 +21,7 @@ public interface TypeManager {
     /**
      * Create a boss bar.
      *
-     * @param key   The NamespacedKey to use (not used on 1.12).
+     * @param key   The NamespacedKey to use
      * @param title The title.
      * @param color The bar color.
      * @param style The style of the boss bar.

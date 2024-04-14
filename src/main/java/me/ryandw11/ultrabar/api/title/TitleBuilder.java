@@ -22,7 +22,7 @@ public class TitleBuilder {
     private int fadeOut;
     private int time;
 
-    public TitleBuilder(UltraBar plugin){
+    public TitleBuilder(UltraBar plugin) {
         this.title = "";
         this.subTitle = "";
         this.plugin = plugin;
@@ -32,19 +32,19 @@ public class TitleBuilder {
         this.time = 10;
     }
 
-    public void setTitle(@NotNull String title){
+    public void setTitle(@NotNull String title) {
         this.title = Objects.requireNonNull(title);
     }
 
-    public void setSubTitle(@NotNull String subTitle){
+    public void setSubTitle(@NotNull String subTitle) {
         this.subTitle = Objects.requireNonNull(subTitle);
     }
 
-    public void addPlayer(Player p){
+    public void addPlayer(Player p) {
         players.add(p);
     }
 
-    public void addAllPlayers(){
+    public void addAllPlayers() {
         players.addAll(Bukkit.getOnlinePlayers());
     }
 
@@ -56,11 +56,11 @@ public class TitleBuilder {
         this.fadeOut = fadeOut;
     }
 
-    public void setTime(int time){
+    public void setTime(int time) {
         this.time = time;
     }
 
-    public boolean hasPlayers(){
+    public boolean hasPlayers() {
         return !players.isEmpty();
     }
 
@@ -68,8 +68,8 @@ public class TitleBuilder {
      * Send the title to the players.
      * <p>The players list is cleared to prevent memory leaks.</p>
      */
-    public void send(){
-        for(Player p : players){
+    public void send() {
+        for (Player p : players) {
             plugin.typeManager.title(plugin.papiTranslate.getMessage(UltraBar.plugin.chatColorUtil.translateChatColor(this.title), p), p,
                     fadeIn, time, fadeOut, plugin.papiTranslate.getMessage(plugin.chatColorUtil.translateChatColor(this.subTitle), p));
         }

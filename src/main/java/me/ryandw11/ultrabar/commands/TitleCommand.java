@@ -21,7 +21,6 @@ public class TitleCommand implements CommandExecutor {
         this.plugin = plugin;
     }
 
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
 
@@ -79,8 +78,8 @@ public class TitleCommand implements CommandExecutor {
                 inValue = false;
                 inString = false;
                 inKey = true;
-				final String key = tempKey.toString().replace(":", "").toLowerCase();
-				if (tempString.toString().equals(""))
+                final String key = tempKey.toString().replace(":", "").toLowerCase();
+                if (tempString.toString().equals(""))
                     mp.put(key, tempValue.toString().toLowerCase());
                 else if (tempValue.toString().equals(""))
                     mp.put(key, tempString.toString().replace('"', ' '));
@@ -105,7 +104,7 @@ public class TitleCommand implements CommandExecutor {
     }
 
     protected void processInfo(CommandSender s, Map<String, String> mp) {
-		Iterator<Map.Entry<String, String>> it = mp.entrySet().iterator();
+        Iterator<Map.Entry<String, String>> it = mp.entrySet().iterator();
 
         TitleBuilder titleBuilder = new TitleBuilder(plugin);
 

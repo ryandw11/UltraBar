@@ -222,7 +222,7 @@ public class BarCommand implements CommandExecutor {
                     return;
                 }
                 bbb.setCountStyle(countStyle);
-                if(countStyle == CountStyle.UP && bbb.getProgress() == 1) {
+                if (countStyle == CountStyle.UP && bbb.getProgress() == 1) {
                     bbb.setProgress(0);
                 }
             } else {

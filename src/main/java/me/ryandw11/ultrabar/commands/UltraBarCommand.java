@@ -41,7 +41,6 @@ public class UltraBarCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar hooks &7- See the active hooks."));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar cancel [id] (player) &7- Remove all active bars."));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar clear (player) &7- Remove all active bars for that player."));
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6/ultrabar purge &7- Purge all boss bars (including ones not creating by this plugin)."));
             } else {
                 sender.sendMessage(ChatColor.RED + "You do not have permission for this command!");
             }

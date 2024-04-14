@@ -12,16 +12,16 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class OnLeave implements Listener {
 
     @EventHandler
-    public void onLeave(PlayerQuitEvent evt){
-        for(UBossBar ub : UltraBar.trackedBars) {
-            if(ub.getPlayers().contains(evt.getPlayer()))
+    public void onLeave(PlayerQuitEvent evt) {
+        for (UBossBar ub : UltraBar.trackedBars) {
+            if (ub.getPlayers().contains(evt.getPlayer()))
                 ub.removePlayer(evt.getPlayer());
         }
         // Remove the player from the list of toggled players.
         UltraBar.plugin.getToggledPlayers().remove(evt.getPlayer());
 
         // Remove the player from the bar announcer.
-        if(UltraBar.plugin.getBarAnnouncer() != null) {
+        if (UltraBar.plugin.getBarAnnouncer() != null) {
             UltraBar.plugin.getBarAnnouncer().removePlayer(evt.getPlayer());
         }
     }

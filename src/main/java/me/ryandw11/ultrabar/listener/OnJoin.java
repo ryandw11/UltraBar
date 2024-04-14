@@ -26,7 +26,7 @@ public class OnJoin implements Listener {
         Player p = event.getPlayer();
 
         // Add the boss bar announcement first.
-        if(plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
+        if (plugin.getConfig().getBoolean("BossBarMessages.Enabled")) {
             plugin.getBarAnnouncer().addPlayer(p);
         }
 

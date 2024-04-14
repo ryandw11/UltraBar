@@ -11,22 +11,22 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 /**
- * 1.17+ now relies on Spigot to use.
+ * The modern implementation of TypeManager.
  */
 public class ModernTypeManager implements TypeManager {
 
-	@Override
-	public void title(String message, Player p, int fadein, int time, int fadeout, String subtitle){
-		p.sendTitle(message, subtitle, fadein, time, fadeout);
-	}
+    @Override
+    public void title(String message, Player p, int fadein, int time, int fadeout, String subtitle) {
+        p.sendTitle(message, subtitle, fadein, time, fadeout);
+    }
 
-	@Override
-	public void actionBar(Player player, String message){
-		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
-	}
+    @Override
+    public void actionBar(Player player, String message) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+    }
 
-	@Override
-	public BossBar createBossBar(NamespacedKey key, String title, BarColor color, BarStyle style, BarFlag... flags) {
-		return Bukkit.createBossBar(key, title, color, style, flags);
-	}
+    @Override
+    public BossBar createBossBar(NamespacedKey key, String title, BarColor color, BarStyle style, BarFlag... flags) {
+        return Bukkit.createBossBar(key, title, color, style, flags);
+    }
 }

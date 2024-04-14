@@ -16,11 +16,11 @@ public class UltraBarCommandTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
         List<String> completions;
-        if(args.length == 1) {
-        	completions = new ArrayList<>(Arrays.asList("reload", "toggle", "hooks", "cancel", "clear"));
-		} else{
-        	completions = new ArrayList<>();
-		}
+        if (args.length == 1) {
+            completions = new ArrayList<>(Arrays.asList("reload", "toggle", "hooks", "cancel", "clear"));
+        } else {
+            completions = new ArrayList<>();
+        }
         return StringUtil.copyPartialMatches(args[args.length - 1], completions, new ArrayList<>());
     }
 }

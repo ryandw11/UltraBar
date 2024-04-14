@@ -72,19 +72,19 @@ public class IndividualBossBarAnnouncer extends BukkitRunnable implements Announ
         timeLeft -= deltaTime;
         if (timeLeft < 0) {
             // Pick the next bar.
-            if(!announcerData.isRandomOrder())
+            if (!announcerData.isRandomOrder())
                 currentBar++;
             else
                 currentBar = ThreadLocalRandom.current().nextInt(0, barConfigurations.size());
-            if(currentBar >= barConfigurations.size()) currentBar = 0;
+            if (currentBar >= barConfigurations.size()) currentBar = 0;
             createBarData(currentBar);
 
             timeLeft = barData.getTime();
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if(!barMap.containsKey(p) && shouldPlayerSeeBar(p))
+                if (!barMap.containsKey(p) && shouldPlayerSeeBar(p))
                     barMap.put(p, createBossBar(barData, p));
-                if(barMap.containsKey(p))
+                if (barMap.containsKey(p))
                     setBossBar(barData, p);
             }
         } else {
@@ -97,8 +97,8 @@ public class IndividualBossBarAnnouncer extends BukkitRunnable implements Announ
                 }
                 bossBarEntry.getValue().setTitle(barData.getTranslatedString(bossBarEntry.getKey()));
                 // Calculate the current progress.
-                if(!announcerData.isNoProgress())
-                    bossBarEntry.getValue().setProgress(1/(barData.getTime()/timeLeft));
+                if (!announcerData.isNoProgress())
+                    bossBarEntry.getValue().setProgress(1 / (barData.getTime() / timeLeft));
             }
 
             // Remove offline players from the map.
@@ -137,7 +137,7 @@ public class IndividualBossBarAnnouncer extends BukkitRunnable implements Announ
     }
 
     private boolean shouldPlayerSeeBar(Player player) {
-        if(!announcerData.isWorldInWhitelist(player.getWorld())) return false;
+        if (!announcerData.isWorldInWhitelist(player.getWorld())) return false;
 
         return !plugin.getToggledPlayers().contains(player);
     }
@@ -155,13 +155,13 @@ public class IndividualBossBarAnnouncer extends BukkitRunnable implements Announ
 
     @Override
     public void addPlayer(Player p) {
-        if(!this.barMap.containsKey(p) && shouldPlayerSeeBar(p))
+        if (!this.barMap.containsKey(p) && shouldPlayerSeeBar(p))
             this.barMap.put(p, createBossBar(barData, p));
     }
 
     @Override
     public void removePlayer(Player p) {
-        if(this.barMap.containsKey(p)) {
+        if (this.barMap.containsKey(p)) {
             this.barMap.get(p).removeAll();
         }
         this.barMap.remove(p);

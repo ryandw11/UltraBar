@@ -201,7 +201,7 @@ public class UltraBar extends JavaPlugin {
     /**
      * Setup code specific to a single version of minecraft.
      * <p>
-     * 1.12 - 1.17 is supported.
+     * 1.12 - 1.20 is supported.
      *
      * @return If the setup was successful.
      */
@@ -210,47 +210,58 @@ public class UltraBar extends JavaPlugin {
         try {
             version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
         } catch (ArrayIndexOutOfBoundsException w0w) {
-            return false;
+            try {
+                version = Bukkit.getBukkitVersion().split("-")[0];
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                return false;
+            }
         }
 
         getLogger().info("Your server is running version " + version + "!");
         switch (version) {
+            case "1.16.3":
             case "v1_16_R3":
                 typeManager = new TypeManager_1_16_R3();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
+            case "1.16.2":
             case "v1_16_R2":
                 typeManager = new TypeManager_1_16_R2();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
+            case "1.16":
             case "v1_16_R1":
                 typeManager = new TypeManager_1_16_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_1_16();
                 break;
+            case "1.15":
             case "v1_15_R1":
                 typeManager = new TypeManager_1_15_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
+            case "1.14":
             case "v1_14_R1":
                 typeManager = new TypeManager_1_14_R1();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
+            case "1.13.2":
             case "v1_13_R2":
                 typeManager = new TypeManager_1_13_R2();
                 if (getConfig().getBoolean("WorldGuardRegion.Enabled") && plugin.worldguard)
                     Bukkit.getServer().getPluginManager().registerEvents(new WorldGuardOnMove(this), this);
                 chatColorUtil = new ChatColorUtil_Old();
                 break;
+            case "1.12":
             case "v1_12_R1":
                 typeManager = new TypeManager_1_12_R1();
                 chatColorUtil = new ChatColorUtil_Old();
